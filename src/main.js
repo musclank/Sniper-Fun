@@ -131,7 +131,7 @@ function makeTarget(x,z,index){const group=new THREE.Group();group.position.set(
  scene.add(group);targets.push(group);}
 makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
-const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0;
+const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0,pointerMoved=false,suppressNextClick=false;
 let playerHealth=100,enemyAlert=0,incomingCooldown=2.5,missionFailed=false;
 const $=s=>document.querySelector(s);
 function updateHud(){$('#ammo').innerHTML=String(ammo).padStart(2,'0')+' <span>/ 05</span>';$('#score').innerHTML=String(score).padStart(2,'0')+' <span>/ 03</span>';$('#healthValue').textContent=Math.ceil(playerHealth)+'%';$('#healthBar').style.width=playerHealth+'%';$('#alertValue').textContent=enemyAlert>75?'ENGAGED':enemyAlert>30?'SEARCHING':'LOW';$('#alertBar').style.width=enemyAlert+'%';}
@@ -144,7 +144,7 @@ function reload(){if(missionFailed||reloadTime>0||ammo===5)return;reloadTime=1.2
 function toggleZoom(){zoomed=!zoomed;camera.fov=zoomed?18:65;camera.updateProjectionMatrix();$('#scope').classList.toggle('active',zoomed);$('#zoom').classList.toggle('active',zoomed);}
 function pointerDown(e){
  if(!started||e.target.closest('button'))return;
- drag=true;lastX=e.clientX;lastY=e.clientY;
+ drag=true;pointerMoved=false;suppressNextClick=false;lastX=e.clientX;lastY=e.clientY;
  try{renderer.domElement.setPointerCapture(e.pointerId);}catch(_){}
 }
 function pointerMove(e){
@@ -157,16 +157,21 @@ function pointerMove(e){
  }
  if(!drag)return;
  const dx=e.clientX-lastX,dy=e.clientY-lastY;
- yaw-=dx*.003;
- pitch=THREE.MathUtils.clamp(pitch-dy*.002,-.5,.45);
+ if(Math.abs(dx)+Math.abs(dy)>4)pointerMoved=true;
+ yaw-=dx*.0035;
+ pitch=THREE.MathUtils.clamp(pitch-dy*.0025,-.5,.45);
  lastX=e.clientX;lastY=e.clientY;
 }
-function pointerUp(e){drag=false;try{if(renderer.domElement.hasPointerCapture(e.pointerId))renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){}}
+function pointerUp(e){if(pointerMoved)suppressNextClick=true;drag=false;try{if(renderer.domElement.hasPointerCapture(e.pointerId))renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){}}
 renderer.domElement.addEventListener('pointerdown',pointerDown);
 renderer.domElement.addEventListener('pointermove',pointerMove);
 renderer.domElement.addEventListener('pointerup',pointerUp);
 renderer.domElement.addEventListener('pointercancel',pointerUp);
-renderer.domElement.addEventListener('click',e=>{if(started&&!e.target.closest('button'))fire();});
+renderer.domElement.addEventListener('click',e=>{
+ if(!started||e.target.closest('button'))return;
+ if(suppressNextClick){suppressNextClick=false;return;}
+ fire();
+});
 $('#startBtn').addEventListener('click',()=>{
  $('#start').classList.add('hidden');started=true;
  // Pointer lock is desktop-only; touch devices use drag-to-look.
