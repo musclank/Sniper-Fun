@@ -47,3 +47,21 @@ Connect this repository to Cloudflare Pages with:
 - Reload button / R: reload
 
 This is an early gameplay prototype. Additional weapon models, richer battlefield assets, enemy AI, mission progression and audio are planned for future updates.
+
+
+## Sniper-$VVV AI hub implementation plan
+
+The AI hub is being developed separately from the production game. The initial branch keeps the game entry point intact until the complete frontend and Pages Functions can be committed together.
+
+### Planned architecture
+- Vite frontend with a responsive tactical dashboard.
+- Cloudflare Pages Functions at `/api/models` and `/api/chat`.
+- OpenRouter free-model catalog and chat completion proxy.
+- Provider credentials stored only as Cloudflare Pages secrets (`OPENROUTER_API_KEY`).
+- Supabase Auth and database for account profiles and chat history in a later milestone.
+
+### Deployment settings
+- Framework preset: Vite
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Keep production branch on `main` until the AI branch has been built and tested.
