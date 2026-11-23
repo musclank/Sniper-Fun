@@ -133,26 +133,40 @@ makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
 const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0,pointerMoved=false,suppressNextClick=false;
 // Mobile gyroscope aiming. The player must enable it from a direct tap gesture.
-let gyroEnabled=false,gyroReady=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.009,gyroPermission='unknown';
+let gyroEnabled=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.012,gyroScopeScale=.55,gyroSmoothing=.22;
+let gyroFilteredYaw=0,gyroFilteredPitch=0;
+function wrapAngleDelta(value){while(value>180)value-=360;while(value<-180)value+=360;return value;}
 function calibrateGyro(){
- if(!gyroEnabled||!gyroLastEvent){showMessage('MOVE PHONE TO CALIBRATE');return;}
+ if(!gyroEnabled||!gyroLastEvent){showMessage('ENABLE GYRO AND MOVE PHONE');return;}
  gyroBaseline={beta:gyroLastEvent.beta,gamma:gyroLastEvent.gamma,angle:screen.orientation?.angle??0};
- showMessage('GYRO CALIBRATED');
+ showMessage('GYRO RECENTERED');
+}
+function openGyroSettings(){ $('#gyroPanel').classList.remove('hidden'); }
+function closeGyroSettings(){ $('#gyroPanel').classList.add('hidden'); }
+function updateGyroSettings(){
+ const value=$('#gyroSensitivity');
+ if(value){gyroSensitivity=Number(value.value)/1000;$('#gyroSensitivityValue').textContent=(Number(value.value)/10).toFixed(1)+'×';}
+ gyroScopeScale=$('#gyroScopeScale').checked?.55:1;
 }
 function onDeviceOrientation(event){
  if(!gyroEnabled||event.beta===null||event.gamma===null)return;
- gyroLastEvent={beta:event.beta,gamma:event.gamma};
- if(!gyroBaseline){gyroBaseline={beta:event.beta,gamma:event.gamma,angle:screen.orientation?.angle??0};return;}
- const angle=screen.orientation?.angle??0;
- let yawDelta=event.gamma-gyroBaseline.gamma;
- let pitchDelta=event.beta-gyroBaseline.beta;
- if(angle===90){yawDelta=event.beta-gyroBaseline.beta;pitchDelta=-(event.gamma-gyroBaseline.gamma);}
- else if(angle===270){yawDelta=-(event.beta-gyroBaseline.beta);pitchDelta=event.gamma-gyroBaseline.gamma;}
- yaw=THREE.MathUtils.clamp(yaw-yawDelta*gyroSensitivity,-Math.PI*.48,Math.PI*.48);
- pitch=THREE.MathUtils.clamp(pitch-pitchDelta*gyroSensitivity*.72,-.5,.45);
+ const current={beta:event.beta,gamma:event.gamma,angle:screen.orientation?.angle??0};
+ if(!gyroLastEvent){gyroLastEvent=current;gyroBaseline=current;return;}
+ const previous=gyroLastEvent;gyroLastEvent=current;
+ let yawDelta=wrapAngleDelta(current.gamma-previous.gamma);
+ let pitchDelta=wrapAngleDelta(current.beta-previous.beta);
+ if(current.angle===90){yawDelta=wrapAngleDelta(current.beta-previous.beta);pitchDelta=-wrapAngleDelta(current.gamma-previous.gamma);}
+ else if(current.angle===270){yawDelta=-wrapAngleDelta(current.beta-previous.beta);pitchDelta=wrapAngleDelta(current.gamma-previous.gamma);}
+ else if(current.angle===180){yawDelta=-yawDelta;pitchDelta=-pitchDelta;}
+ const scopeFactor=zoomed?gyroScopeScale:1;
+ const scale=gyroSensitivity*scopeFactor;
+ gyroFilteredYaw+=(yawDelta*scale-gyroFilteredYaw)*gyroSmoothing;
+ gyroFilteredPitch+=(pitchDelta*scale-gyroFilteredPitch)*gyroSmoothing;
+ yaw=THREE.MathUtils.clamp(yaw-gyroFilteredYaw,-Math.PI*.48,Math.PI*.48);
+ pitch=THREE.MathUtils.clamp(pitch-gyroFilteredPitch*.72,-.5,.45);
 }
 async function toggleGyro(){
- if(gyroEnabled){gyroEnabled=false;gyroBaseline=null;removeEventListener('deviceorientation',onDeviceOrientation);updateGyroButtons();showMessage('GYRO OFF');return;}
+ if(gyroEnabled){gyroEnabled=false;gyroBaseline=null;gyroLastEvent=null;removeEventListener('deviceorientation',onDeviceOrientation);updateGyroButtons();showMessage('GYRO OFF');return;}
  if(!('DeviceOrientationEvent' in window)){showMessage('GYROSCOPE NOT SUPPORTED');return;}
  if(!isSecureContext){showMessage('GYRO REQUIRES HTTPS');return;}
  try{
@@ -160,7 +174,7 @@ async function toggleGyro(){
    const permission=await DeviceOrientationEvent.requestPermission();
    if(permission!=='granted'){showMessage('GYRO PERMISSION DENIED');return;}
   }
-  gyroEnabled=true;gyroReady=true;gyroBaseline=null;addEventListener('deviceorientation',onDeviceOrientation,{passive:true});
+  gyroEnabled=true;gyroBaseline=null;gyroLastEvent=null;gyroFilteredYaw=0;gyroFilteredPitch=0;addEventListener('deviceorientation',onDeviceOrientation,{passive:true});
   updateGyroButtons();showMessage('GYRO ON · HOLD PHONE COMFORTABLY');
  }catch(error){gyroEnabled=false;showMessage('GYRO PERMISSION UNAVAILABLE');updateGyroButtons();}
 }
@@ -236,7 +250,7 @@ $('#startBtn').addEventListener('click',()=>{
  if(matchMedia('(pointer:fine)').matches)renderer.domElement.requestPointerLock?.();
 });
 $('#fire').addEventListener('click',fire);$('#reload').addEventListener('click',reload);$('#zoom').addEventListener('click',toggleZoom);
-$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',calibrateGyro);
+$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',openGyroSettings);$('#recenterGyro').addEventListener('click',calibrateGyro);$('#closeGyroSettings').addEventListener('click',closeGyroSettings);$('#gyroSensitivity').addEventListener('input',updateGyroSettings);$('#gyroScopeScale').addEventListener('change',updateGyroSettings);
 addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire();}if(e.code==='KeyR')reload();if(e.code==='KeyZ')toggleZoom();});
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
 addEventListener('resize',resize);
