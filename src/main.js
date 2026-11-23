@@ -142,12 +142,36 @@ function fire(){if(!started||reloadTime>0||missionFailed)return;enemyAlert=Math.
  showMessage('SHOT FIRED');}
 function reload(){if(missionFailed||reloadTime>0||ammo===5)return;reloadTime=1.25;showMessage('RELOADING');}
 function toggleZoom(){zoomed=!zoomed;camera.fov=zoomed?18:65;camera.updateProjectionMatrix();$('#scope').classList.toggle('active',zoomed);$('#zoom').classList.toggle('active',zoomed);}
-function pointerDown(e){if(!started||e.target.closest('button'))return;drag=true;lastX=e.clientX;lastY=e.clientY;}
-function pointerMove(e){if(!drag)return;yaw-=(e.clientX-lastX)*.003;pitch=THREE.MathUtils.clamp(pitch-(e.clientY-lastY)*.002,-.5,.45);lastX=e.clientX;lastY=e.clientY;}
-function pointerUp(){drag=false;}
-renderer.domElement.addEventListener('pointerdown',pointerDown);addEventListener('pointermove',pointerMove);addEventListener('pointerup',pointerUp);
+function pointerDown(e){
+ if(!started||e.target.closest('button'))return;
+ drag=true;lastX=e.clientX;lastY=e.clientY;
+ try{renderer.domElement.setPointerCapture(e.pointerId);}catch(_){}
+}
+function pointerMove(e){
+ if(!started)return;
+ // Pointer-lock uses movement deltas because clientX/clientY remain centered.
+ if(document.pointerLockElement===renderer.domElement){
+  yaw-=((e.movementX||0))*.003;
+  pitch=THREE.MathUtils.clamp(pitch-((e.movementY||0))*.002,-.5,.45);
+  return;
+ }
+ if(!drag)return;
+ const dx=e.clientX-lastX,dy=e.clientY-lastY;
+ yaw-=dx*.003;
+ pitch=THREE.MathUtils.clamp(pitch-dy*.002,-.5,.45);
+ lastX=e.clientX;lastY=e.clientY;
+}
+function pointerUp(e){drag=false;try{if(renderer.domElement.hasPointerCapture(e.pointerId))renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){}}
+renderer.domElement.addEventListener('pointerdown',pointerDown);
+renderer.domElement.addEventListener('pointermove',pointerMove);
+renderer.domElement.addEventListener('pointerup',pointerUp);
+renderer.domElement.addEventListener('pointercancel',pointerUp);
 renderer.domElement.addEventListener('click',e=>{if(started&&!e.target.closest('button'))fire();});
-$('#startBtn').addEventListener('click',()=>{$('#start').classList.add('hidden');started=true;renderer.domElement.requestPointerLock?.();});
+$('#startBtn').addEventListener('click',()=>{
+ $('#start').classList.add('hidden');started=true;
+ // Pointer lock is desktop-only; touch devices use drag-to-look.
+ if(matchMedia('(pointer:fine)').matches)renderer.domElement.requestPointerLock?.();
+});
 $('#fire').addEventListener('click',fire);$('#reload').addEventListener('click',reload);$('#zoom').addEventListener('click',toggleZoom);
 addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire();}if(e.code==='KeyR')reload();if(e.code==='KeyZ')toggleZoom();});
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
