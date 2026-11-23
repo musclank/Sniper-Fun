@@ -100,3 +100,19 @@ canvas{touch-action:none}
 .mobile-controls button:disabled{opacity:.42;cursor:not-allowed}
 .mobile-controls button#gyro.active{background:#a9c47b;color:#11170f;border-color:#a9c47b}
 @media(max-width:600px){.mobile-controls{gap:5px}.mobile-controls button{font-size:8px;padding:12px 3px;letter-spacing:.3px}}
+
+/* In-game gyroscope setup panel */
+.gyro-panel{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#050907d9;backdrop-filter:blur(9px);pointer-events:auto}
+.gyro-panel.hidden{display:none}
+.gyro-card{position:relative;width:min(390px,100%);padding:28px;border:1px solid #bda46d77;background:#121b16;box-shadow:0 20px 70px #0009}
+.gyro-card>small{font-size:8px;letter-spacing:2px;color:#c5a66b}
+.gyro-card h2{font:800 32px 'Barlow Condensed';margin:12px 0 25px}
+.gyro-card label{display:flex;justify-content:space-between;gap:12px;font-size:9px;letter-spacing:1px;color:#e5e3d5}
+.gyro-card label b{color:#c5a66b}
+.gyro-card input[type=range]{width:100%;margin:19px 0 6px;accent-color:#c5a66b}
+.gyro-range{display:flex;justify-content:space-between;font-size:8px;color:#899487}
+.gyro-check{justify-content:flex-start!important;align-items:center;margin:22px 0}
+.gyro-check input{accent-color:#c5a66b}
+.gyro-recenter{width:100%;padding:14px;border:0;background:#c5a66b;color:#11170f;font:700 10px 'DM Mono';letter-spacing:1px}
+.gyro-card p{font-size:9px;line-height:1.7;color:#aeb8a9;margin:16px 0 0}
+.gyro-close{position:absolute;right:15px;top:10px;background:none;border:0;color:#eee;font-size:25px}
