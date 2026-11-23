@@ -1,40 +1,40 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#101915" />
-    <meta name="description" content="Sniper Fun — a cinematic 3D browser sniper experience." />
-    <title>SNIPER FUN — Tactical Range</title>
-  </head>
-  <body>
-    <div id="app">
-      <div id="loading"><div class="loader-mark">SF</div><p>PREPARING TACTICAL RANGE</p></div>
-      <div id="hud">
-        <div class="topline"><div class="brand">SNIPER<span>FUN</span><small>TACTICAL RANGE / 01</small></div><div class="status"><i></i> SYSTEM ONLINE</div></div>
-        <div class="mission"><small>MISSION 01 / TRAINING GROUNDS</small><strong id="missionTitle">LONG RANGE RECON</strong><span>Neutralize the training targets</span></div>
-        <div class="combat-status"><div><small>VITALS</small><strong id="healthValue">100%</strong><div class="health-track"><i id="healthBar"></i></div></div><div><small>ENEMY ALERT</small><strong id="alertValue">LOW</strong><div class="alert-track"><i id="alertBar"></i></div></div></div>
-        <div class="crosshair"><b></b><i></i><em></em></div>
-        <div class="reticle-label">RANGE <b id="range">240 M</b></div>
-        <div class="bottom-hud"><div class="ammo"><small>AMMUNITION</small><strong id="ammo">05 <span>/ 05</span></strong></div><div class="score"><small>TARGETS</small><strong id="score">00 <span>/ 03</span></strong></div><div class="controls-hint">DRAG TO LOOK · TAP FIRE</div></div>
-        <div class="center-message" id="message">TARGET ACQUIRED</div>
-        <div class="scope-overlay" id="scope"><div class="scope-ring"></div><div class="scope-cross"></div><span>OPTICAL ZOOM · 4X</span></div>
-        <div class="mobile-controls"><button id="fire">FIRE</button><button id="zoom">4× SCOPE</button><button id="reload">RELOAD</button><button id="gyro" aria-pressed="false">GYRO OFF</button><button id="calibrateGyro" disabled>GYRO SETUP</button></div>
-        <div class="start-screen main-menu" id="start">
-          <div class="menu-top"><div class="menu-brand">SNIPER<span>FUN</span><small>TACTICAL OPERATIONS</small></div><div class="menu-online"><i></i> GAME SYSTEMS ONLINE</div></div>
-          <div class="menu-content">
-            <section class="menu-intro"><div class="menu-kicker">FIRST-PERSON SNIPER EXPERIENCE</div><h1>PRECISION<br><span>IS EVERYTHING.</span></h1><p>Enter the field. Read the terrain. Take the shot. Your mission starts here.</p>
-              <div class="menu-actions"><button id="startBtn" class="play-button">START MISSION <b>→</b></button><button id="howBtn" class="secondary-button">HOW TO PLAY</button></div>
-            </section>
-            <aside class="mission-card"><div class="mission-card-head"><span>AVAILABLE OPERATION</span><b>01</b></div><div class="mission-art"><div class="art-crosshair"></div><div class="art-horizon"></div><span>TRAINING GROUNDS</span></div><div class="mission-card-body"><small>MISSION 01 / TRAINING</small><h2>LONG RANGE RECON</h2><p>Locate and neutralize all three targets across the desert range.</p><div class="mission-stats"><div><small>TARGETS</small><b>03</b></div><div><small>AMMO</small><b>05 RDS</b></div><div><small>DIFFICULTY</small><b>STANDARD</b></div></div><div class="mission-available"><i></i> READY FOR DEPLOYMENT</div></div></aside>
-          </div>
-          <div class="menu-footer"><span>SNIPER FUN <b>·</b> WEB EDITION</span><span>DRAG TO AIM <b>·</b> TAP TO FIRE <b>·</b> 4X OPTICAL SCOPE</span><span>V 0.1.0</span></div>
-          <div class="how-panel hidden" id="howPanel"><div class="how-card"><button id="closeHow" class="how-close" aria-label="Close">×</button><small>FIELD MANUAL / QUICK GUIDE</small><h2>HOW TO PLAY</h2><div class="how-row"><b>01</b><span><strong>AIM</strong>Drag anywhere on the game screen to look around.</span></div><div class="how-row"><b>02</b><span><strong>ZOOM</strong>Use 4× SCOPE to line up distant targets.</span></div><div class="how-row"><b>03</b><span><strong>SHOOT</strong>Tap FIRE or tap the screen to take a shot.</span></div><div class="how-row"><b>04</b><span><strong>RELOAD</strong>Use RELOAD when your magazine is empty.</span></div><p>Complete the objective before your health reaches zero.</p></div></div>
-        </div>
-        <div class="gyro-panel hidden" id="gyroPanel"><div class="gyro-card"><button id="closeGyroSettings" class="gyro-close" aria-label="Close">×</button><small>CONTROL CONFIGURATION</small><h2>GYROSCOPE SETTINGS</h2><label for="gyroSensitivity">NORMAL CAMERA SENSITIVITY <b id="gyroSensitivityValue">1.2×</b></label><input id="gyroSensitivity" type="range" min="3" max="24" value="12" step="1"><div class="gyro-range"><span>LOW</span><span>HIGH</span></div><label for="gyroScopeSensitivity" class="gyro-second-label">4× SCOPE SENSITIVITY <b id="gyroScopeSensitivityValue">0.6×</b></label><input id="gyroScopeSensitivity" type="range" min="2" max="16" value="6" step="1"><div class="gyro-range"><span>PRECISE</span><span>FAST</span></div><label for="touchSensitivity" class="gyro-second-label">TOUCH CAMERA SENSITIVITY <b id="touchSensitivityValue">0.4×</b></label><input id="touchSensitivity" type="range" min="1" max="12" value="4" step="1"><div class="gyro-range"><span>SLOW</span><span>FAST</span></div><label for="scopeTouchSensitivity" class="gyro-second-label">TOUCH SCOPE SENSITIVITY <b id="scopeTouchSensitivityValue">0.2×</b></label><input id="scopeTouchSensitivity" type="range" min="1" max="6" value="2" step="1"><div class="gyro-range"><span>PRECISE</span><span>FAST</span></div><label for="recoilCompensation" class="gyro-second-label">RECOIL COMPENSATION <b id="recoilCompensationValue">35%</b></label><input id="recoilCompensation" type="range" min="0" max="80" value="35" step="5"><div class="gyro-range"><span>REALISTIC</span><span>STABLE</span></div><button id="recenterGyro" class="gyro-recenter">RECENTER GYRO</button><p>Move your phone gently. Touch controls remain available at all times.</p></div></div>
-        <div class="start-screen result-screen hidden" id="result"><div class="start-card"><small>FIELD REPORT / MISSION 01</small><h1 id="resultTitle">MISSION<br><span>COMPLETE.</span></h1><p id="resultCopy">All training targets have been neutralized.</p><div class="result-stats"><div><small>TARGETS</small><b id="statTargets">03 / 03</b></div><div><small>SHOTS FIRED</small><b id="statShots">03</b></div><div><small>ACCURACY</small><b id="statAccuracy">100%</b></div><div><small>TIME</small><b id="statTime">00:00</b></div></div><button id="retryBtn">RETRY MISSION <b>↻</b></button><div class="start-foot">SNIPER FUN · TACTICAL RANGE</div></div></div>
-      </div>
-    </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#080d0b"><meta name="description" content="Sniper-$VVV — tactical multi-model AI command center.">
+<title>SNIPER-$VVV | AI COMMAND CENTER</title>
+</head>
+<body>
+<div id="app">
+<aside class="sidebar">
+<a class="brand" href="#"><span class="brand-mark">S</span><span>SNIPER<span class="green">-$VVV</span><small>AI COMMAND CENTER</small></span></a>
+<div class="side-label">WORKSPACE</div>
+<button class="side-item active" id="newChat"><span>＋</span> New operation</button>
+<button class="side-item" id="historyBtn"><span>◷</span> History <em>LOGIN</em></button>
+<div class="side-label tools-label">AI SYSTEMS</div>
+<button class="side-item tool-link active" data-tool="chat"><span>⌘</span> AI Chat</button>
+<button class="side-item tool-link" data-tool="code"><span>⟨/⟩</span> Coding assistant</button>
+<button class="side-item tool-link" data-tool="image"><span>▧</span> Image tools <em>BETA</em></button>
+<div class="sidebar-bottom"><div class="status-line"><i></i> SYSTEM READY</div><div class="quota-note">FREE ACCESS · PROVIDER LIMITS APPLY</div></div>
+</aside>
+<main class="main">
+<header class="topbar"><div class="mobile-brand">SNIPER<span>-$VVV</span></div><div class="top-meta"><span class="online-dot"></span> ALL SYSTEMS OPERATIONAL</div><button class="login-btn" id="loginBtn">SIGN IN <span>↗</span></button></header>
+<section class="workspace">
+<div class="eyebrow"><span></span> TACTICAL INTELLIGENCE INTERFACE / 001</div>
+<h1 id="headline">THINK FASTER.<br><span>BUILD WITHOUT LIMITS.</span></h1>
+<p class="intro" id="intro">A multi-model AI workspace. Choose your model or let the system route your request.</p>
+<div class="model-panel">
+<div class="panel-head"><div><span class="panel-kicker">MODEL CONTROL</span><strong>SELECT YOUR INTELLIGENCE</strong></div><span class="free-tag">FREE MODELS</span></div>
+<div class="model-controls"><label class="select-wrap"><span>ROUTING MODE</span><select id="routing"><option value="manual">MANUAL SELECTION</option><option value="auto">AUTO ROUTE</option></select></label><label class="select-wrap model-select-wrap"><span>AI MODEL</span><select id="model"><option value="">Loading free models…</option></select></label><button id="refreshModels" class="refresh" title="Refresh models">↻</button></div>
+<div class="model-foot"><span id="modelStatus">CONNECTING TO MODEL DIRECTORY</span><span>PROVIDER AVAILABILITY MAY CHANGE</span></div>
+</div>
+<div class="chat-shell">
+<div class="chat-head"><div><span class="live-indicator"></span><strong id="modeTitle">AI CHAT</strong><small>API KEY STORED SERVER-SIDE</small></div><button id="clearChat">CLEAR SESSION</button></div>
+<div class="messages" id="messages"><div class="welcome"><div class="welcome-icon">S<span>✳</span></div><div class="welcome-title">READY WHEN YOU ARE.</div><p>Ask a question, explore an idea, or start building something.</p><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div></div>
+<form id="chatForm" class="composer"><textarea id="promptInput" rows="2" placeholder="Send a message to Sniper AI…" required></textarea><div class="composer-bottom"><span>AI OUTPUT CAN BE INCORRECT. VERIFY IMPORTANT RESULTS.</span><button id="sendBtn" type="submit"><span>TRANSMIT</span> ↑</button></div></form>
+</div>
+<footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER FREE MODEL CATALOG</span></footer>
+</section></main></div>
+<script type="module" src="/src/ai-hub.js"></script>
+</body></html>
