@@ -112,11 +112,22 @@ const flashMesh=new THREE.Mesh(new THREE.ConeGeometry(.12,.42,8),new THREE.MeshB
 
 const targets=[];
 function makeTarget(x,z,index){const group=new THREE.Group();group.position.set(x,0,z);group.userData.baseX=x;group.userData.phase=index*1.8;group.userData.hit=false;group.userData.speed=.35+index*.12;
- const body=new THREE.Mesh(new THREE.CylinderGeometry(.32,.42,1.55,12),mat(0x343c39,.7));body.position.y=1.15;body.castShadow=true;group.add(body);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.28,14,12),mat(0x8b806b));head.position.y=2.08;head.castShadow=true;group.add(head);
- const plate=new THREE.Mesh(new THREE.BoxGeometry(1.3,.16,.12),mat(0x9c9b83));plate.position.y=2.75;group.add(plate);
- const pole=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,3.3,8),mat(0x454942));pole.position.set(0,1.5,-.13);group.add(pole);
- const marker=new THREE.Mesh(new THREE.BoxGeometry(.16,.16,.08),new THREE.MeshBasicMaterial({color:0xb99c5d}));marker.position.set(0,2.75,.08);group.add(marker);
+ const uniform=mat(index===1?0x555d4d:0x454f43,.92),skin=mat(0x8c7864,.95),gear=mat(0x343c37,.8),helmet=mat(0x343f38,.7),boots=mat(0x252b27,.9);
+ function part(geometry,material,pos,rot){const m=new THREE.Mesh(geometry,material);m.position.set(...pos);if(rot)m.rotation.set(...rot);m.castShadow=true;m.receiveShadow=true;group.add(m);return m;}
+ // Combat silhouette with helmet, torso, limbs and field gear.
+ part(new THREE.CylinderGeometry(.34,.42,.95,10),uniform,[0,1.28,0]);
+ part(new THREE.SphereGeometry(.25,12,10),skin,[0,1.96,0]);
+ part(new THREE.SphereGeometry(.29,12,8),helmet,[0,2.13,-.015]);
+ part(new THREE.BoxGeometry(.55,.28,.32),gear,[0,1.28,.23]);
+ part(new THREE.CylinderGeometry(.09,.11,.72,8),uniform,[-.43,1.35,0],[0,0,-.22]);
+ part(new THREE.CylinderGeometry(.09,.11,.72,8),uniform,[.43,1.35,0],[0,0,.22]);
+ part(new THREE.CylinderGeometry(.12,.14,.78,8),uniform,[-.17,.43,0],[0,0,-.04]);
+ part(new THREE.CylinderGeometry(.12,.14,.78,8),uniform,[.17,.43,0],[0,0,.04]);
+ part(new THREE.BoxGeometry(.22,.12,.38),boots,[-.17,.07,.05]);
+ part(new THREE.BoxGeometry(.22,.12,.38),boots,[.17,.07,.05]);
+ // A compact rifle across the chest.
+ part(new THREE.BoxGeometry(.1,.12,.82),gear,[.12,1.35,.38],[.08,0,-.28]);
+ part(new THREE.CylinderGeometry(.025,.025,.48,8),steel,[.12,1.39,.78],[Math.PI/2,0,0]);
  scene.add(group);targets.push(group);}
 makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
