@@ -133,16 +133,19 @@ makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
 const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0,pointerMoved=false,suppressNextClick=false;
 // Mobile gyroscope aiming. The player must enable it from a direct tap gesture.
-let gyroEnabled=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.012,gyroScopeSensitivity=.006,gyroSmoothing=.22;
+let gyroEnabled=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.012,gyroScopeSensitivity=.006,gyroSmoothing=.22,touchSensitivity=.0035,scopeTouchSensitivity=.0015,recoilCompensation=.35,cameraRecoilOffset=0;
 function loadGyroPreferences(){
  try{
   const saved=JSON.parse(localStorage.getItem('sniperFunGyro')||'{}');
   if(Number.isFinite(saved.camera))gyroSensitivity=THREE.MathUtils.clamp(saved.camera,.003,.024);
   if(Number.isFinite(saved.scope))gyroScopeSensitivity=THREE.MathUtils.clamp(saved.scope,.002,.016);
+  if(Number.isFinite(saved.touch))touchSensitivity=THREE.MathUtils.clamp(saved.touch,.001,.012);
+  if(Number.isFinite(saved.scopeTouch))scopeTouchSensitivity=THREE.MathUtils.clamp(saved.scopeTouch,.001,.006);
+  if(Number.isFinite(saved.recoil))recoilCompensation=THREE.MathUtils.clamp(saved.recoil,0,.8);
  }catch(_){}
 }
 function saveGyroPreferences(){
- try{localStorage.setItem('sniperFunGyro',JSON.stringify({camera:gyroSensitivity,scope:gyroScopeSensitivity}));}catch(_){}
+ try{localStorage.setItem('sniperFunGyro',JSON.stringify({camera:gyroSensitivity,scope:gyroScopeSensitivity,touch:touchSensitivity,scopeTouch:scopeTouchSensitivity,recoil:recoilCompensation}));}catch(_){}
 }
 loadGyroPreferences();
 let gyroFilteredYaw=0,gyroFilteredPitch=0;
@@ -157,13 +160,20 @@ function openGyroSettings(){ syncGyroSettingsUI();$('#gyroPanel').classList.remo
 function closeGyroSettings(){ $('#gyroPanel').classList.add('hidden'); }
 function updateGyroSettings(){
  const cameraValue=$('#gyroSensitivity'),scopeValue=$('#gyroScopeSensitivity');
+ const touchValue=$('#touchSensitivity'),scopeTouchValue=$('#scopeTouchSensitivity'),recoilValue=$('#recoilCompensation');
  if(cameraValue){gyroSensitivity=Number(cameraValue.value)/1000;$('#gyroSensitivityValue').textContent=(Number(cameraValue.value)/10).toFixed(1)+'×';}
  if(scopeValue){gyroScopeSensitivity=Number(scopeValue.value)/1000;$('#gyroScopeSensitivityValue').textContent=(Number(scopeValue.value)/10).toFixed(1)+'×';}
+ if(touchValue){touchSensitivity=Number(touchValue.value)/1000;$('#touchSensitivityValue').textContent=(Number(touchValue.value)/10).toFixed(1)+'×';}
+ if(scopeTouchValue){scopeTouchSensitivity=Number(scopeTouchValue.value)/1000;$('#scopeTouchSensitivityValue').textContent=(Number(scopeTouchValue.value)/10).toFixed(1)+'×';}
+ if(recoilValue){recoilCompensation=Number(recoilValue.value)/100;$('#recoilCompensationValue').textContent=Number(recoilValue.value)+'%';}
  saveGyroPreferences();
 }
 function syncGyroSettingsUI(){
  $('#gyroSensitivity').value=Math.round(gyroSensitivity*1000);
  $('#gyroScopeSensitivity').value=Math.round(gyroScopeSensitivity*1000);
+ $('#touchSensitivity').value=Math.round(touchSensitivity*1000);
+ $('#scopeTouchSensitivity').value=Math.round(scopeTouchSensitivity*1000);
+ $('#recoilCompensation').value=Math.round(recoilCompensation*100);
  updateGyroSettings();
 }
 function onDeviceOrientation(event){
@@ -215,7 +225,7 @@ function updateMissionReport(){
  $('#statAccuracy').textContent=accuracy+'%';
  $('#statTime').textContent=String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0');
 }
-function fire(){if(!started||reloadTime>0||missionFailed)return;enemyAlert=Math.min(100,enemyAlert+38);if(ammo<=0){showMessage('RELOAD REQUIRED');return;}ammo--;shotsFired++;recoil=.12;flash.intensity=5;flashMesh.visible=true;updateHud();
+function fire(){if(!started||reloadTime>0||missionFailed)return;enemyAlert=Math.min(100,enemyAlert+38);if(ammo<=0){showMessage('RELOAD REQUIRED');return;}ammo--;shotsFired++;recoil=.12;cameraRecoilOffset=Math.min(.055,cameraRecoilOffset+.014*(1-recoilCompensation));flash.intensity=5;flashMesh.visible=true;updateHud();
  raycaster.setFromCamera(new THREE.Vector2(0,0),camera);const meshes=targets.filter(t=>!t.userData.hit).flatMap(t=>t.children);const hits=raycaster.intersectObjects(meshes,false);
  if(hits.length){let root=hits[0].object;while(root.parent&&!targets.includes(root))root=root.parent;if(targets.includes(root)&&!root.userData.hit){root.userData.hit=true;root.userData.hitAt=performance.now();score++;updateHud();showMessage('TARGET NEUTRALIZED');if(score===3){missionFailed=true;updateMissionReport();showMessage('RANGE CLEARED');$('#missionTitle').textContent='MISSION COMPLETE';$('#resultTitle').innerHTML='MISSION<br><span>COMPLETE.</span>';$('#resultCopy').textContent='All training targets have been neutralized. Score: 03 / 03.';$('#result').classList.remove('hidden');}return;}}
  showMessage('SHOT FIRED');}
@@ -240,15 +250,17 @@ function pointerMove(e){
  if(!started)return;
  // Pointer-lock uses movement deltas because clientX/clientY remain centered.
  if(document.pointerLockElement===renderer.domElement){
-  yaw-=((e.movementX||0))*.003;
-  pitch=THREE.MathUtils.clamp(pitch-((e.movementY||0))*.002,-.5,.45);
+  const sensitivity=zoomed?scopeTouchSensitivity:touchSensitivity;
+  yaw-=((e.movementX||0))*sensitivity;
+  pitch=THREE.MathUtils.clamp(pitch-((e.movementY||0))*sensitivity*.72,-.5,.45);
   return;
  }
  if(!drag)return;
  const dx=e.clientX-lastX,dy=e.clientY-lastY;
  if(Math.abs(dx)+Math.abs(dy)>4)pointerMoved=true;
- yaw-=dx*.0035;
- pitch=THREE.MathUtils.clamp(pitch-dy*.0025,-.5,.45);
+ const sensitivity=zoomed?scopeTouchSensitivity:touchSensitivity;
+ yaw-=dx*sensitivity;
+ pitch=THREE.MathUtils.clamp(pitch-dy*sensitivity*.72,-.5,.45);
  lastX=e.clientX;lastY=e.clientY;
 }
 function pointerUp(e){if(pointerMoved)suppressNextClick=true;drag=false;try{if(renderer.domElement.hasPointerCapture(e.pointerId))renderer.domElement.releasePointerCapture(e.pointerId);}catch(_){}}
@@ -267,13 +279,14 @@ $('#startBtn').addEventListener('click',()=>{
  if(matchMedia('(pointer:fine)').matches)renderer.domElement.requestPointerLock?.();
 });
 $('#fire').addEventListener('click',fire);$('#reload').addEventListener('click',reload);$('#zoom').addEventListener('click',toggleZoom);
-$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',openGyroSettings);$('#recenterGyro').addEventListener('click',calibrateGyro);$('#closeGyroSettings').addEventListener('click',closeGyroSettings);$('#gyroSensitivity').addEventListener('input',updateGyroSettings);$('#gyroScopeSensitivity').addEventListener('input',updateGyroSettings);
+$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',openGyroSettings);$('#recenterGyro').addEventListener('click',calibrateGyro);$('#closeGyroSettings').addEventListener('click',closeGyroSettings);$('#gyroSensitivity').addEventListener('input',updateGyroSettings);$('#gyroScopeSensitivity').addEventListener('input',updateGyroSettings);$('#touchSensitivity').addEventListener('input',updateGyroSettings);$('#scopeTouchSensitivity').addEventListener('input',updateGyroSettings);$('#recoilCompensation').addEventListener('input',updateGyroSettings);
 addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire();}if(e.code==='KeyR')reload();if(e.code==='KeyZ')toggleZoom();});
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
 addEventListener('resize',resize);
 const clock=new THREE.Clock();
 function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
- camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;camera.position.y=2.1+Math.sin(t*.7)*.018;
+ camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch-cameraRecoilOffset;camera.position.y=2.1+Math.sin(t*.7)*.018;
+ cameraRecoilOffset=Math.max(0,cameraRecoilOffset-dt*.045);
  recoil=Math.max(0,recoil-dt*.55);rifle.position.z=-.82+recoil;rifle.rotation.x=-.04+recoil*.8;
  flash.intensity=Math.max(0,flash.intensity-dt*35);if(flash.intensity===0)flashMesh.visible=false;
  if(reloadTime>0){reloadTime=Math.max(0,reloadTime-dt);rifle.rotation.z=Math.sin((1.25-reloadTime)/1.25*Math.PI)*.48;if(reloadTime===0){ammo=5;updateHud();showMessage('MAGAZINE READY');}}else rifle.rotation.z=THREE.MathUtils.lerp(rifle.rotation.z,-.02,dt*8);
