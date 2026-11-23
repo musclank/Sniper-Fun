@@ -139,6 +139,7 @@ function wrapAngleDelta(value){while(value>180)value-=360;while(value<-180)value
 function calibrateGyro(){
  if(!gyroEnabled||!gyroLastEvent){showMessage('ENABLE GYRO AND MOVE PHONE');return;}
  gyroBaseline={beta:gyroLastEvent.beta,gamma:gyroLastEvent.gamma,angle:screen.orientation?.angle??0};
+ gyroFilteredYaw=0;gyroFilteredPitch=0;
  showMessage('GYRO RECENTERED');
 }
 function openGyroSettings(){ $('#gyroPanel').classList.remove('hidden'); }
@@ -146,7 +147,7 @@ function closeGyroSettings(){ $('#gyroPanel').classList.add('hidden'); }
 function updateGyroSettings(){
  const value=$('#gyroSensitivity');
  if(value){gyroSensitivity=Number(value.value)/1000;$('#gyroSensitivityValue').textContent=(Number(value.value)/10).toFixed(1)+'×';}
- gyroScopeScale=$('#gyroScopeScale').checked?.55:1;
+ gyroScopeScale=$('#gyroScopeScale').checked ? .55 : 1;
 }
 function onDeviceOrientation(event){
  if(!gyroEnabled||event.beta===null||event.gamma===null)return;
