@@ -58,7 +58,7 @@ The AI hub is being developed separately from the production game. The initial b
 - Cloudflare Pages Functions at `/api/models` and `/api/chat`.
 - OpenRouter free-model catalog and chat completion proxy.
 - Provider credentials stored only as Cloudflare Pages secrets (`OPENROUTER_API_KEY`).
-- Supabase Auth and database for account profiles and chat history in a later milestone.
+- Browser `localStorage` for local chat history; no account or external database required.
 
 ### Deployment settings
 - Framework preset: Vite
