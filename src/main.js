@@ -138,9 +138,16 @@ function updateHud(){$('#ammo').innerHTML=String(ammo).padStart(2,'0')+' <span>/
 function showMessage(t){const el=$('#message');el.textContent=t;el.classList.add('show');clearTimeout(showMessage.timer);showMessage.timer=setTimeout(()=>el.classList.remove('show'),1300);}
 function fire(){if(!started||reloadTime>0||missionFailed)return;enemyAlert=Math.min(100,enemyAlert+38);if(ammo<=0){showMessage('RELOAD REQUIRED');return;}ammo--;recoil=.12;flash.intensity=5;flashMesh.visible=true;updateHud();
  raycaster.setFromCamera(new THREE.Vector2(0,0),camera);const meshes=targets.filter(t=>!t.userData.hit).flatMap(t=>t.children);const hits=raycaster.intersectObjects(meshes,false);
- if(hits.length){let root=hits[0].object;while(root.parent&&!targets.includes(root))root=root.parent;if(targets.includes(root)&&!root.userData.hit){root.userData.hit=true;root.userData.hitAt=performance.now();score++;updateHud();showMessage('TARGET NEUTRALIZED');if(score===3){showMessage('RANGE CLEARED');$('#missionTitle').textContent='MISSION COMPLETE';}return;}}
+ if(hits.length){let root=hits[0].object;while(root.parent&&!targets.includes(root))root=root.parent;if(targets.includes(root)&&!root.userData.hit){root.userData.hit=true;root.userData.hitAt=performance.now();score++;updateHud();showMessage('TARGET NEUTRALIZED');if(score===3){missionFailed=true;showMessage('RANGE CLEARED');$('#missionTitle').textContent='MISSION COMPLETE';$('#resultTitle').innerHTML='MISSION<br><span>COMPLETE.</span>';$('#resultCopy').textContent='All training targets have been neutralized. Score: 03 / 03.';$('#result').classList.remove('hidden');}return;}}
  showMessage('SHOT FIRED');}
 function reload(){if(missionFailed||reloadTime>0||ammo===5)return;reloadTime=1.25;showMessage('RELOADING');}
+function retryMission(){
+ score=0;ammo=5;playerHealth=100;enemyAlert=0;incomingCooldown=2.5;missionFailed=false;reloadTime=0;recoil=0;yaw=0;pitch=0;zoomed=false;
+ camera.fov=65;camera.updateProjectionMatrix();$('#scope').classList.remove('active');$('#zoom').classList.remove('active');
+ targets.forEach(target=>{target.userData.hit=false;delete target.userData.hitAt;target.position.set(target.userData.baseX,0,target.position.z);target.rotation.set(0,0,0);});
+ $('#missionTitle').textContent='LONG RANGE RECON';$('#result').classList.add('hidden');rifle.rotation.set(-.04,-.08,-.02);rifle.position.set(.42,-.38,-.82);updateHud();showMessage('MISSION RESTARTED');
+}
+$('#retryBtn').addEventListener('click',retryMission);
 function toggleZoom(){zoomed=!zoomed;camera.fov=zoomed?18:65;camera.updateProjectionMatrix();$('#scope').classList.toggle('active',zoomed);$('#zoom').classList.toggle('active',zoomed);}
 function pointerDown(e){
  if(!started||e.target.closest('button'))return;
@@ -189,7 +196,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  if(reloadTime>0){reloadTime=Math.max(0,reloadTime-dt);rifle.rotation.z=Math.sin((1.25-reloadTime)/1.25*Math.PI)*.48;if(reloadTime===0){ammo=5;updateHud();showMessage('MAGAZINE READY');}}else rifle.rotation.z=THREE.MathUtils.lerp(rifle.rotation.z,-.02,dt*8);
  const dustAttr=dust.geometry.attributes.position;for(let i=0;i<dustCount;i++){const j=i*3;dustAttr.array[j]+=dt* dustSpeeds[i]*.75;dustAttr.array[j+1]+=Math.sin(t+i)*dt*.08;dustAttr.array[j+2]+=dt*dustSpeeds[i]*.3;if(dustAttr.array[j]>78)dustAttr.array[j]=-78;if(dustAttr.array[j+2]>8)dustAttr.array[j+2]=-220;}dustAttr.needsUpdate=true;
  // Enemies become suspicious after shots and survivors track the player's position.
- if(score<3){const alive=targets.filter(target=>!target.userData.hit);if(alive.length&&enemyAlert>0){enemyAlert=Math.max(0,enemyAlert-dt*.65);incomingCooldown-=dt;alive.forEach(target=>target.lookAt(camera.position.x,target.position.y+1.3,camera.position.z));if(incomingCooldown<=0&&enemyAlert>35){incomingCooldown=2.8+Math.random()*1.4;playerHealth=Math.max(0,playerHealth-(enemyAlert>75?9:5));showMessage('INCOMING FIRE');if(playerHealth<=0){missionFailed=true;$('#missionTitle').textContent='MISSION FAILED';showMessage('OPERATOR DOWN');}}}}
+ if(score<3){const alive=targets.filter(target=>!target.userData.hit);if(alive.length&&enemyAlert>0){enemyAlert=Math.max(0,enemyAlert-dt*.65);incomingCooldown-=dt;alive.forEach(target=>target.lookAt(camera.position.x,target.position.y+1.3,camera.position.z));if(incomingCooldown<=0&&enemyAlert>35){incomingCooldown=2.8+Math.random()*1.4;playerHealth=Math.max(0,playerHealth-(enemyAlert>75?9:5));showMessage('INCOMING FIRE');if(playerHealth<=0){missionFailed=true;$('#missionTitle').textContent='MISSION FAILED';$('#resultTitle').innerHTML='MISSION<br><span>FAILED.</span>';$('#resultCopy').textContent='Operator down. Regroup and try the range again.';$('#result').classList.remove('hidden');showMessage('OPERATOR DOWN');}}}}
  targets.forEach(target=>{if(!target.userData.hit){target.position.x=target.userData.baseX+Math.sin(t*target.userData.speed+target.userData.phase)*1.35;}else if(target.userData.hitAt){const fallen=Math.min((performance.now()-target.userData.hitAt)/420,1);target.rotation.z=-fallen*.9;target.position.y=-fallen*.28;}});updateHud();
  renderer.render(scene,camera);}
 animate();updateHud();
