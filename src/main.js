@@ -133,7 +133,18 @@ makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
 const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0,pointerMoved=false,suppressNextClick=false;
 // Mobile gyroscope aiming. The player must enable it from a direct tap gesture.
-let gyroEnabled=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.012,gyroScopeScale=.55,gyroSmoothing=.22;
+let gyroEnabled=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.012,gyroScopeSensitivity=.006,gyroSmoothing=.22;
+function loadGyroPreferences(){
+ try{
+  const saved=JSON.parse(localStorage.getItem('sniperFunGyro')||'{}');
+  if(Number.isFinite(saved.camera))gyroSensitivity=THREE.MathUtils.clamp(saved.camera,.003,.024);
+  if(Number.isFinite(saved.scope))gyroScopeSensitivity=THREE.MathUtils.clamp(saved.scope,.002,.016);
+ }catch(_){}
+}
+function saveGyroPreferences(){
+ try{localStorage.setItem('sniperFunGyro',JSON.stringify({camera:gyroSensitivity,scope:gyroScopeSensitivity}));}catch(_){}
+}
+loadGyroPreferences();
 let gyroFilteredYaw=0,gyroFilteredPitch=0;
 function wrapAngleDelta(value){while(value>180)value-=360;while(value<-180)value+=360;return value;}
 function calibrateGyro(){
@@ -142,12 +153,18 @@ function calibrateGyro(){
  gyroFilteredYaw=0;gyroFilteredPitch=0;
  showMessage('GYRO RECENTERED');
 }
-function openGyroSettings(){ $('#gyroPanel').classList.remove('hidden'); }
+function openGyroSettings(){ syncGyroSettingsUI();$('#gyroPanel').classList.remove('hidden'); }
 function closeGyroSettings(){ $('#gyroPanel').classList.add('hidden'); }
 function updateGyroSettings(){
- const value=$('#gyroSensitivity');
- if(value){gyroSensitivity=Number(value.value)/1000;$('#gyroSensitivityValue').textContent=(Number(value.value)/10).toFixed(1)+'×';}
- gyroScopeScale=$('#gyroScopeScale').checked ? .55 : 1;
+ const cameraValue=$('#gyroSensitivity'),scopeValue=$('#gyroScopeSensitivity');
+ if(cameraValue){gyroSensitivity=Number(cameraValue.value)/1000;$('#gyroSensitivityValue').textContent=(Number(cameraValue.value)/10).toFixed(1)+'×';}
+ if(scopeValue){gyroScopeSensitivity=Number(scopeValue.value)/1000;$('#gyroScopeSensitivityValue').textContent=(Number(scopeValue.value)/10).toFixed(1)+'×';}
+ saveGyroPreferences();
+}
+function syncGyroSettingsUI(){
+ $('#gyroSensitivity').value=Math.round(gyroSensitivity*1000);
+ $('#gyroScopeSensitivity').value=Math.round(gyroScopeSensitivity*1000);
+ updateGyroSettings();
 }
 function onDeviceOrientation(event){
  if(!gyroEnabled||event.beta===null||event.gamma===null)return;
@@ -159,8 +176,7 @@ function onDeviceOrientation(event){
  if(current.angle===90){yawDelta=wrapAngleDelta(current.beta-previous.beta);pitchDelta=-wrapAngleDelta(current.gamma-previous.gamma);}
  else if(current.angle===270){yawDelta=-wrapAngleDelta(current.beta-previous.beta);pitchDelta=wrapAngleDelta(current.gamma-previous.gamma);}
  else if(current.angle===180){yawDelta=-yawDelta;pitchDelta=-pitchDelta;}
- const scopeFactor=zoomed?gyroScopeScale:1;
- const scale=gyroSensitivity*scopeFactor;
+ const scale=zoomed?gyroScopeSensitivity:gyroSensitivity;
  gyroFilteredYaw+=(yawDelta*scale-gyroFilteredYaw)*gyroSmoothing;
  gyroFilteredPitch+=(pitchDelta*scale-gyroFilteredPitch)*gyroSmoothing;
  yaw=THREE.MathUtils.clamp(yaw-gyroFilteredYaw,-Math.PI*.48,Math.PI*.48);
@@ -251,7 +267,7 @@ $('#startBtn').addEventListener('click',()=>{
  if(matchMedia('(pointer:fine)').matches)renderer.domElement.requestPointerLock?.();
 });
 $('#fire').addEventListener('click',fire);$('#reload').addEventListener('click',reload);$('#zoom').addEventListener('click',toggleZoom);
-$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',openGyroSettings);$('#recenterGyro').addEventListener('click',calibrateGyro);$('#closeGyroSettings').addEventListener('click',closeGyroSettings);$('#gyroSensitivity').addEventListener('input',updateGyroSettings);$('#gyroScopeScale').addEventListener('change',updateGyroSettings);
+$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',openGyroSettings);$('#recenterGyro').addEventListener('click',calibrateGyro);$('#closeGyroSettings').addEventListener('click',closeGyroSettings);$('#gyroSensitivity').addEventListener('input',updateGyroSettings);$('#gyroScopeSensitivity').addEventListener('input',updateGyroSettings);
 addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire();}if(e.code==='KeyR')reload();if(e.code==='KeyZ')toggleZoom();});
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
 addEventListener('resize',resize);
