@@ -23,6 +23,78 @@ for(let i=0;i<24;i++){const x=(Math.random()-.5)*420,z=-100-Math.random()*250;ri
 const floorGrid=new THREE.GridHelper(500,100,0x9b9a79,0x8b8b72);floorGrid.position.y=.01;floorGrid.material.transparent=true;floorGrid.material.opacity=.12;scene.add(floorGrid);
 for(let i=0;i<90;i++){const x=(Math.random()-.5)*180,z=-15-Math.random()*180,h=.6+Math.random()*1.8;const shrub=new THREE.Mesh(new THREE.DodecahedronGeometry(.5,0),mat(i%2?0x555b3f:0x77734d));shrub.position.set(x,h/2-.05,z);shrub.scale.set(1,h,1);shrub.castShadow=true;scene.add(shrub);}
 
+
+// Expanded battlefield set dressing: outpost, defensive positions, road and drifting dust.
+const concrete=mat(0x77786d,.94),sandbag=mat(0x9a8969,.98),steel=mat(0x414943,.72,.35),wood=mat(0x66533c,.95);
+function boxAsset(x,y,z,w,h,d,material,rz=0){
+ const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
+ mesh.position.set(x,y,z);mesh.rotation.z=rz;mesh.castShadow=true;mesh.receiveShadow=true;scene.add(mesh);return mesh;
+}
+function cylinderAsset(x,y,z,r1,r2,h,material,segments=10){
+ const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,segments),material);
+ mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;scene.add(mesh);return mesh;
+}
+// Low concrete command bunker to the left of the firing lane.
+boxAsset(-27,1.6,-75,13,3.2,10,concrete);
+boxAsset(-27,3.35,-75,14,.35,11,mat(0x555b54));
+boxAsset(-27,1.2,-69.85,3.2,1.5,.18,mat(0x252d2a));
+boxAsset(-30,2.2,-69.72,.18,.12,.12,steel);
+boxAsset(-24,2.2,-69.72,.18,.12,.12,steel);
+// Watch tower on the far right, with cross-braced supports.
+for(const x of [29,34])for(const z of [-92,-87]){
+ cylinderAsset(x,4.5,z,.13,.18,9,steel,8);
+}
+boxAsset(31.5,8.6,-89.5,7,.35,7,wood);
+boxAsset(31.5,10.2,-89.5,7,.35,7,wood);
+for(const x of [28.5,34.5]){
+ boxAsset(x,9.4,-86, .18,1.5,.18,steel);
+ boxAsset(x,9.4,-93, .18,1.5,.18,steel);
+}
+boxAsset(31.5,9.5,-89.5,5.8,1.6,5.8,mat(0x5d655a));
+// Guard rail and ladder details.
+for(let i=0;i<7;i++)boxAsset(28.6+i*.95,9.4,-86.1,.06,.9,.06,steel);
+for(let i=0;i<8;i++)boxAsset(34.3,1.2+i*1.05,-89.5,.75,.08,.12,steel);
+// Sandbag firing positions, staggered along the range.
+function sandbagWall(x,z,count,angle=0){
+ for(let row=0;row<2;row++)for(let i=0;i<count;i++){
+  const a=boxAsset(x+(i-(count-1)/2)*1.05, .34+row*.52,z-row*.13,1.12,.55,.72,sandbag);
+  a.rotation.y=angle;
+ }
+}
+sandbagWall(-15,-37,8,-.12);sandbagWall(17,-48,7,.18);sandbagWall(-35,-115,9,.08);
+// Supply crates, fuel drums and anti-vehicle barriers.
+for(const [x,z] of [[-20,-43],[-23,-45],[23,-58],[26,-60],[-40,-95]]){
+ boxAsset(x,.65,z,1.35,1.3,1.35,wood,Math.random()*.08);
+ boxAsset(x,.67,z,1.38,.08,.08,steel);
+}
+for(const [x,z] of [[-18,-48],[20,-65],[38,-105]]){
+ cylinderAsset(x,.72,z,.48,.48,1.4,mat(0x4b594d,.55,.55),16);
+ cylinderAsset(x,1.44,z,.49,.49,.08,steel,16);
+}
+function barrier(x,z,angle=0){
+ const g=new THREE.Group();g.position.set(x,.0,z);g.rotation.y=angle;
+ const base=new THREE.Mesh(new THREE.BoxGeometry(3.5,.8,.8),mat(0x777b70));base.position.y=.45;base.castShadow=true;base.receiveShadow=true;g.add(base);
+ const stripe=new THREE.Mesh(new THREE.BoxGeometry(3.52,.22,.82),mat(0xb09a62));stripe.position.y=.5;g.add(stripe);scene.add(g);
+}
+barrier(-8,-24,.15);barrier(9,-31,-.18);barrier(42,-76,.5);
+// A worn service road running toward the distant outpost.
+const road=new THREE.Mesh(new THREE.PlaneGeometry(15,260),mat(0x625e4d));road.rotation.x=-Math.PI/2;road.position.set(0,.005,-145);road.receiveShadow=true;scene.add(road);
+for(let side of [-1,1])for(let i=0;i<24;i++){
+ const dash=new THREE.Mesh(new THREE.BoxGeometry(.12,.015,2.2),mat(0xb6a77d));
+ dash.position.set(side*7.15,.02,-24-i*10.5);scene.add(dash);
+}
+// Fine dust drifting across the battlefield; low particle count for mobile GPUs.
+const dustCount=520,dustPositions=new Float32Array(dustCount*3),dustSpeeds=new Float32Array(dustCount);
+for(let i=0;i<dustCount;i++){
+ dustPositions[i*3]=(Math.random()-.5)*150;
+ dustPositions[i*3+1]=Math.random()*15;
+ dustPositions[i*3+2]=-Math.random()*220;
+ dustSpeeds[i]=.4+Math.random()*1.2;
+}
+const dustGeometry=new THREE.BufferGeometry();dustGeometry.setAttribute('position',new THREE.BufferAttribute(dustPositions,3));
+const dust=new THREE.Points(dustGeometry,new THREE.PointsMaterial({color:0xd8c9a6,size:.12,transparent:true,opacity:.3,depthWrite:false}));
+scene.add(dust);
+
 // Procedural first-person rifle: camera-mounted geometry, no external asset required.
 const rifle=new THREE.Group();camera.add(rifle);rifle.position.set(.42,-.38,-.82);rifle.rotation.set(-.04,-.08,-.02);
 const gunMetal=mat(0x202824,.34,.72),gunDark=mat(0x111714,.52,.25),gunRubber=mat(0x303832,.9),scopeGlass=new THREE.MeshStandardMaterial({color:0x243c3b,metalness:.8,roughness:.12});
@@ -74,6 +146,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  recoil=Math.max(0,recoil-dt*.55);rifle.position.z=-.82+recoil;rifle.rotation.x=-.04+recoil*.8;
  flash.intensity=Math.max(0,flash.intensity-dt*35);if(flash.intensity===0)flashMesh.visible=false;
  if(reloadTime>0){reloadTime=Math.max(0,reloadTime-dt);rifle.rotation.z=Math.sin((1.25-reloadTime)/1.25*Math.PI)*.48;if(reloadTime===0){ammo=5;updateHud();showMessage('MAGAZINE READY');}}else rifle.rotation.z=THREE.MathUtils.lerp(rifle.rotation.z,-.02,dt*8);
+ const dustAttr=dust.geometry.attributes.position;for(let i=0;i<dustCount;i++){const j=i*3;dustAttr.array[j]+=dt* dustSpeeds[i]*.75;dustAttr.array[j+1]+=Math.sin(t+i)*dt*.08;dustAttr.array[j+2]+=dt*dustSpeeds[i]*.3;if(dustAttr.array[j]>78)dustAttr.array[j]=-78;if(dustAttr.array[j+2]>8)dustAttr.array[j+2]=-220;}dustAttr.needsUpdate=true;
  targets.forEach(target=>{if(!target.userData.hit){target.position.x=target.userData.baseX+Math.sin(t*target.userData.speed+target.userData.phase)*1.35;}else if(target.userData.hitAt){const fallen=Math.min((performance.now()-target.userData.hitAt)/420,1);target.rotation.z=-fallen*.9;target.position.y=-fallen*.28;}});
  renderer.render(scene,camera);}
 animate();updateHud();
