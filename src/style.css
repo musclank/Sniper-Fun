@@ -22,3 +22,68 @@ canvas{touch-action:none}
 #resultTitle{color:#e9e7d8}
 #resultTitle span{color:#c3a56c}
 #resultCopy{min-height:40px}
+
+/* Tactical main menu */
+.main-menu{display:block;overflow:auto;background:linear-gradient(90deg,#080e0cfa 0%,#0a100edb 48%,#0a100e88 100%),linear-gradient(0deg,#080d0bd9,transparent 70%);color:#f0eee3}
+.menu-top{position:absolute;top:28px;left:5.5%;right:5.5%;display:flex;align-items:center;justify-content:space-between}
+.menu-brand{font:900 30px 'Barlow Condensed';letter-spacing:3px;color:#f2f0e5}
+.menu-brand span{color:#c6a66b}
+.menu-brand small{display:block;font:8px 'DM Mono';letter-spacing:3px;color:#a8ad9e;margin-top:2px}
+.menu-online{font-size:9px;letter-spacing:1.5px;color:#c4c9ba}
+.menu-online i,.mission-available i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a9c77b;box-shadow:0 0 9px #a9c77b;margin-right:9px}
+.menu-content{position:relative;min-height:100%;width:min(1120px,89%);margin:auto;display:grid;grid-template-columns:1.1fr .78fr;align-items:center;gap:8%;padding:105px 0 90px}
+.menu-intro{padding:20px 0}
+.menu-kicker{font-size:9px;letter-spacing:3px;color:#c7ad76}
+.menu-intro h1{font:900 clamp(54px,8vw,94px)/.83 'Barlow Condensed';letter-spacing:1px;margin:24px 0}
+.menu-intro h1 span{color:#c4a56b}
+.menu-intro>p{max-width:390px;font-size:11px;line-height:1.9;color:#c1c6b9;margin:28px 0 34px}
+.menu-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.menu-actions button{height:50px;padding:0 22px;font:700 10px 'DM Mono';letter-spacing:1.5px;cursor:pointer}
+.menu-actions .play-button{background:#c5a66a;border:1px solid #c5a66a;color:#11170f;min-width:190px}
+.play-button b{font-size:16px;margin-left:25px}
+.menu-actions .secondary-button{background:#17201b99;border:1px solid #8d927e;color:#e8e7d9}
+.menu-actions button:active{transform:translateY(1px)}
+.mission-card{border:1px solid #c1aa7555;background:#111a16d9;box-shadow:0 22px 70px #0008;backdrop-filter:blur(8px)}
+.mission-card-head{height:43px;padding:0 17px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #c1aa7533;font-size:8px;letter-spacing:1.7px;color:#c9c4b1}
+.mission-card-head b{font:700 16px 'Barlow Condensed';color:#c6a66b}
+.mission-art{height:145px;position:relative;overflow:hidden;background:linear-gradient(180deg,#8a9991 0%,#596b61 52%,#353f35 53%,#242d25 100%)}
+.mission-art:before,.mission-art:after{content:'';position:absolute;bottom:40px;width:0;height:0;border-left:130px solid transparent;border-right:130px solid transparent;border-bottom:100px solid #414c40;opacity:.9}
+.mission-art:before{left:-35px}.mission-art:after{right:-65px;border-bottom-color:#303c32}
+.art-horizon{position:absolute;left:0;right:0;bottom:34px;height:2px;background:#c9b17b88}
+.art-crosshair{position:absolute;z-index:2;left:50%;top:45%;width:32px;height:32px;transform:translate(-50%,-50%);border:1px solid #e4ddc5aa;border-radius:50%}
+.art-crosshair:before,.art-crosshair:after{content:'';position:absolute;background:#e4ddc5aa}
+.art-crosshair:before{width:1px;height:48px;left:15px;top:-9px}.art-crosshair:after{height:1px;width:48px;top:15px;left:-9px}
+.mission-art>span{position:absolute;z-index:3;left:17px;bottom:13px;font-size:8px;letter-spacing:2px;color:#f0ead7}
+.mission-card-body{padding:19px}
+.mission-card-body>small{font-size:8px;letter-spacing:1.8px;color:#c5a66b}
+.mission-card-body h2{font:800 27px 'Barlow Condensed';letter-spacing:1px;margin:8px 0}
+.mission-card-body>p{font-size:10px;line-height:1.7;color:#bfc5b8;margin:0 0 18px}
+.mission-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:13px 0;border-top:1px solid #ffffff20;border-bottom:1px solid #ffffff20}
+.mission-stats div{display:grid;gap:7px;border-right:1px solid #ffffff20;padding-left:10px}
+.mission-stats div:first-child{padding-left:0}.mission-stats div:last-child{border:0}
+.mission-stats small{font-size:7px;letter-spacing:1px;color:#9fa99a}
+.mission-stats b{font:700 13px 'Barlow Condensed';letter-spacing:.6px;color:#ece8d9}
+.mission-available{padding-top:15px;font-size:8px;letter-spacing:1.2px;color:#d2d5c7}
+.menu-footer{position:absolute;left:5.5%;right:5.5%;bottom:23px;display:flex;justify-content:space-between;gap:14px;font-size:7px;letter-spacing:1.1px;color:#929b8d}
+.menu-footer b{color:#c3a56b;padding:0 4px}
+.how-panel{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:#050907d9;backdrop-filter:blur(8px)}
+.how-panel.hidden{display:none}
+.how-card{position:relative;width:min(460px,100%);padding:30px;border:1px solid #bda46d66;background:#121b16}
+.how-card>small{font-size:8px;letter-spacing:2px;color:#c5a66b}
+.how-card h2{font:800 36px 'Barlow Condensed';margin:12px 0 23px}
+.how-close{position:absolute;right:16px;top:12px;background:none;border:0;color:#e9e7d9;font-size:26px;cursor:pointer}
+.how-row{display:flex;gap:15px;padding:13px 0;border-top:1px solid #ffffff20}
+.how-row>b{font:700 18px 'Barlow Condensed';color:#c5a66b}
+.how-row span{font-size:9px;line-height:1.6;color:#bfc5b8}
+.how-row strong{display:block;color:#f0eee3;font-size:9px;letter-spacing:1px;margin-bottom:3px}
+.how-card>p{font-size:9px;line-height:1.7;color:#c5a66b;margin:18px 0 0}
+@media(max-width:760px){
+ .menu-top{top:18px;left:6%;right:6%}.menu-brand{font-size:24px}.menu-online{font-size:7px}
+ .menu-content{width:88%;grid-template-columns:1fr;gap:24px;padding:95px 0 100px;align-content:center}
+ .menu-intro{padding:8px 0}.menu-kicker{font-size:7px;letter-spacing:2px}
+ .menu-intro h1{font-size:clamp(48px,13vw,68px);margin:15px 0}
+ .menu-intro>p{font-size:9px;margin:17px 0 20px;max-width:320px}
+ .menu-actions{gap:9px}.menu-actions button{height:44px;padding:0 13px;font-size:8px}.menu-actions .play-button{min-width:160px}
+ .mission-card{max-width:440px;width:100%;margin:0 auto}.mission-art{height:90px}.mission-card-body{padding:13px}.mission-card-body h2{font-size:22px}.mission-card-body>p{font-size:9px;margin-bottom:12px}
+ .mission-stats{padding:9px 0}.menu-footer{left:6%;right:6%;bottom:13px;flex-wrap:wrap;font-size:6px}.menu-footer span:nth-child(2){display:none}
+}
