@@ -148,6 +148,9 @@ function retryMission(){
  $('#missionTitle').textContent='LONG RANGE RECON';$('#result').classList.add('hidden');rifle.rotation.set(-.04,-.08,-.02);rifle.position.set(.42,-.38,-.82);updateHud();showMessage('MISSION RESTARTED');
 }
 $('#retryBtn').addEventListener('click',retryMission);
+$('#howBtn').addEventListener('click',()=>$('#howPanel').classList.remove('hidden'));
+$('#closeHow').addEventListener('click',()=>$('#howPanel').classList.add('hidden'));
+$('#howPanel').addEventListener('click',e=>{if(e.target===$('#howPanel'))$('#howPanel').classList.add('hidden');});
 function toggleZoom(){zoomed=!zoomed;camera.fov=zoomed?18:65;camera.updateProjectionMatrix();$('#scope').classList.toggle('active',zoomed);$('#zoom').classList.toggle('active',zoomed);}
 function pointerDown(e){
  if(!started||e.target.closest('button'))return;
