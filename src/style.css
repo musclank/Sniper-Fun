@@ -87,3 +87,11 @@ canvas{touch-action:none}
  .mission-card{max-width:440px;width:100%;margin:0 auto}.mission-art{height:90px}.mission-card-body{padding:13px}.mission-card-body h2{font-size:22px}.mission-card-body>p{font-size:9px;margin-bottom:12px}
  .mission-stats{padding:9px 0}.menu-footer{left:6%;right:6%;bottom:13px;flex-wrap:wrap;font-size:6px}.menu-footer span:nth-child(2){display:none}
 }
+
+/* Mission performance report */
+.result-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid #ffffff24;border-bottom:1px solid #ffffff24;margin:0 0 24px}
+.result-stats>div{display:grid;gap:6px;padding:13px 10px;border-bottom:1px solid #ffffff18}
+.result-stats>div:nth-child(odd){border-right:1px solid #ffffff18;padding-left:0}
+.result-stats>div:nth-child(n+3){border-bottom:0}
+.result-stats small{font-size:8px;letter-spacing:1.3px;color:#aeb6a7}
+.result-stats b{font:700 20px 'Barlow Condensed';letter-spacing:1px;color:#eee9d9}
