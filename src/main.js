@@ -132,6 +132,44 @@ function makeTarget(x,z,index){const group=new THREE.Group();group.position.set(
 makeTarget(-8,-65,0);makeTarget(5,-105,1);makeTarget(19,-155,2);
 
 const raycaster=new THREE.Raycaster();let yaw=0,pitch=0,zoomed=false,started=false,ammo=5,score=0,drag=false,lastX=0,lastY=0,recoil=0,reloadTime=0,pointerMoved=false,suppressNextClick=false;
+// Mobile gyroscope aiming. The player must enable it from a direct tap gesture.
+let gyroEnabled=false,gyroReady=false,gyroBaseline=null,gyroLastEvent=null,gyroSensitivity=.009,gyroPermission='unknown';
+function calibrateGyro(){
+ if(!gyroEnabled||!gyroLastEvent){showMessage('MOVE PHONE TO CALIBRATE');return;}
+ gyroBaseline={beta:gyroLastEvent.beta,gamma:gyroLastEvent.gamma,angle:screen.orientation?.angle??0};
+ showMessage('GYRO CALIBRATED');
+}
+function onDeviceOrientation(event){
+ if(!gyroEnabled||event.beta===null||event.gamma===null)return;
+ gyroLastEvent={beta:event.beta,gamma:event.gamma};
+ if(!gyroBaseline){gyroBaseline={beta:event.beta,gamma:event.gamma,angle:screen.orientation?.angle??0};return;}
+ const angle=screen.orientation?.angle??0;
+ let yawDelta=event.gamma-gyroBaseline.gamma;
+ let pitchDelta=event.beta-gyroBaseline.beta;
+ if(angle===90){yawDelta=event.beta-gyroBaseline.beta;pitchDelta=-(event.gamma-gyroBaseline.gamma);}
+ else if(angle===270){yawDelta=-(event.beta-gyroBaseline.beta);pitchDelta=event.gamma-gyroBaseline.gamma;}
+ yaw=THREE.MathUtils.clamp(yaw-yawDelta*gyroSensitivity,-Math.PI*.48,Math.PI*.48);
+ pitch=THREE.MathUtils.clamp(pitch-pitchDelta*gyroSensitivity*.72,-.5,.45);
+}
+async function toggleGyro(){
+ if(gyroEnabled){gyroEnabled=false;gyroBaseline=null;removeEventListener('deviceorientation',onDeviceOrientation);updateGyroButtons();showMessage('GYRO OFF');return;}
+ if(!('DeviceOrientationEvent' in window)){showMessage('GYROSCOPE NOT SUPPORTED');return;}
+ if(!isSecureContext){showMessage('GYRO REQUIRES HTTPS');return;}
+ try{
+  if(typeof DeviceOrientationEvent.requestPermission==='function'){
+   const permission=await DeviceOrientationEvent.requestPermission();
+   if(permission!=='granted'){showMessage('GYRO PERMISSION DENIED');return;}
+  }
+  gyroEnabled=true;gyroReady=true;gyroBaseline=null;addEventListener('deviceorientation',onDeviceOrientation,{passive:true});
+  updateGyroButtons();showMessage('GYRO ON · HOLD PHONE COMFORTABLY');
+ }catch(error){gyroEnabled=false;showMessage('GYRO PERMISSION UNAVAILABLE');updateGyroButtons();}
+}
+function updateGyroButtons(){
+ const button=$('#gyro');if(!button)return;
+ button.textContent=gyroEnabled?'GYRO ON':'GYRO OFF';button.classList.toggle('active',gyroEnabled);button.setAttribute('aria-pressed',String(gyroEnabled));
+ const calibration=$('#calibrateGyro');if(calibration)calibration.disabled=!gyroEnabled;
+}
+
 let playerHealth=100,enemyAlert=0,incomingCooldown=2.5,missionFailed=false,shotsFired=0,missionStart=0,missionElapsed=0;
 const $=s=>document.querySelector(s);
 function updateHud(){$('#ammo').innerHTML=String(ammo).padStart(2,'0')+' <span>/ 05</span>';$('#score').innerHTML=String(score).padStart(2,'0')+' <span>/ 03</span>';$('#healthValue').textContent=Math.ceil(playerHealth)+'%';$('#healthBar').style.width=playerHealth+'%';$('#alertValue').textContent=enemyAlert>75?'ENGAGED':enemyAlert>30?'SEARCHING':'LOW';$('#alertBar').style.width=enemyAlert+'%';}
@@ -198,6 +236,7 @@ $('#startBtn').addEventListener('click',()=>{
  if(matchMedia('(pointer:fine)').matches)renderer.domElement.requestPointerLock?.();
 });
 $('#fire').addEventListener('click',fire);$('#reload').addEventListener('click',reload);$('#zoom').addEventListener('click',toggleZoom);
+$('#gyro').addEventListener('click',toggleGyro);$('#calibrateGyro').addEventListener('click',calibrateGyro);
 addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire();}if(e.code==='KeyR')reload();if(e.code==='KeyZ')toggleZoom();});
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
 addEventListener('resize',resize);
