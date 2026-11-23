@@ -95,3 +95,8 @@ canvas{touch-action:none}
 .result-stats>div:nth-child(n+3){border-bottom:0}
 .result-stats small{font-size:8px;letter-spacing:1.3px;color:#aeb6a7}
 .result-stats b{font:700 20px 'Barlow Condensed';letter-spacing:1px;color:#eee9d9}
+
+/* Gyroscope controls */
+.mobile-controls button:disabled{opacity:.42;cursor:not-allowed}
+.mobile-controls button#gyro.active{background:#a9c47b;color:#11170f;border-color:#a9c47b}
+@media(max-width:600px){.mobile-controls{gap:5px}.mobile-controls button{font-size:8px;padding:12px 3px;letter-spacing:.3px}}
