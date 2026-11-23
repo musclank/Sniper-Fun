@@ -116,3 +116,5 @@ canvas{touch-action:none}
 .gyro-recenter{width:100%;padding:14px;border:0;background:#c5a66b;color:#11170f;font:700 10px 'DM Mono';letter-spacing:1px}
 .gyro-card p{font-size:9px;line-height:1.7;color:#aeb8a9;margin:16px 0 0}
 .gyro-close{position:absolute;right:15px;top:10px;background:none;border:0;color:#eee;font-size:25px}
+
+.gyro-card .gyro-second-label{margin-top:22px}
