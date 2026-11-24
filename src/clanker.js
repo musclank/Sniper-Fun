@@ -2,33 +2,33 @@ const API='/api/clanker';
 const money=value=>{const n=Number(value);if(!Number.isFinite(n)||n<=0)return '—';return n>=1e9?'$'+(n/1e9).toFixed(2)+'B':n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+(n/1e3).toFixed(2)+'K':n<.01?'$'+n.toExponential(2):'$'+n.toFixed(n<1?5:3)};
 const pick=(o,keys)=>{for(const k of keys){const v=k.split('.').reduce((a,b)=>a?.[b],o);if(v!==undefined&&v!==null&&v!=='')return v}return null};
 const arr=data=>{
- const queue=[data],seen=new Set();
- const keys=['tokens','results','items','data','pools','trending','clankers'];
- while(queue.length){
-  const value=queue.shift();
-  if(Array.isArray(value))return value;
-  if(!value||typeof value!=='object'||seen.has(value))continue;
-  seen.add(value);
-  for(const key of keys)if(value[key]!==undefined)queue.push(value[key]);
- }
- return [];
+ if(Array.isArray(data))return data;
+ const candidates=[data?.data,data?.tokens,data?.results,data?.items,data?.pools,data?.trending,data?.clankers,data?.data?.tokens,data?.data?.results,data?.data?.items,data?.data?.pools];
+ return candidates.find(Array.isArray)||[];
 };
-function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
-function tokenCard(t,i){
- const address=pick(t,['token.address','tokenAddress','address','contractAddress','token_address'])||'';
- const name=pick(t,['token.name','name','tokenName'])||'Unknown token';
- const symbol=pick(t,['token.symbol','symbol','ticker'])||'—';
- const logo=safeUrl(pick(t,['token.imageUrl','token.image','imageUrl','image','logoURI','logo']));
- const price=pick(t,['market.priceUsd','priceUsd','price_usd','price.usd','price']);
- const cap=pick(t,['market.marketCapUsd','marketCapUsd','market_cap_usd','marketCap','fdv']);
- const liquidity=pick(t,['market.liquidityUsd','liquidityUsd','liquidity_usd','liquidity']);
- const volume=pick(t,['market.volume24hUsd','volume24hUsd','volume_24h_usd','volume24h','volume']);
- const change=Number(pick(t,['market.priceChange24h','priceChange24h','price_change_24h','change24h','priceChange'])||0);
- const href=address?'https://www.clanker.world/clanker/'+encodeURIComponent(address):'https://www.clanker.world/';
+function tokenCard(pool,i,included=[]){
+ const attrs=pool?.attributes||pool||{};
+ const rel=pool?.relationships||{};
+ const baseId=rel?.base_token?.data?.id||rel?.baseToken?.data?.id;
+ const quoteId=rel?.quote_token?.data?.id||rel?.quoteToken?.data?.id;
+ const base=included.find(x=>x?.id===baseId)?.attributes||{};
+ const quote=included.find(x=>x?.id===quoteId)?.attributes||{};
+ const token=Object.keys(base).length?base:(Object.keys(quote).length?quote:(pool?.token||pool?.baseToken||{}));
+ const address=pick(token,['address','contract_address','token_address'])||pick(attrs,['token_address','base_token_address','address'])||'';
+ const name=pick(token,['name','token_name'])||pick(attrs,['token_name','name'])||String(attrs.name||'').split(' / ')[0]||'Unknown token';
+ const symbol=pick(token,['symbol','ticker'])||pick(attrs,['symbol','token_symbol'])||'—';
+ const logo=safeUrl(pick(token,['image_url','imageUrl','image','logoURI','logo']))||safeUrl(pick(attrs,['image_url','imageUrl','image']));
+ const price=pick(attrs,['base_token_price_usd','price_usd','priceUsd','price_usd.value','baseTokenPriceUsd'])||pick(pool,['priceUsd','price_usd']);
+ const cap=pick(attrs,['market_cap_usd','fdv_usd','marketCapUsd','fdv'])||pick(pool,['marketCapUsd','fdvUsd']);
+ const liquidity=pick(attrs,['reserve_in_usd','liquidity_usd','liquidityUsd','liquidity'])||pick(pool,['liquidityUsd']);
+ const volume=pick(attrs,['volume_usd.h24','volume24hUsd','volume_24h_usd','volume24h'])||pick(pool,['volume24hUsd']);
+ const change=Number(pick(attrs,['price_change_percentage.h24','priceChange24h','price_change_24h','change24h'])||pick(pool,['priceChange24h'])||0);
+ const href=address?'https://www.clanker.world/clanker/'+encodeURIComponent(address):'https://www.clanker.world/clankers?filter=trending';
  const img=logo?'<img src="'+logo.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
  const short=address?address.slice(0,6)+'…'+address.slice(-4):'Address unavailable';
- return '<article class="clanker-token"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
+ return '<article class="clanker-token"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP / FDV</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
 }
+function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function mount(){
  if(document.getElementById('clankerLauncher'))return;
@@ -46,9 +46,9 @@ function mount(){
    const res=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});
    if(!res.ok){let info={};try{info=await res.json()}catch{}throw new Error(info.details||info.error||('API returned HTTP '+res.status))}
    const payload=await res.json();
-   const tokens=arr(payload).filter(t=>{const chain=pick(t,['chainId','chain_id','chain.id','token.chainId']);return chain==null||Number(chain)===8453}).slice(0,10);
+   const tokens=arr(payload).slice(0,10);
    if(!tokens.length)throw new Error('No trending Base tokens returned');
-   grid.innerHTML=tokens.map(tokenCard).join('');
+   grid.innerHTML=tokens.map((token,index)=>tokenCard(token,index,Array.isArray(payload?.included)?payload.included:[])).join('');
    status.textContent='LIVE · '+tokens.length+' TOKENS · BASE';
   }catch(err){
    status.textContent='DATA FEED UNAVAILABLE';
