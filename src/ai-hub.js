@@ -1091,4 +1091,27 @@ $('#resourcesBtn')?.addEventListener('click',()=>openResources('docs'));
 document.querySelectorAll('[data-resource-open]').forEach(button=>button.addEventListener('click',()=>openResources(button.dataset.resourceOpen)));
 document.querySelectorAll('[data-resource-tab]').forEach(button=>button.addEventListener('click',()=>setResourcePage(button.dataset.resourceTab)));
 
-$('#mobileResourcesBtn')?.addEventListener('click',()=>openResources('docs'));
+function closeMobileMenu(){
+ const menu=$('#mobileMenuBackdrop');if(menu)menu.hidden=true;
+ $('#mobileMenuBtn')?.setAttribute('aria-expanded','false');
+}
+function openMobileMenu(){
+ const menu=$('#mobileMenuBackdrop');if(!menu)return;
+ menu.hidden=false;$('#mobileMenuBtn')?.setAttribute('aria-expanded','true');
+ $('#closeMobileMenu')?.focus();
+}
+$('#mobileMenuBtn')?.addEventListener('click',openMobileMenu);
+$('#closeMobileMenu')?.addEventListener('click',closeMobileMenu);
+$('#mobileMenuBackdrop')?.addEventListener('click',event=>{if(event.target.id==='mobileMenuBackdrop')closeMobileMenu()});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('#mobileMenuBackdrop')?.hidden)closeMobileMenu()});
+document.querySelectorAll('[data-mobile-action]').forEach(button=>button.addEventListener('click',()=>{
+ const action=button.dataset.mobileAction;
+ closeMobileMenu();
+ if(action==='terminal'){setTool('chat');document.querySelector('.terminal-workspace')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(action==='coding'){setTool('code');document.querySelector('.terminal-workspace')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(action==='visual'){setTool('image');document.querySelector('.terminal-workspace')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+ const actions={workflow:'#openWorkflow',projects:'#projectsBtn',history:'#historyBtn',prompts:'#promptBtn'};
+ if(actions[action]){$(actions[action])?.click();return}
+ const resources={docs:'docs',terms:'terms',privacy:'privacy',api:'api',changelog:'changelog',faq:'faq'};
+ if(resources[action])openResources(resources[action]);
+}));
