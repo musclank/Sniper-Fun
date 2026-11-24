@@ -51,10 +51,28 @@ function addMessage(role,text,save=true){
  if(role==='assistant'){
   const copy=document.createElement('button');copy.className='copy-message';copy.type='button';copy.textContent='COPY';copy.setAttribute('aria-label','Copy response');copy.addEventListener('click',()=>copyText(text,copy));head.append(copy);
  }
- const content=document.createElement('div');content.className='message-content';content.textContent=text;
+ const content=document.createElement('div');content.className='message-content';if(role==='assistant')renderRichContent(content,text);else content.textContent=text;
  el.append(head,content);messages.append(el);messages.scrollTop=messages.scrollHeight;
  if(save){conversation.push({role,text});saveCurrentSession()}
  return el;
+}
+function renderRichContent(container,text){
+ container.innerHTML='';
+ const pattern=/```([a-zA-Z0-9_+#.-]*)\s*\n([\s\S]*?)```/g;
+ let cursor=0,match;
+ while((match=pattern.exec(text))){
+  if(match.index>cursor){const prose=document.createElement('div');prose.className='response-text';prose.textContent=text.slice(cursor,match.index);container.append(prose)}
+  const block=document.createElement('section');block.className='code-block';
+  const head=document.createElement('div');head.className='code-block-head';
+  const lang=document.createElement('span');lang.textContent=(match[1]||'CODE').toUpperCase();
+  const copy=document.createElement('button');copy.type='button';copy.className='copy-code';copy.textContent='COPY CODE';
+  const codeText=match[2].replace(/\n$/,'');
+  copy.addEventListener('click',()=>copyText(codeText,copy));
+  head.append(lang,copy);
+  const pre=document.createElement('pre');const code=document.createElement('code');code.textContent=codeText;pre.append(code);
+  block.append(head,pre);container.append(block);cursor=pattern.lastIndex;
+ }
+ if(cursor<text.length||!container.childNodes.length){const prose=document.createElement('div');prose.className='response-text';prose.textContent=text.slice(cursor);container.append(prose)}
 }
 function showWelcome(){
  messages.innerHTML='<div class="welcome"><div class="welcome-title">SNIPER AI TERMINAL <span>v1.0</span></div><p>System initialized. Intelligence router standing by.</p><div class="terminal-help"><span>AVAILABLE COMMANDS</span><code>/help</code><code>/clear</code><code>/models</code><code>/history</code><code>/prompts</code><code>/export</code></div><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div>';
@@ -127,6 +145,7 @@ function exportChat(){
  setStatus('CHAT EXPORTED · MARKDOWN');
 }
 function openCommandCenter(){openModal('commandModal')}
+function setTool(nextTool){tool=nextTool;document.querySelectorAll('.tool-link').forEach(x=>x.classList.toggle('active',x.dataset.tool===tool));const labels={chat:['SNIPER TERMINAL','THINK FASTER.','A focused AI command line. Ask anything and keep your workflow moving.','GENERAL'],code:['DEVELOPER WORKSPACE','BUILD SMARTER.','Review, debug, explain, and refactor code with your AI engineering assistant.','CODING'],image:['VISUAL ASSISTANT','VISUALIZE IDEAS.','Create and refine image prompts with AI assistance.','VISUAL']};const label=labels[tool]||labels.chat;$('#modeTitle').textContent=label[0];$('#headline').innerHTML=label[1]+'<br><span>WITH SNIPER AI.</span>';$('#intro').textContent=label[2];$('#channelName').textContent=label[3];$('#developerTools').hidden=tool!=='code';}
 async function loadModels(){
  models=[{id:'openrouter/free',name:'OPENROUTER SMART ROUTER'}];
  modelSelect.innerHTML='';const option=document.createElement('option');option.value=models[0].id;option.textContent=models[0].name;modelSelect.append(option);
@@ -150,7 +169,7 @@ async function send(text){
   const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,model,system:systemPrompts[tool]})});
   const data=await response.json();if(!response.ok)throw new Error(data.error||'Request failed');
   const answer=data.reply||'The model returned an empty response.';
-  reply.querySelector('.message-content').textContent=answer;
+  renderRichContent(reply.querySelector('.message-content'),answer);
   const copy=document.createElement('button');copy.className='copy-message';copy.type='button';copy.textContent='COPY';copy.setAttribute('aria-label','Copy response');copy.addEventListener('click',()=>copyText(answer,copy));reply.querySelector('.message-head').append(copy);
   conversation.push({role:'assistant',text:answer});saveCurrentSession();reply.dataset.model=data.model||model;
  }catch(e){reply.classList.add('error');reply.querySelector('.message-content').textContent='Connection error: '+e.message}
@@ -181,9 +200,6 @@ $('#promptBtn').addEventListener('click',openCommandCenter);
 $('#commandBtn').addEventListener('click',openCommandCenter);
 $('#clearChat').addEventListener('click',clearBuffer);
 $('#refreshModels').addEventListener('click',loadModels);
-document.querySelectorAll('.tool-link').forEach(b=>b.addEventListener('click',()=>{
- document.querySelectorAll('.tool-link').forEach(x=>x.classList.remove('active'));b.classList.add('active');tool=b.dataset.tool;
- const labels={chat:['AI CHAT','THINK FASTER.','A multi-model AI workspace.'],code:['CODING ASSISTANT','BUILD SMARTER.','Design, debug, and improve your code with AI.'],image:['IMAGE TOOLS','VISUALIZE IDEAS.','Create and refine image prompts with AI assistance.']};
- $('#modeTitle').textContent=labels[tool][0];$('#headline').innerHTML=labels[tool][1]+'<br><span>WITH SNIPER AI.</span>';$('#intro').textContent=labels[tool][2];
-}));
+document.querySelectorAll('.tool-link').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+document.addEventListener('click',e=>{const task=e.target.closest('[data-code-task]');if(task){const code=input.value.trim();const taskText=task.dataset.codeTask;input.value=code?taskText+'\n\n```\n'+code+'\n```':taskText+'\n\nPaste your code below this instruction.';input.focus();input.setSelectionRange(input.value.length,input.value.length)}});
 loadSessions();loadModels();
