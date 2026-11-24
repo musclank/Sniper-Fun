@@ -19,7 +19,7 @@ function addMessage(role,text,save=true){
  if(save){conversation.push({role,text});persist()}return el;
 }
 function showWelcome(){
- messages.innerHTML='<div class="welcome"><div class="welcome-icon">S<span>✳</span></div><div class="welcome-title">READY WHEN YOU ARE.</div><p>Ask a question, explore an idea, or start building something.</p><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div>';
+ messages.innerHTML='<div class="welcome"><div class="welcome-icon"><img src="/sniper-vvv-emblem.svg" alt=""></div><div class="welcome-title">READY WHEN YOU ARE.</div><p>Ask a question, explore an idea, or start building something.</p><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div>';
 }
 function restoreHistory(){
  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');if(!Array.isArray(saved)||!saved.length){setStatus('NO LOCAL CHAT HISTORY');return}
