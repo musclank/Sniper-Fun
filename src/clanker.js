@@ -17,7 +17,25 @@ function tokenCard(pool,i,included=[]){
  const address=pick(token,['address','contract_address','token_address'])||pick(attrs,['token_address','base_token_address','address'])||'';
  const name=pick(token,['name','token_name'])||pick(attrs,['token_name','name'])||String(attrs.name||'').split(' / ')[0]||'Unknown token';
  const symbol=pick(token,['symbol','ticker'])||pick(attrs,['symbol','token_symbol'])||'—';
- const rawLogo=pick(token,['image_url','imageUrl','image','logoURI','logo','image_uri','logo_url','icon_url','metadata.image','metadata.image_url'])||pick(attrs,['image_url','imageUrl','image','image_uri','logo_url','icon_url']);
+ const findTokenImage=(root)=>{
+  const imageKeys=/^(image|image_url|imageurl|image_uri|imageuri|logo|logouri|logo_uri|logo_url|icon|icon_url|token_image|tokenimage|avatar_url)$/i;
+  const seen=new Set();
+  const walk=(value,depth=0)=>{
+   if(!value||typeof value!=='object'||depth>6||seen.has(value))return null;
+   seen.add(value);
+   for(const [key,item] of Object.entries(value)){
+    if(imageKeys.test(key)&&typeof item==='string'&&item.trim())return item.trim();
+   }
+   for(const item of Object.values(value)){
+    if(item&&typeof item==='object'){const found=walk(item,depth+1);if(found)return found;}
+   }
+   return null;
+  };
+  return walk(root);
+ };
+ const rawLogo=findTokenImage([token,attrs,pool,base,quote])||
+  pick(token,['metadata.image','metadata.image_url','metadata.imageUrl','properties.image','properties.image_url'])||
+  pick(attrs,['metadata.image','metadata.image_url','metadata.imageUrl']);
  const logo=imageUrl(rawLogo);
  const price=pick(attrs,['base_token_price_usd','price_usd','priceUsd','price_usd.value','baseTokenPriceUsd'])||pick(pool,['priceUsd','price_usd']);
  const cap=pick(attrs,['market_cap_usd','fdv_usd','marketCapUsd','fdv'])||pick(pool,['marketCapUsd','fdvUsd']);
@@ -25,7 +43,8 @@ function tokenCard(pool,i,included=[]){
  const volume=pick(attrs,['volume_usd.h24','volume24hUsd','volume_24h_usd','volume24h'])||pick(pool,['volume24hUsd']);
  const change=Number(pick(attrs,['price_change_percentage.h24','priceChange24h','price_change_24h','change24h'])||pick(pool,['priceChange24h'])||0);
  const href=address?'https://www.clanker.world/clanker/'+encodeURIComponent(address):'https://www.clanker.world/clankers?filter=trending';
- const img=logo?'<img src="'+escapeHtml(logo)+'" alt="'+escapeHtml(name)+'" loading="lazy" referrerpolicy="no-referrer" onerror="clankerImageFallback(this)"/>':'';
+ const initials=escapeHtml((symbol&&symbol!=='—'?symbol:name).trim().slice(0,3).toUpperCase());
+ const img=logo?'<img src="'+escapeHtml(logo)+'" alt="'+escapeHtml(name)+' official token icon" loading="lazy" referrerpolicy="no-referrer" onerror="clankerImageFallback(this)"/>':'<span class="ct-logo-fallback" aria-label="'+escapeHtml(name)+' token icon">'+initials+'</span>';
  const short=address?address.slice(0,6)+'…'+address.slice(-4):'Address unavailable';
  return '<article class="clanker-token"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP / FDV</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
 }
