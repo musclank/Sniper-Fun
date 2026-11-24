@@ -349,3 +349,40 @@ body.modal-open{overflow:hidden}
   padding-right:10px;
   cursor:default;
 }
+
+ 
+/* Stage 13 — local AI-generated file draft manager */
+#openFileManager{border-color:#28658a;color:#a5e6ff}
+.file-manager-modal{width:min(100%,700px)}
+.file-manager-modal input,.file-manager-modal textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';outline:none}
+.file-manager-modal input{min-height:42px}
+.file-manager-modal textarea{min-height:150px;resize:vertical}
+.file-manager-modal input:focus,.file-manager-modal textarea:focus{border-color:#39c9ff}
+.draft-editor-controls,.draft-list-head,.draft-preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.draft-editor-controls{margin-top:10px}
+.draft-editor-controls span,.draft-storage-note,.draft-list-head span{color:#6f91ad;font:8px 'DM Mono';letter-spacing:.5px}
+.draft-editor-controls button,.draft-preview-head button{min-height:40px;padding:0 13px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:8px 'DM Mono';letter-spacing:.5px}
+.draft-storage-note{margin-top:12px;padding-bottom:14px;border-bottom:1px solid #1d3d58}
+.draft-list-head{padding:14px 0 9px;color:#a9dfff;font:9px 'DM Mono';letter-spacing:.8px}
+.file-draft-list{display:grid;gap:7px}
+.file-draft-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px;border:1px solid #1c3d59;background:#081a2b}
+.file-draft-info{flex:1;min-width:0}
+.file-draft-info strong,.file-draft-info small{display:block;overflow-wrap:anywhere}
+.file-draft-info strong{color:#d9efff;font:10px 'DM Mono'}
+.file-draft-info small{margin-top:5px;color:#6f91ad;font:8px 'DM Mono'}
+.file-draft-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.file-draft-actions button{min-height:32px;padding:0 8px;border:1px solid #244865;background:#0b2033;color:#8edbff;font:7px 'DM Mono'}
+.file-draft-actions button:last-child{color:#e39aa6}
+.draft-preview{margin-top:14px;border:1px solid #285474;background:#06111d}
+.draft-preview[hidden]{display:none}
+.draft-preview-head{padding:9px 10px;background:#0d2941;color:#8edbff;font:8px 'DM Mono'}
+.draft-preview pre{max-height:340px;margin:0;padding:12px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#d7efff;font:9px/1.7 'DM Mono'}
+@media(max-width:560px){
+ #openFileManager{width:100%}
+ .draft-editor-controls{align-items:stretch;flex-direction:column}
+ .draft-editor-controls button{min-height:46px}
+ .file-draft-row{align-items:stretch;flex-direction:column}
+ .file-draft-actions{justify-content:flex-start}
+ .file-draft-actions button{min-height:38px;padding:0 10px}
+ .file-manager-modal input,.file-manager-modal textarea{font-size:12px}
+}
