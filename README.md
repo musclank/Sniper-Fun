@@ -16,6 +16,7 @@ A mobile-friendly AI workspace with a blue tactical terminal interface. Built wi
 - AI Debug Engine for session-scoped browser error and unhandled-promise capture, pasted build logs, project-aware diagnosis, and reviewable fix suggestions. It does not record page content or apply fixes automatically.
 - Autonomous Coding Workspace for validated multi-file plans, before/after review summaries, explicit local apply, one-step undo, and ZIP export of saved drafts. It does not push changes to GitHub automatically.
 - Project Dependency Intelligence for local package.json/lockfile scanning, version-pattern heuristics, dependency inventory, and AI-assisted compatibility review. It does not install packages or claim live vulnerability/registry checks.
+- Security & Secrets Guardian for local pattern-based credential detection with redacted reports and AI remediation guidance. Secret values are not displayed or included in AI review; the scanner is heuristic and cannot guarantee complete detection.
 
 ## Tech stack
 
