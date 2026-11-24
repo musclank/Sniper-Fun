@@ -55,7 +55,8 @@ async function send(text){
  }catch(e){reply.classList.add('error');reply.querySelector('.message-content').textContent='Connection error: '+e.message}
  finally{busy=false;$('#sendBtn').disabled=false;input.focus();messages.scrollTop=messages.scrollHeight}
 }
-$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=input.value;input.value='';send(text)});\ninput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#chatForm').requestSubmit()}});
+$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=input.value;input.value='';send(text)});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#chatForm').requestSubmit()}});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b){input.value=b.dataset.prompt;input.focus()}});
 function newChat(){conversation=[];persist();showWelcome();setStatus('1 VERIFIED ROUTE · AUTO MODE')}
 $('#newChat').addEventListener('click',newChat);
