@@ -464,3 +464,27 @@ body.modal-open{overflow:hidden}
 .secrets-status{margin:10px 0;padding:10px;border:1px solid #6c405a;background:#211526;color:#ffb9d5;font:9px 'DM Mono'}
 .secrets-report{max-height:340px;overflow:auto;padding:13px;border:1px solid #50324a;background:#100d19;color:#f1c6dc;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:560px){#openSecretsGuardian{width:100%}.secrets-actions{display:grid;grid-template-columns:1fr}.secrets-actions button{min-height:46px}}
+
+/* Stage 20 — AI Project Health Dashboard */
+#openProjectHealth{border-color:#477eaa;color:#b9e1ff}
+.project-health-modal{width:min(100%,760px)}
+.health-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.health-actions button{min-height:42px;padding:0 13px;border:1px solid #477eaa;background:#12273b;color:#c8e8ff;font:8px 'DM Mono';letter-spacing:.4px}
+.health-actions button:disabled{opacity:.4;cursor:not-allowed}
+.health-actions button:hover:not(:disabled){border-color:#8bd1ff;background:#1b3853}
+.health-score-panel{display:flex;align-items:center;gap:16px;margin:14px 0;padding:16px;border:1px solid #35648c;background:#101f32}
+.health-score-value{font:700 42px 'DM Mono';color:#a8dcff;min-width:82px;text-align:center}
+.health-score-panel[data-state="good"] .health-score-value{color:#78e0bb}
+.health-score-panel[data-state="warn"] .health-score-value{color:#ffd17e}
+.health-score-panel[data-state="risk"] .health-score-value{color:#ff9baf}
+.health-score-panel strong,.health-score-panel span{display:block}
+.health-score-panel strong{font:11px 'DM Mono';color:#e0f2ff;letter-spacing:.8px}
+.health-score-panel span{margin-top:5px;color:#91a9bf;font-size:11px}
+.health-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+.health-status-card{min-width:0;padding:12px;border:1px solid #29445f;background:#101b2b}
+.health-status-card span,.health-status-card strong,.health-status-card small{display:block}
+.health-status-card span{font:8px 'DM Mono';color:#80b9e6;letter-spacing:.8px}
+.health-status-card strong{margin:8px 0 4px;font:10px 'DM Mono';color:#e0efff;overflow-wrap:anywhere}
+.health-status-card small{font-size:10px;color:#8fa6bb;line-height:1.5}
+.health-report{max-height:280px;overflow:auto;padding:13px;border:1px solid #29445f;background:#0b1421;color:#c8dff2;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){#openProjectHealth{width:100%}.health-actions{display:grid;grid-template-columns:1fr}.health-actions button{min-height:46px}.health-status-grid{grid-template-columns:1fr}.health-score-value{font-size:36px}}
