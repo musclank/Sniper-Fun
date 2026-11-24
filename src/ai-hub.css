@@ -413,3 +413,18 @@ body.modal-open{overflow:hidden}
 .test-lab-controls button{min-height:42px;padding:0 14px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
 .test-lab-controls button:hover{border-color:#62d9ff;background:#124b6e}
 @media(max-width:560px){#openTestLab{width:100%}.test-lab-controls{align-items:stretch;flex-direction:column}.test-lab-controls button{min-height:46px}.test-lab-modal input,.test-lab-modal textarea,.test-lab-select{font-size:12px}}
+
+/* Stage 16 — AI Debugging Engine */
+#openDebugEngine{border-color:#28658a;color:#a5e6ff}
+.debug-engine-modal{width:min(100%,660px)}
+.debug-engine-modal textarea,.debug-engine-modal input,.debug-select{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';outline:none}
+.debug-engine-modal textarea{min-height:130px;resize:vertical}
+.debug-select{min-height:44px}
+.debug-engine-modal textarea:focus,.debug-engine-modal input:focus,.debug-select:focus{border-color:#39c9ff}
+.debug-runtime-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.debug-runtime-head span,.debug-engine-controls span{margin-right:auto;color:#78a2bf;font:8px/1.6 'DM Mono';letter-spacing:.5px}
+.debug-runtime-head button{min-height:34px;padding:0 10px;border:1px solid #244865;background:#0a2235;color:#a8dfff;font:8px 'DM Mono'}
+.debug-engine-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.debug-engine-controls button{min-height:44px;padding:0 16px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
+.debug-engine-controls button:hover,.debug-runtime-head button:hover{border-color:#62d9ff;background:#124b6e}
+@media(max-width:560px){#openDebugEngine{width:100%}.debug-engine-controls{align-items:stretch;flex-direction:column}.debug-engine-controls button{min-height:48px}.debug-engine-modal textarea,.debug-engine-modal input,.debug-select{font-size:12px}}
