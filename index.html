@@ -62,6 +62,7 @@
   <button type="button" id="openDependencyIntel">PROJECT DEPENDENCY INTELLIGENCE</button>
   <button type="button" id="openSecretsGuardian">AI SECURITY & SECRETS GUARDIAN</button>
   <button type="button" id="openProjectHealth">AI PROJECT HEALTH DASHBOARD</button>
+  <button type="button" id="openPerformanceEngine">AI PERFORMANCE & OPTIMIZATION</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -192,6 +193,17 @@
   <input id="debugFocus" type="text" maxlength="500" placeholder="Example: Error appears after pressing Execute on Android.">
   <div class="debug-engine-controls"><span>ANALYSIS ONLY · NO AUTO-FIX</span><button type="button" id="runDebugAnalysis">ANALYZE ERROR</button></div>
   <div class="workflow-note">For better diagnosis, add related files in Projects → Files. Remove secrets, API keys, tokens, and personal data before submitting logs.</div>
+ </section>
+</div>
+<div class="modal-backdrop" id="performanceEngineModal" hidden>
+ <section class="utility-modal performance-engine-modal" role="dialog" aria-modal="true" aria-labelledby="performanceEngineTitle">
+  <div class="utility-modal-head"><div><span class="panel-kicker">FRONTEND PERFORMANCE INTELLIGENCE</span><h2 id="performanceEngineTitle">PERFORMANCE & OPTIMIZATION</h2></div><button class="modal-close" type="button" data-close-modal="performanceEngineModal" aria-label="Close">×</button></div>
+  <p class="snippet-note">Inspect locally saved project files for size hotspots and common performance patterns. This is static analysis only; it does not run Lighthouse, benchmark a browser, or modify source files.</p>
+  <div class="performance-actions"><button type="button" id="scanPerformance">ANALYZE PERFORMANCE</button><button type="button" id="reviewPerformanceAI" disabled>ASK AI TO OPTIMIZE</button><button type="button" id="copyPerformanceReport" disabled>COPY REPORT</button></div>
+  <div class="performance-score-panel" id="performanceScorePanel"><div class="performance-score-value" id="performanceScoreValue">—</div><div><strong id="performanceScoreLabel">NOT ANALYZED</strong><span id="performanceScoreCaption">Run a local static analysis to begin.</span></div></div>
+  <div id="performanceMetrics" class="performance-metrics"><div><span>FILES</span><strong>—</strong></div><div><span>PROJECT SIZE</span><strong>—</strong></div><div><span>HOTSPOTS</span><strong>—</strong></div></div>
+  <div id="performanceReport" class="performance-report" aria-live="polite">No performance report yet.</div>
+  <div class="workflow-note">Static heuristics can produce false positives and miss real bottlenecks. Verify recommendations with browser profiling and real-device testing before changing code.</div>
  </section>
 </div>
 <div class="modal-backdrop" id="projectHealthModal" hidden>
