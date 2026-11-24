@@ -9,8 +9,10 @@ export default async function handler(req, res) {
     });
     const body = await upstream.json();
     if (!upstream.ok) return res.status(upstream.status).json({ error: body.error?.message || "OpenRouter model catalog request failed", models: [] });
+    const blockedModel = /inclusion\\s*ai|inclusionai|ling[-\\s._]*3[.]?2[-\\s._]*flash/i;
     const models = (body.data || [])
       .filter(m => m.id?.endsWith(":free") || (Number(m.pricing?.prompt) === 0 && Number(m.pricing?.completion) === 0))
+      .filter(m => !blockedModel.test(String(m.id || "") + " " + String(m.name || "")))
       .map(m => ({ id: m.id, name: m.name || m.id }))
       .slice(0, 100);
     return res.status(200).json({ models });
