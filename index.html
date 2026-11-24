@@ -45,6 +45,11 @@
 <div class="terminal-meta"><span>SESSION: LOCAL</span><span>CHANNEL: <b id="channelName">GENERAL</b></span><span>STATUS: <b class="terminal-ready">READY</b></span><span>CONTEXT: <b>12 MSG WINDOW</b></span></div>
 <div class="developer-tools" id="developerTools" hidden><div class="developer-tools-head"><span>DEVELOPER WORKSPACE</span><span>AI-ASSISTED ENGINEERING</span></div><div class="developer-task-grid"><button type="button" data-code-task="Review the following code for bugs, security issues, performance, and maintainability. Explain findings and provide corrected code where useful.">CODE REVIEW</button><button type="button" data-code-task="Debug the following code. Identify the root cause, explain why it happens, and provide a minimal corrected version.">DEBUG CODE</button><button type="button" data-code-task="Explain the following code step by step in beginner-friendly language. Describe inputs, outputs, and important logic.">EXPLAIN CODE</button><button type="button" data-code-task="Refactor the following code for clarity, performance, and maintainability without changing its behavior. Explain the changes.">REFACTOR</button></div><p>Paste code in the message box, then choose an engineering task.</p></div>
 <div class="messages terminal-output" id="messages"><div class="welcome"><div class="welcome-icon"><img src="/sniper-vvv-emblem.svg" alt=""></div><div class="welcome-title">SNIPER AI TERMINAL <span>v1.0</span></div><p>System initialized. Intelligence router standing by.</p><div class="terminal-help"><span>AVAILABLE COMMANDS</span><code>/help</code><code>/clear</code><code>/models</code><code>/history</code></div><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div></div>
+<div class="workspace-tools" aria-label="AI workspace tools">
+  <button type="button" id="enhancePrompt">✦ ENHANCE PROMPT</button>
+  <button type="button" id="summarizeChat">≋ SUMMARIZE CHAT</button>
+  <button type="button" id="openSnippets">▤ CODE SNIPPETS</button>
+</div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
 <footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER VERIFIED ROUTING</span></footer>
@@ -72,6 +77,14 @@
       <button class="arsenal-item" data-library-prompt="Create a concise content plan with audience, key message, platform-specific ideas, and several strong headline options.">Content plan <span>CREATIVE</span></button>
     </div></div>
     <div class="modal-hint">TIP: PRESS <kbd>CTRL</kbd> + <kbd>K</kbd> TO OPEN COMMAND CENTER</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="snippetModal" hidden>
+  <section class="utility-modal snippet-modal" role="dialog" aria-modal="true" aria-labelledby="snippetModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL DEVELOPER LIBRARY</span><h2 id="snippetModalTitle">CODE SNIPPETS</h2></div><button class="modal-close" type="button" data-close-modal="snippetModal" aria-label="Close">×</button></div>
+    <div class="snippet-save-row"><input id="snippetName" type="text" maxlength="48" placeholder="Snippet name"><button type="button" id="saveSnippet">SAVE CURRENT CODE</button></div>
+    <p class="snippet-note">Save code from the message box. Snippets stay on this device only.</p>
+    <div class="snippet-list" id="snippetList"></div>
   </section>
 </div>
 <script type="module" src="/src/ai-hub.js"></script>
