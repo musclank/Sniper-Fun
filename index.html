@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#080d0b"><meta name="description" content="Sniper-$VVV — tactical multi-model AI command center.">
+<meta name="theme-color" content="#050b16"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="description" content="Sniper-$VVV — tactical multi-model AI command center.">
 <title>SNIPER-$VVV | AI COMMAND CENTER</title>
 </head>
 <body>
 <div id="app">
 <aside class="sidebar">
-<a class="brand" href="#"><span class="brand-mark">S</span><span>SNIPER<span class="green">-$VVV</span><small>AI COMMAND CENTER</small></span></a>
+<a class="brand" href="#"><img class="brand-mark" src="/sniper-vvv-emblem.svg" alt="SNIPER VVV emblem"><span>SNIPER<span class="green">-$VVV</span><small>AI COMMAND CENTER</small></span></a>
 <div class="side-label">WORKSPACE</div>
 <button class="side-item active" id="newChat"><span>＋</span> New operation</button>
 <button class="side-item" id="historyBtn"><span>◷</span> Local history</button>
@@ -31,7 +31,7 @@
 </div>
 <div class="chat-shell">
 <div class="chat-head"><div><span class="live-indicator"></span><strong id="modeTitle">AI CHAT</strong><small>API KEY STORED SERVER-SIDE</small></div><button id="clearChat">CLEAR SESSION</button></div>
-<div class="messages" id="messages"><div class="welcome"><div class="welcome-icon">S<span>✳</span></div><div class="welcome-title">READY WHEN YOU ARE.</div><p>Ask a question, explore an idea, or start building something.</p><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div></div>
+<div class="messages" id="messages"><div class="welcome"><div class="welcome-icon"><img src="/sniper-vvv-emblem.svg" alt=""></div><div class="welcome-title">READY WHEN YOU ARE.</div><p>Ask a question, explore an idea, or start building something.</p><div class="prompt-grid"><button class="prompt" data-prompt="Explain a complex topic in simple terms.">Explain a complex topic <span>↗</span></button><button class="prompt" data-prompt="Help me plan and build a web application.">Plan a web application <span>↗</span></button><button class="prompt" data-prompt="Review this code and suggest improvements.">Review my code <span>↗</span></button></div></div></div>
 <form id="chatForm" class="composer"><textarea id="promptInput" rows="2" placeholder="Send a message to Sniper AI…" required></textarea><div class="composer-bottom"><span>AI OUTPUT CAN BE INCORRECT. VERIFY IMPORTANT RESULTS.</span><button id="sendBtn" type="submit"><span>TRANSMIT</span> ↑</button></div></form>
 </div>
 <footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER FREE MODEL CATALOG</span></footer>
