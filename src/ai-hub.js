@@ -490,9 +490,9 @@ function validateWorkspacePlan(){
   const old=current.find(file=>file.name.toLowerCase()===item.name.toLowerCase());
   const beforeText=old?old.content.slice(0,700):'(NEW FILE)';
   const afterText=item.content.slice(0,700);
-  return (old?'UPDATE':'ADD')+' · '+item.name+' · '+item.content.length.toLocaleString()+' chars'+(old?' (was '+old.content.length.toLocaleString()+')':'')+'\\nBEFORE:\\n'+beforeText+'\\nAFTER:\\n'+afterText+(item.content.length>700?'\\n… preview truncated; full content remains in the JSON plan.':'');
+  return (old?'UPDATE':'ADD')+' · '+item.name+' · '+item.content.length.toLocaleString()+' chars'+(old?' (was '+old.content.length.toLocaleString()+')':'')+'\nBEFORE:\n'+beforeText+'\nAFTER:\n'+afterText+(item.content.length>700?'\n… preview truncated; full content remains in the JSON plan.':'');
  });
- preview.textContent='REVIEW SUMMARY\\n'+rows.join('\\n\\n')+'\\n\\nTOTAL · '+normalized.length+' FILES · '+total.toLocaleString()+' NEW CHARACTERS\\n\\nReview the before/after excerpts and full JSON above. Applying replaces matching paths and adds new paths; it does not delete files.'; reviewedWorkspacePlan=normalized;apply.disabled=false;
+ preview.textContent='REVIEW SUMMARY\n'+rows.join('\n\n')+'\n\nTOTAL · '+normalized.length+' FILES · '+total.toLocaleString()+' NEW CHARACTERS\n\nReview the before/after excerpts and full JSON above. Applying replaces matching paths and adds new paths; it does not delete files.'; reviewedWorkspacePlan=normalized;apply.disabled=false;
 }
 function applyWorkspacePlan(){
  if(!reviewedWorkspacePlan||!reviewedWorkspacePlan.length){setStatus('PREVIEW A VALID PLAN FIRST');return}
