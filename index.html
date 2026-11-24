@@ -26,8 +26,8 @@
 <p class="intro" id="intro">A multi-model AI workspace. Choose your model or let the system route your request.</p>
 <div class="model-panel">
 <div class="panel-head"><div><span class="panel-kicker">MODEL CONTROL</span><strong>SELECT YOUR INTELLIGENCE</strong></div><span class="free-tag">FREE MODELS</span></div>
-<div class="model-controls"><label class="select-wrap"><span>ROUTING MODE</span><select id="routing"><option value="manual">MANUAL SELECTION</option><option value="auto">AUTO ROUTE</option></select></label><label class="select-wrap model-select-wrap"><span>AI MODEL</span><select id="model"><option value="">Loading free models…</option></select></label><button id="refreshModels" class="refresh" title="Refresh models">↻</button></div>
-<div class="model-foot"><span id="modelStatus">CONNECTING TO MODEL DIRECTORY</span><span>PROVIDER AVAILABILITY MAY CHANGE</span></div>
+<div class="model-controls"><label class="select-wrap"><span>ROUTING MODE</span><select id="routing" disabled><option value="auto">AUTO ROUTE · VERIFIED</option></select></label><label class="select-wrap model-select-wrap"><span>AI MODEL</span><select id="model" disabled><option value="openrouter/free">OPENROUTER SMART ROUTER</option></select></label><button id="refreshModels" class="refresh" title="Refresh models">↻</button></div>
+<div class="model-foot"><span id="modelStatus">VERIFIED ROUTING · AUTO MODE</span><span>ONLY CONFIRMED ROUTE IS ENABLED</span></div>
 </div>
 <div class="chat-shell">
 <div class="chat-head"><div><span class="live-indicator"></span><strong id="modeTitle">AI CHAT</strong><small>API KEY STORED SERVER-SIDE</small></div><button id="clearChat">CLEAR SESSION</button></div>
