@@ -4,7 +4,7 @@ export async function onRequestGet({env}) {
     const upstream=await fetch("https://openrouter.ai/api/v1/models",{headers:{Authorization:"Bearer "+env.OPENROUTER_API_KEY}});
     if(!upstream.ok) return Response.json({error:"Model provider returned "+upstream.status},{status:upstream.status});
     const body=await upstream.json();
-    const blockedModel=/inclusion\\s*ai|inclusionai|ling[-\\s._]*3[.]?2[-\\s._]*flash/i;
+    const blockedModel=/inclusion\s*ai|inclusionai|ling[-\s._]*3[.]?2[-\s._]*flash/i;
     const models=(body.data||[])
       .filter(m=>(m.id?.endsWith(":free") || (Number(m.pricing?.prompt)===0 && Number(m.pricing?.completion)===0)))
       .filter(m=>!blockedModel.test(String(m.id||"")+" "+String(m.name||"")))
