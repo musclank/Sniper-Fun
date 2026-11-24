@@ -24,6 +24,7 @@
 <div class="side-label">WORKSPACE</div>
 <button class="side-item active" id="newChat"><span>＋</span> New session</button>
 <button class="side-item" id="historyBtn"><span>◷</span> Session history</button>
+<button class="side-item" id="promptBtn"><span>✳</span> Prompt arsenal</button>
 <div class="side-label tools-label">AI SYSTEMS</div>
 <button class="side-item tool-link active" data-tool="chat"><span>⌘</span> General intelligence</button>
 <button class="side-item tool-link" data-tool="code"><span>⟨/⟩</span> Coding assistant</button>
@@ -31,7 +32,7 @@
 <div class="sidebar-bottom"><div class="status-line"><i></i> SYSTEM READY</div><div class="quota-note">FREE ACCESS · PROVIDER LIMITS APPLY</div></div>
 </aside>
 <main class="main">
-<header class="topbar"><div class="mobile-brand"><img src="/sniper-vvv-emblem.svg" alt="">SNIPER<span>-$VVV</span></div><div class="top-meta"><span class="online-dot"></span> ALL SYSTEMS OPERATIONAL</div><div class="login-btn">GUEST SESSION</div></header>
+<header class="topbar"><div class="mobile-brand"><img src="/sniper-vvv-emblem.svg" alt="">SNIPER<span>-$VVV</span></div><div class="top-meta"><span class="online-dot"></span> ALL SYSTEMS OPERATIONAL</div><button class="login-btn command-trigger" id="commandBtn" type="button">COMMANDS <span>⌘K</span></button></header>
 <section class="workspace terminal-workspace">
 <div class="terminal-hero"><div class="eyebrow"><span></span> TACTICAL INTELLIGENCE INTERFACE / 001</div><h1 id="headline">THINK FASTER.<br><span>EXECUTE WITH PRECISION.</span></h1><p class="intro" id="intro">A focused AI command line. Ask anything, switch intelligence modes, and keep your workflow moving.</p></div>
 <div class="model-panel">
@@ -47,5 +48,30 @@
 </div>
 <footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER VERIFIED ROUTING</span></footer>
 </section></main></div>
+<div class="modal-backdrop" id="sessionModal" hidden>
+  <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL WORKSPACE</span><h2 id="sessionModalTitle">SESSION HISTORY</h2></div><button class="modal-close" type="button" data-close-modal="sessionModal" aria-label="Close">×</button></div>
+    <div class="session-list" id="sessionList"></div>
+  </section>
+</div>
+<div class="modal-backdrop" id="commandModal" hidden>
+  <section class="utility-modal command-modal" role="dialog" aria-modal="true" aria-labelledby="commandModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">TACTICAL CONTROL</span><h2 id="commandModalTitle">COMMAND CENTER</h2></div><button class="modal-close" type="button" data-close-modal="commandModal" aria-label="Close">×</button></div>
+    <div class="command-section"><span class="utility-label">WORKSPACE ACTIONS</span><div class="command-grid">
+      <button class="command-item" data-command="new"><b>＋</b><span>New session<small>Start a clean conversation</small></span></button>
+      <button class="command-item" data-command="history"><b>◷</b><span>Session history<small>Open saved conversations</small></span></button>
+      <button class="command-item" data-command="export"><b>⇩</b><span>Export chat<small>Download as Markdown</small></span></button>
+      <button class="command-item" data-command="clear"><b>⌫</b><span>Clear buffer<small>Clear this session only</small></span></button>
+    </div></div>
+    <div class="command-section"><span class="utility-label">PROMPT ARSENAL · QUICK START</span><div class="arsenal-list">
+      <button class="arsenal-item" data-library-prompt="Act as a senior software engineer. Review this code for bugs, security issues, performance problems, and maintainability. Explain each finding and suggest a fix.">Code review <span>ENGINEERING</span></button>
+      <button class="arsenal-item" data-library-prompt="Help me plan a responsive web application. Propose the architecture, pages, user flows, and a practical implementation roadmap using free tools.">Build a web app <span>DEVELOPMENT</span></button>
+      <button class="arsenal-item" data-library-prompt="Research this topic carefully. Separate verified facts from assumptions, explain the evidence, and list useful sources to check.">Research brief <span>RESEARCH</span></button>
+      <button class="arsenal-item" data-library-prompt="Turn this idea into a clear business plan with target users, value proposition, MVP features, risks, and a low-cost launch strategy.">Business strategy <span>STRATEGY</span></button>
+      <button class="arsenal-item" data-library-prompt="Create a concise content plan with audience, key message, platform-specific ideas, and several strong headline options.">Content plan <span>CREATIVE</span></button>
+    </div></div>
+    <div class="modal-hint">TIP: PRESS <kbd>CTRL</kbd> + <kbd>K</kbd> TO OPEN COMMAND CENTER</div>
+  </section>
+</div>
 <script type="module" src="/src/ai-hub.js"></script>
 </body></html>
