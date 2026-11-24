@@ -303,3 +303,14 @@ body.modal-open{overflow:hidden}
 .audit-project-btn{width:100%;min-height:38px;margin-top:9px;padding:8px 10px;border:1px solid #2a83ad;background:linear-gradient(180deg,#103653,#0b263d);color:#9ce5ff;font:9px 'DM Mono';letter-spacing:.8px}
 .audit-project-btn:hover{border-color:#62d9ff;background:#123e5d;color:#effbff}
 @media(max-width:560px){.developer-task-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.developer-task-grid button{min-height:38px;font-size:8px}.audit-project-btn{font-size:8px}}
+
+/* Stage 10 — guided AI workflow planner */
+#openWorkflow{border-color:#28658a;color:#a5e6ff}
+.workflow-modal textarea{display:block;width:100%;min-height:112px;margin-top:14px;padding:13px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';resize:vertical}
+.workflow-modal textarea:focus{outline:none;border-color:#39c9ff}
+.workflow-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.workflow-controls span,.workflow-note{color:#6f91ad;font:8px/1.6 'DM Mono';letter-spacing:.5px}
+.workflow-controls button{min-height:42px;padding:0 14px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
+.workflow-controls button:hover{border-color:#62d9ff;background:#124b6e}
+.workflow-note{margin-top:12px}
+@media(max-width:560px){#openWorkflow{width:100%}.workflow-controls{align-items:stretch;flex-direction:column}.workflow-controls button{min-height:46px}.workflow-modal textarea{font-size:12px}}
