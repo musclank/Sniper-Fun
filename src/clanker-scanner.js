@@ -75,7 +75,7 @@ function mount() {
     </section>`;
   document.body.append(overlay);
   const topbar = $('.topbar');
-  if (topbar) topbar.insertBefore(trigger, topbar.firstChild);
+  if (topbar) topbar.insertBefore(trigger, $('.login-btn', topbar) || null);
   const sidebar = $('.sidebar');
   const resources = $('.resources-label', sidebar || document);
   if (sidebar && resources) {
@@ -94,6 +94,9 @@ function mount() {
   overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && !overlay.hidden) close(); });
   $('#sniperRadarRefresh', overlay).addEventListener('click', loadFeed);
+  window.setInterval(() => {
+    if (!overlay.hidden && !$('#sniperRadarRefresh', overlay).disabled) loadFeed();
+  }, 30000);
 
   async function loadFeed() {
     const status = $('#sniperRadarStatus', overlay);
