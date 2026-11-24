@@ -54,6 +54,7 @@
   <button type="button" id="openWorkflow">BUILD AI WORKFLOW</button>
   <button type="button" id="openCodeChange">PROPOSE CODE CHANGES</button>
   <button type="button" id="openProjectBuilder">AI PROJECT BUILDER</button>
+  <button type="button" id="openFileManager">AI FILE MANAGER</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -128,6 +129,21 @@
     <input id="projectBuilderStack" type="text" maxlength="160" placeholder="Example: Vite, vanilla JavaScript, CSS">
     <div class="builder-controls"><span>FREE-FIRST · REVIEW BEFORE APPLYING</span><button type="button" id="generateProject">GENERATE PROJECT</button></div>
     <div class="workflow-note">Start with a small MVP. Copy the generated files into GitHub only after reviewing each file and its setup instructions.</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="fileManagerModal" hidden>
+  <section class="utility-modal file-manager-modal" role="dialog" aria-modal="true" aria-labelledby="fileManagerTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL FILE DRAFT WORKSPACE</span><h2 id="fileManagerTitle">AI FILE MANAGER</h2></div><button class="modal-close" type="button" data-close-modal="fileManagerModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Save AI-generated file drafts here, review their contents, copy or download them individually. Drafts stay in this browser and are never applied to GitHub automatically.</p>
+    <label class="builder-field-label" for="draftFileName">FILE NAME / RELATIVE PATH</label>
+    <input id="draftFileName" type="text" maxlength="100" placeholder="Example: src/components/Header.jsx">
+    <label class="builder-field-label" for="draftFileContent">FILE CONTENT</label>
+    <textarea id="draftFileContent" rows="8" maxlength="100000" placeholder="Paste the complete contents of the AI-generated file here..."></textarea>
+    <div class="draft-editor-controls"><span id="draftFileCount">0 characters</span><button type="button" id="saveFileDraft">SAVE FILE DRAFT</button></div>
+    <div class="draft-storage-note">LOCAL ONLY · MAX 20 FILES · REVIEW BEFORE APPLYING</div>
+    <div class="draft-list-head"><strong>SAVED FILE DRAFTS</strong><span id="draftStorageCount">0 / 20 FILES</span></div>
+    <div class="file-draft-list" id="fileDraftList"></div>
+    <div class="draft-preview" id="draftPreview" hidden><div class="draft-preview-head"><strong id="draftPreviewName">FILE PREVIEW</strong><button type="button" id="closeDraftPreview">CLOSE PREVIEW</button></div><pre id="draftPreviewContent"></pre></div>
   </section>
 </div>
 <div class="modal-backdrop" id="memoryModal" hidden>
