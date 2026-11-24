@@ -127,3 +127,55 @@ footer{color:#607f9b}
 @keyframes boot-progress{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
 @keyframes boot-grid-drift{to{background-position:42px 42px}}
 @media(prefers-reduced-motion:reduce){.boot-grid,.boot-orbit,.boot-emblem img,.boot-progress span{animation:none}.boot-progress span{width:100%}}
+
+/* Phase 1 — command center, local sessions and prompt arsenal */
+body.modal-open{overflow:hidden}
+.command-trigger{cursor:pointer}
+.command-trigger span{margin-left:10px;color:#79cfff;font-size:9px}
+.message-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.message-head .role{margin:0}
+.copy-message{border:1px solid #244b69;background:#0a1b2b;color:#78bfe3;padding:4px 7px;border-radius:2px;font:8px 'DM Mono';letter-spacing:.7px}
+.copy-message:hover{border-color:#43caff;color:#d8f5ff}
+.modal-backdrop{position:fixed;inset:0;z-index:8000;display:grid;place-items:center;padding:16px;background:#020914d9;backdrop-filter:blur(9px)}
+.modal-backdrop[hidden]{display:none}
+.utility-modal{width:min(100%,560px);max-height:min(84vh,760px);overflow:auto;background:#091a2a;border:1px solid #285476;box-shadow:0 24px 80px #0009;padding:20px;color:#dff2ff}
+.command-modal{width:min(100%,620px)}
+.utility-modal-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid #1d3d58}
+.utility-modal-head h2{margin:6px 0 0;font:700 21px 'Barlow Condensed';letter-spacing:1.5px}
+.modal-close{width:34px;height:34px;border:1px solid #284a65;background:#0b2033;color:#9fc9e5;font-size:22px;line-height:1}
+.modal-close:hover{border-color:#45caff;color:#fff}
+.command-section{padding-top:17px}
+.utility-label{display:block;margin-bottom:10px;color:#7196b4;font:8px 'DM Mono';letter-spacing:1.5px}
+.command-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.command-item{display:flex;align-items:center;gap:12px;text-align:left;min-height:62px;padding:11px;border:1px solid #1c3d59;background:#0b2033;color:#d9edff}
+.command-item:hover,.arsenal-item:hover{border-color:#3aa8d8;background:#0e2941}
+.command-item>b{display:grid;place-items:center;width:31px;height:31px;border:1px solid #25577b;color:#59cfff;font:16px 'DM Mono'}
+.command-item span{font:10px 'DM Mono'}
+.command-item small{display:block;margin-top:5px;color:#7798b4;font-size:8px}
+.arsenal-list{display:grid;gap:6px}
+.arsenal-item{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:11px 12px;text-align:left;border:1px solid #1b3b57;background:#0a1d2f;color:#cce5f7;font:10px 'DM Mono'}
+.arsenal-item span{color:#56bde9;font-size:7px;letter-spacing:1px;white-space:nowrap}
+.modal-hint{margin-top:18px;padding-top:12px;border-top:1px solid #1b3b57;color:#688ba8;font:8px 'DM Mono';letter-spacing:1px}
+.modal-hint kbd{padding:3px 5px;border:1px solid #2b4b66;color:#9fc6e1}
+.session-list{display:grid;gap:8px;padding-top:16px}
+.session-row{display:flex;align-items:center;gap:8px;padding:9px;border:1px solid #1c3d59;background:#0a1d2f}
+.session-row.active{border-color:#3aa8d8;background:#0d2941}
+.session-open{display:block;flex:1;min-width:0;text-align:left;border:0;background:transparent;color:#dceeff}
+.session-open strong,.session-open small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.session-open strong{font:10px 'DM Mono'}
+.session-open small{margin-top:6px;color:#7696b1;font:8px 'DM Mono'}
+.session-actions{display:flex;gap:5px}
+.session-actions button{padding:6px;border:1px solid #244865;background:#0b2033;color:#84b5d4;font:7px 'DM Mono'}
+.session-actions button:last-child{color:#e39aa6}
+.session-actions button:hover{border-color:#49caff}
+@media(max-width:560px){
+ .command-trigger{padding:9px 10px;font-size:9px}
+ .command-trigger span{display:none}
+ .utility-modal{padding:15px;max-height:88vh}
+ .command-grid{grid-template-columns:1fr}
+ .command-item{min-height:54px}
+ .session-row{align-items:flex-start;flex-direction:column}
+ .session-actions{width:100%;justify-content:flex-end}
+ .session-actions button{padding:8px 10px}
+ .message-head{margin-bottom:6px}
+}
