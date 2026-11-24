@@ -40,6 +40,7 @@
 <button class="side-item" id="historyBtn"><span>◷</span> Session history</button>
 <button class="side-item" id="promptBtn"><span>✳</span> Prompt arsenal</button>
 <div class="side-label tools-label">AI SYSTEMS</div>
+<button class="side-item" type="button" data-scroll-target="baseEcosystem"><span>◉</span> Base ecosystem</button>
 <button class="side-item tool-link active" data-tool="chat"><span>⌘</span> General intelligence</button>
 <button class="side-item tool-link" data-tool="code"><span>⟨/⟩</span> Coding assistant</button>
 <button class="side-item tool-link" data-tool="image"><span>▧</span> Visual assistant</button>
@@ -87,6 +88,27 @@
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
+
+<section class="base-ecosystem" id="baseEcosystem" aria-labelledby="baseEcosystemTitle">
+ <div class="base-ecosystem-head">
+  <div><span class="base-kicker">BASE NETWORK / MAINNET</span><h2 id="baseEcosystemTitle">BASE <span>ECOSYSTEM</span> COMMAND CENTER</h2><p>Live network telemetry and Clanker token intelligence for Base builders.</p></div>
+  <div class="base-live-state"><i></i><span id="baseNetworkStatus">CONNECTING TO BASE</span></div>
+ </div>
+ <div class="base-metrics" aria-live="polite">
+  <article class="base-metric"><span>NETWORK</span><strong id="baseChainName">BASE MAINNET</strong><small id="baseChainId">CHAIN ID · 8453</small></article>
+  <article class="base-metric"><span>LATEST BLOCK</span><strong id="baseBlockNumber">—</strong><small id="baseBlockAge">Awaiting RPC data</small></article>
+  <article class="base-metric"><span>GAS PRICE</span><strong id="baseGasPrice">—</strong><small>GWEI · LIVE ESTIMATE</small></article>
+  <article class="base-metric"><span>LAST BLOCK TXS</span><strong id="baseTxCount">—</strong><small id="baseBlockTime">Latest block activity</small></article>
+ </div>
+ <div class="base-ecosystem-actions">
+  <button type="button" id="refreshBaseNetwork">↻ REFRESH NETWORK</button>
+  <button type="button" id="openClankerIntelligence">OPEN CLANKER INTELLIGENCE</button>
+  <a href="https://basescan.org/" target="_blank" rel="noopener noreferrer">BASESCAN EXPLORER ↗</a>
+  <a href="https://www.clanker.world/clankers?filter=trending" target="_blank" rel="noopener noreferrer">CLANKER TRENDING ↗</a>
+ </div>
+ <p class="base-data-note" id="baseDataNote">Network metrics are read from Base mainnet RPC. Gas is an indicative network quote, not a transaction fee estimate.</p>
+</section>
+
 <section class="contract-section" aria-labelledby="contractTitle">
  <div class="contract-heading"><span class="contract-kicker">TOKEN INFORMATION</span><h2 id="contractTitle">TOKEN <span>CONTRACT</span></h2><p>SNIPER-$VVV is planned to launch on Base through Clanker. The official contract address will appear here after launch.</p></div>
  <div class="contract-address-panel">
@@ -119,6 +141,9 @@
    <button type="button" data-mobile-action="projects"><b>05</b><span>Projects<small>Open local project space</small></span></button>
    <button type="button" data-mobile-action="history"><b>06</b><span>Session history<small>Return to saved conversations</small></span></button>
    <button type="button" data-mobile-action="prompts"><b>07</b><span>Prompt arsenal<small>Browse quick-start prompts</small></span></button>
+  </div>
+  <div class="mobile-menu-group"><span>BASE ECOSYSTEM</span>
+   <button type="button" data-mobile-action="base"><b>08</b><span>Base command center<small>Live Base network and Clanker data</small></span></button>
   </div>
   <div class="mobile-menu-group"><span>RESOURCES</span>
    <div class="mobile-menu-resource-grid">
