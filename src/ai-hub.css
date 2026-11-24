@@ -786,3 +786,74 @@ button,select,textarea{max-width:100%}
  #clankerPanel .ct-metrics{margin:12px 0;gap:10px 8px}
  #clankerPanel .cl-foot{padding-bottom:12px}
 }
+
+
+/* Mobile collision guard — keep controls inside their own tap targets. */
+@media(max-width:560px){
+  .topbar{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .mobile-brand{grid-column:1;min-width:0;white-space:nowrap}
+  .mobile-tool-select{grid-column:2;min-width:0;max-width:92px}
+  .mobile-resources-btn{grid-column:3;min-width:42px}
+  .top-meta{display:none}
+  .command-trigger{
+    grid-column:1/-1;
+    justify-self:end;
+    max-width:100%;
+    white-space:nowrap;
+  }
+  .terminal-head-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;min-width:0;gap:6px}
+  .chat-head{gap:8px}
+  .chat-head>div:first-child{flex:1 1 auto;min-width:0}
+  .terminal-input-row{display:flex;flex-wrap:wrap;min-width:0}
+  .terminal-input-row .terminal-prompt{flex:0 0 auto}
+  .terminal-input-row .attach-file-btn{flex:0 0 auto}
+  .terminal-input-row textarea{flex:1 1 100%;order:3;width:100%;min-width:0}
+  .terminal-input-row #sendBtn{flex:1 1 100%;order:4;width:100%;min-width:0}
+  .workspace-tools{align-items:stretch}
+  .workspace-tools button{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+  .project-create-row,.project-files-toolbar,.project-file-actions,.session-actions,
+  .memory-footer,.workflow-controls,.code-change-controls,.builder-controls,
+  .patch-review-controls,.test-lab-controls,.debug-engine-controls,
+  .workspace-actions,.dependency-actions,.secrets-actions,.health-actions,
+  .performance-actions,.workflow-execution-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    min-width:0;
+  }
+  .project-create-row>*,
+  .project-file-actions button,
+  .session-actions button,
+  .memory-footer button,
+  .workflow-controls button,.code-change-controls button,
+  .builder-controls button,.patch-review-controls button,
+  .test-lab-controls button,.debug-engine-controls button,
+  .workspace-actions button,.dependency-actions button,
+  .secrets-actions button,.health-actions button,
+  .performance-actions button,.workflow-execution-actions button{
+    flex:1 1 130px;
+    min-width:0;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .project-files-toolbar{align-items:center;justify-content:space-between}
+  .project-files-toolbar>*{min-width:0;max-width:100%}
+  .mobile-menu-resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mobile-menu-resource-grid button{min-width:0;white-space:normal;overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+  .topbar{grid-template-columns:minmax(0,1fr) auto;gap:7px}
+  .mobile-tool-select{grid-column:1;grid-row:2;justify-self:start;max-width:100%;width:100%}
+  .mobile-resources-btn{grid-column:2;grid-row:2;justify-self:end}
+  .command-trigger{grid-column:1/-1;grid-row:3;justify-self:stretch;width:100%}
+  .command-trigger{text-align:center}
+  .terminal-input-row .terminal-prompt{font-size:8px}
+  .terminal-input-row .attach-file-btn{font-size:8px}
+}
