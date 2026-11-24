@@ -63,6 +63,14 @@
     <div class="project-list" id="projectList"></div>
   </section>
 </div>
+<div class="modal-backdrop" id="projectFilesModal" hidden>
+  <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="projectFilesTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT REFERENCE LIBRARY</span><h2 id="projectFilesTitle">PROJECT FILES</h2></div><button class="modal-close" type="button" data-close-modal="projectFilesModal" aria-label="Close">×</button></div>
+    <div class="project-files-toolbar"><span id="projectFilesName">GENERAL</span><button type="button" id="addProjectFilesBtn">＋ ADD FILES</button><input id="projectFilesInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.csv" multiple hidden></div>
+    <p class="snippet-note">Text and code files only. Up to 5 files per project, 80 KB each. Files stay in this browser.</p>
+    <div class="project-files-list" id="projectFilesList"></div>
+  </section>
+</div>
 <div class="modal-backdrop" id="sessionModal" hidden>
   <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
     <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL WORKSPACE</span><h2 id="sessionModalTitle">SESSION HISTORY</h2></div><button class="modal-close" type="button" data-close-modal="sessionModal" aria-label="Close">×</button></div>
