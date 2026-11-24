@@ -145,7 +145,7 @@ function exportChat(){
  setStatus('CHAT EXPORTED · MARKDOWN');
 }
 function openCommandCenter(){openModal('commandModal')}
-function setTool(nextTool){tool=nextTool;document.querySelectorAll('.tool-link').forEach(x=>x.classList.toggle('active',x.dataset.tool===tool));const labels={chat:['SNIPER TERMINAL','THINK FASTER.','A focused AI command line. Ask anything and keep your workflow moving.','GENERAL'],code:['DEVELOPER WORKSPACE','BUILD SMARTER.','Review, debug, explain, and refactor code with your AI engineering assistant.','CODING'],image:['VISUAL ASSISTANT','VISUALIZE IDEAS.','Create and refine image prompts with AI assistance.','VISUAL']};const label=labels[tool]||labels.chat;$('#modeTitle').textContent=label[0];$('#headline').innerHTML=label[1]+'<br><span>WITH SNIPER AI.</span>';$('#intro').textContent=label[2];$('#channelName').textContent=label[3];$('#developerTools').hidden=tool!=='code';}
+function setTool(nextTool){tool=nextTool;$('#mobileToolSelect').value=tool;document.querySelectorAll('.tool-link').forEach(x=>x.classList.toggle('active',x.dataset.tool===tool));const labels={chat:['SNIPER TERMINAL','THINK FASTER.','A focused AI command line. Ask anything and keep your workflow moving.','GENERAL'],code:['DEVELOPER WORKSPACE','BUILD SMARTER.','Review, debug, explain, and refactor code with your AI engineering assistant.','CODING'],image:['VISUAL ASSISTANT','VISUALIZE IDEAS.','Create and refine image prompts with AI assistance.','VISUAL']};const label=labels[tool]||labels.chat;$('#modeTitle').textContent=label[0];$('#headline').innerHTML=label[1]+'<br><span>WITH SNIPER AI.</span>';$('#intro').textContent=label[2];$('#channelName').textContent=label[3];$('#developerTools').hidden=tool!=='code';}
 async function loadModels(){
  models=[{id:'openrouter/free',name:'OPENROUTER SMART ROUTER'}];
  modelSelect.innerHTML='';const option=document.createElement('option');option.value=models[0].id;option.textContent=models[0].name;modelSelect.append(option);
@@ -201,5 +201,6 @@ $('#commandBtn').addEventListener('click',openCommandCenter);
 $('#clearChat').addEventListener('click',clearBuffer);
 $('#refreshModels').addEventListener('click',loadModels);
 document.querySelectorAll('.tool-link').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+$('#mobileToolSelect').addEventListener('change',e=>setTool(e.target.value));
 document.addEventListener('click',e=>{const task=e.target.closest('[data-code-task]');if(task){const code=input.value.trim();const taskText=task.dataset.codeTask;input.value=code?taskText+'\n\n```\n'+code+'\n```':taskText+'\n\nPaste your code below this instruction.';input.focus();input.setSelectionRange(input.value.length,input.value.length)}});
 loadSessions();loadModels();
