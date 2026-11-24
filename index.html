@@ -124,7 +124,12 @@
     <p class="snippet-note">Describe the outcome you want. Sniper AI will create a phased plan with dependencies, checkpoints, and clear deliverables. Review the plan before using each step.</p>
     <textarea id="workflowGoal" rows="4" maxlength="1800" placeholder="Example: Build a responsive dashboard with login, project list, and settings. Keep it free and mobile-friendly."></textarea>
     <div class="workflow-controls"><span>PLAN FIRST · YOU CONTROL EXECUTION</span><button type="button" id="generateWorkflow">GENERATE WORKFLOW</button></div>
-    <div class="workflow-note">AI-generated plans may need review. This tool does not modify repository files automatically.</div>
+    <label class="builder-field-label" for="workflowPlanInput">WORKFLOW PLAN · JSON</label>
+    <textarea id="workflowPlanInput" rows="7" maxlength="24000" spellcheck="false" placeholder="Paste the JSON returned by Sniper AI here."></textarea>
+    <div class="workflow-execution-actions"><button type="button" id="previewWorkflowPlan">LOAD PLAN</button><button type="button" id="runWorkflowStep" disabled>RUN NEXT STEP</button><button type="button" id="completeWorkflowStep" disabled>MARK STEP COMPLETE</button><button type="button" id="resetWorkflowPlan" disabled>RESET PLAN</button></div>
+    <div class="workflow-progress"><div><span id="workflowProgressLabel">NO PLAN LOADED</span><strong id="workflowProgressCount">0 / 0</strong></div><div class="workflow-progress-track"><span id="workflowProgressBar"></span></div></div>
+    <div id="workflowStepList" class="workflow-step-list" aria-live="polite">Your workflow steps will appear here after loading a plan.</div>
+    <div class="workflow-note">Each step is sent to AI only when you choose RUN NEXT STEP. Review its response, then mark it complete yourself. No repository files or deployments are changed automatically.</div>
   </section>
 </div>
 <div class="modal-backdrop" id="projectBuilderModal" hidden>
