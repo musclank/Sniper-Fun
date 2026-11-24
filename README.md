@@ -14,6 +14,7 @@ A mobile-friendly AI workspace with a blue tactical terminal interface. Built wi
 - AI Patch Reviewer for read-only engineering, security, and compatibility feedback.
 - AI Test Lab for project-aware test-suite generation; generated tests are not executed or applied automatically.
 - AI Debug Engine for session-scoped browser error and unhandled-promise capture, pasted build logs, project-aware diagnosis, and reviewable fix suggestions. It does not record page content or apply fixes automatically.
+- Autonomous Coding Workspace for validated multi-file plans, before/after review summaries, explicit local apply, one-step undo, and ZIP export of saved drafts. It does not push changes to GitHub automatically.
 
 ## Tech stack
 
