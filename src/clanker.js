@@ -33,7 +33,7 @@ function mount(){
   status.textContent='UPDATING…';
   try{
    const res=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});
-   if(!res.ok)throw new Error('Clanker API returned '+res.status);
+   if(!res.ok){let info={};try{info=await res.json()}catch{}throw new Error(info.details||info.error||('API returned HTTP '+res.status))}
    const payload=await res.json();
    const tokens=arr(payload).filter(t=>{const chain=pick(t,['chainId','chain_id','chain.id','token.chainId']);return chain==null||Number(chain)===8453}).slice(0,10);
    if(!tokens.length)throw new Error('No trending Base tokens returned');
