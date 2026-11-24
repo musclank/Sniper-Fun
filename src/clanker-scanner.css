@@ -1,0 +1,52 @@
+/* SNIPER-VVV Clanker Intelligence Radar */
+.sniper-radar-trigger{border:1px solid #285071;background:#0c1d2d;color:#79d7ff;padding:9px 12px;font:10px 'DM Mono',monospace;letter-spacing:1px;white-space:nowrap}
+.sniper-radar-trigger:hover{border-color:#55caff;background:#102a40}
+.sniper-radar-overlay{position:fixed;inset:0;z-index:11000;background:#020812e8;backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px}
+.sniper-radar-overlay[hidden]{display:none!important}
+.sniper-radar-dialog{width:min(1120px,100%);max-height:92dvh;overflow:auto;background:linear-gradient(145deg,#0c1c2d,#081321 72%);border:1px solid #294967;box-shadow:0 28px 100px #000b;color:#e6f3ff}
+.sniper-radar-head{display:flex;justify-content:space-between;gap:16px;padding:24px 28px 18px;border-bottom:1px solid #203c56}
+.sniper-radar-kicker{font:9px 'DM Mono',monospace;letter-spacing:1.2px;color:#75bce5}
+.sniper-radar-head h2{font:800 32px 'Barlow Condensed',sans-serif;letter-spacing:1px;margin:7px 0;color:#f0f8ff}
+.sniper-radar-head h2 b{color:#78d5ff}
+.sniper-radar-head p{font-size:12px;color:#91a9bf;margin:0}
+.sniper-radar-close{width:38px;height:38px;flex:0 0 auto;border:1px solid #35536d;background:#10243a;color:#bceaff;font-size:25px}
+.sniper-radar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 28px;border-bottom:1px solid #203c56}
+.sniper-radar-toolbar span{font:9px 'DM Mono',monospace;color:#83b7d9;letter-spacing:1px}
+.sniper-radar-toolbar button{border:1px solid #315574;background:#10263c;color:#8cddff;padding:9px 12px;font:9px 'DM Mono',monospace}
+.sniper-radar-toolbar button:disabled{opacity:.5}
+.sniper-radar-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:18px 28px}
+.sniper-radar-card{min-width:0;padding:15px;border:1px solid #25445f;background:#0a1928}
+.sniper-radar-card-head{display:flex;align-items:center;gap:10px;min-width:0}
+.sniper-radar-rank{font:10px 'DM Mono',monospace;color:#6489a7}
+.sniper-radar-logo{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border:1px solid #315574;background:#10263c;color:#9bdfff;font:11px 'DM Mono',monospace;overflow:hidden}
+.sniper-radar-logo img{width:100%;height:100%;object-fit:cover}
+.sniper-radar-name{display:grid;gap:3px;min-width:0;flex:1}
+.sniper-radar-name b{font:700 16px 'Barlow Condensed',sans-serif;color:#eaf7ff;overflow-wrap:anywhere}
+.sniper-radar-name small{font:9px 'DM Mono',monospace;color:#81a5c3}
+.sniper-radar-card-head>strong{font:10px 'DM Mono',monospace;white-space:nowrap;color:#55d9ad}
+.sniper-radar-card-head>strong.is-down{color:#ff9292}
+.sniper-radar-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:15px 0}
+.sniper-radar-metrics div{display:grid;gap:5px;min-width:0}
+.sniper-radar-metrics small{font:8px 'DM Mono',monospace;color:#6f91ad}
+.sniper-radar-metrics b{font:11px 'DM Mono',monospace;color:#dceeff;overflow:hidden;text-overflow:ellipsis}
+.sniper-radar-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid #1d354b;padding:10px 0;color:#6585a1;font:8px 'DM Mono',monospace}
+.sniper-radar-links span{margin-right:auto;overflow-wrap:anywhere}
+.sniper-radar-links a{color:#6ccfff;text-decoration:none}
+.sniper-radar-links a:hover{text-decoration:underline}
+.sniper-radar-research{width:100%;min-height:38px;border:1px solid #3489b9;background:#10324a;color:#9de4ff;font:9px 'DM Mono',monospace;letter-spacing:1px}
+.sniper-radar-research:disabled{opacity:.5;cursor:wait}
+.sniper-radar-report{margin-top:12px;padding:13px;border:1px solid #2a4965;background:#071421;color:#c2d4e2;font:11px/1.7 'DM Mono',monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow:auto}
+.sniper-radar-model{display:block;margin-top:12px;padding-top:9px;border-top:1px solid #20384d;color:#6996b7;font-size:8px}
+.sniper-radar-empty{grid-column:1/-1;padding:28px;border:1px dashed #315574;color:#88a9c4;text-align:center;font:10px 'DM Mono',monospace}
+.sniper-radar-disclaimer{margin:0;padding:0 28px 20px;color:#7993aa;font-size:10px;line-height:1.7}
+@media(max-width:760px){
+ .sniper-radar-trigger{padding:8px 9px;font-size:8px;letter-spacing:.5px}
+ .sniper-radar-overlay{padding:0;align-items:end}
+ .sniper-radar-dialog{width:100%;max-height:95dvh;border-left:0;border-right:0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom)}
+ .sniper-radar-head{padding:17px 15px 13px}
+ .sniper-radar-head h2{font-size:26px}
+ .sniper-radar-toolbar{padding:10px 15px}
+ .sniper-radar-grid{grid-template-columns:1fr;padding:13px 12px}
+ .sniper-radar-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sniper-radar-disclaimer{padding:0 15px 16px}
+}
