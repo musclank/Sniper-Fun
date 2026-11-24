@@ -41,7 +41,7 @@
 <div class="sidebar-bottom"><div class="status-line"><i></i> SYSTEM READY</div><div class="quota-note">FREE ACCESS · PROVIDER LIMITS APPLY</div></div>
 </aside>
 <main class="main">
-<header class="topbar"><div class="mobile-brand"><img src="/sniper-vvv-emblem.svg" alt="">SNIPER<span>-$VVV</span></div><select class="mobile-tool-select" id="mobileToolSelect" aria-label="Choose AI workspace"><option value="chat">GENERAL</option><option value="code">CODING</option><option value="image">VISUAL</option></select><div class="top-meta"><span class="online-dot"></span> ALL SYSTEMS OPERATIONAL</div><button class="mobile-resources-btn" id="mobileResourcesBtn" type="button">DOCS</button><button class="login-btn command-trigger" id="commandBtn" type="button">COMMANDS <span>⌘K</span></button></header>
+<header class="topbar"><div class="mobile-brand"><img src="/sniper-vvv-emblem.svg" alt="">SNIPER<span>-$VVV</span></div><select class="mobile-tool-select" id="mobileToolSelect" aria-label="Choose AI workspace"><option value="chat">GENERAL</option><option value="code">CODING</option><option value="image">VISUAL</option></select><div class="top-meta"><span class="online-dot"></span> ALL SYSTEMS OPERATIONAL</div><button class="mobile-resources-btn" id="mobileMenuBtn" type="button" aria-expanded="false" aria-controls="mobileMenuBackdrop">MENU</button><button class="login-btn command-trigger" id="commandBtn" type="button">COMMANDS <span>⌘K</span></button></header>
 <section class="workspace terminal-workspace">
 <div class="terminal-hero"><div class="eyebrow"><span></span> TACTICAL INTELLIGENCE INTERFACE / 001</div><h1 id="headline">THINK FASTER.<br><span>EXECUTE WITH PRECISION.</span></h1><p class="intro" id="intro">A focused AI command line. Ask anything, switch intelligence modes, and keep your workflow moving.</p></div>
 <div class="model-panel">
@@ -76,6 +76,30 @@
 </div>
 <footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER VERIFIED ROUTING</span></footer>
 </section></main></div>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" hidden>
+ <nav class="mobile-menu-panel" aria-label="SNIPER navigation">
+  <div class="mobile-menu-head"><div><span class="panel-kicker">TACTICAL CONTROL</span><strong>SNIPER NAVIGATION</strong></div><button type="button" id="closeMobileMenu" aria-label="Close menu">×</button></div>
+  <div class="mobile-menu-group"><span>WORKSPACE</span>
+   <button type="button" data-mobile-action="terminal"><b>01</b><span>Terminal<small>General AI command interface</small></span></button>
+   <button type="button" data-mobile-action="coding"><b>02</b><span>Coding assistant<small>Developer workspace</small></span></button>
+   <button type="button" data-mobile-action="visual"><b>03</b><span>Visual assistant<small>Image prompt workspace</small></span></button>
+  </div>
+  <div class="mobile-menu-group"><span>TOOLS</span>
+   <button type="button" data-mobile-action="workflow"><b>04</b><span>Workflow builder<small>Plan and track AI workflows</small></span></button>
+   <button type="button" data-mobile-action="projects"><b>05</b><span>Projects<small>Open local project space</small></span></button>
+   <button type="button" data-mobile-action="history"><b>06</b><span>Session history<small>Return to saved conversations</small></span></button>
+   <button type="button" data-mobile-action="prompts"><b>07</b><span>Prompt arsenal<small>Browse quick-start prompts</small></span></button>
+  </div>
+  <div class="mobile-menu-group"><span>RESOURCES</span>
+   <div class="mobile-menu-resource-grid">
+    <button type="button" data-mobile-action="docs">Documentation</button><button type="button" data-mobile-action="api">API reference</button>
+    <button type="button" data-mobile-action="terms">Terms</button><button type="button" data-mobile-action="privacy">Privacy</button>
+    <button type="button" data-mobile-action="changelog">Changelog</button><button type="button" data-mobile-action="faq">FAQ & support</button>
+   </div>
+  </div>
+  <div class="mobile-menu-foot"><span><i></i> SYSTEM READY</span><small>SNIPER-$VVV · MOBILE NAVIGATION</small></div>
+ </nav>
+</div>
 <div class="modal-backdrop" id="projectModal" hidden>
   <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
     <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL PROJECT SPACE</span><h2 id="projectModalTitle">PROJECTS</h2></div><button class="modal-close" type="button" data-close-modal="projectModal" aria-label="Close">×</button></div>
