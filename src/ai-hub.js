@@ -1,3 +1,4 @@
+import './clanker.js';
 import './ai-hub.css';
 
 // Cinematic boot screen
