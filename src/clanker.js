@@ -1,4 +1,4 @@
-const API='https://www.clanker.world/api/tokens/trending?chainId=8453';
+const API='https://www.clanker.world/api/tokens/trending';
 const money=value=>{const n=Number(value);if(!Number.isFinite(n)||n<=0)return '—';return n>=1e9?'$'+(n/1e9).toFixed(2)+'B':n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+(n/1e3).toFixed(2)+'K':n<.01?'$'+n.toExponential(2):'$'+n.toFixed(n<1?5:3)};
 const pick=(o,keys)=>{for(const k of keys){const v=k.split('.').reduce((a,b)=>a?.[b],o);if(v!==undefined&&v!==null&&v!=='')return v}return null};
 const arr=data=>Array.isArray(data)?data:(data?.tokens||data?.data?.tokens||data?.data||data?.results||data?.pools||[]);
@@ -41,7 +41,7 @@ function mount(){
    status.textContent='LIVE · '+tokens.length+' TOKENS · BASE';
   }catch(err){
    status.textContent='DATA FEED UNAVAILABLE';
-   if(!grid.querySelector('.cl-error'))grid.innerHTML='<div class="cl-empty cl-error">Unable to load live Clanker data right now. Check your connection or try again.</div>';
+   grid.innerHTML='<div class="cl-empty cl-error">Unable to load live Clanker data. '+escapeHtml(err?.message||'Request failed')+'. <a href="https://www.clanker.world/clankers?filter=trending" target="_blank" rel="noopener noreferrer" style="color:#64baf0">Open Clanker trending ↗</a></div>';
   }
  }
  load();
