@@ -756,6 +756,7 @@ button,select,textarea{max-width:100%}
 #clankerPanel .ct-rank{flex:none;font-size:10px;color:#6e98ba}
 #clankerPanel .ct-logo{width:35px;height:35px;flex:none;border-radius:50%;background:#1c3a55;display:grid;place-items:center;overflow:hidden}
 #clankerPanel .ct-logo img{width:100%;height:100%;object-fit:cover}
+#clankerPanel .ct-logo-fallback{display:grid;place-items:center;width:100%;height:100%;font:800 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.04em;color:#b9e8ff;background:linear-gradient(145deg,#17466a,#10283f)}
 #clankerPanel .ct-name{min-width:0;display:grid;gap:3px;flex:1}
 #clankerPanel .ct-name b{font:700 14px/1.2 'Barlow Condensed',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #clankerPanel .ct-name small{font-size:10px;color:#81a7c7}
