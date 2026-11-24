@@ -16,7 +16,8 @@ const $=s=>document.querySelector(s);
 const messages=$('#messages'),modelSelect=$('#model'),routing=$('#routing'),input=$('#promptInput');
 const LEGACY_KEY='sniper-vvv-chat-v1',SESSIONS_KEY='sniper-vvv-sessions-v1';
 let models=[],busy=false,tool='chat',conversation=[],sessions=[],activeSessionId='',projects=[],activeProjectId='';
-const PROJECTS_KEY='sniper-vvv-projects-v1';
+const PROJECTS_KEY='sniper-vvv-projects-v1',PROJECT_FILES_KEY='sniper-vvv-project-files-v1';
+let projectFilesProjectId='';
 const systemPrompts={
  chat:'You are Sniper-$VVV, a helpful and precise AI assistant. Be clear, honest, and useful.',
  code:'You are Sniper-$VVV Coding Assistant. Help design, debug, explain, and write maintainable software. Include code blocks when useful.',
@@ -48,10 +49,69 @@ function renderProjects(){
   const open=document.createElement('button');open.type='button';open.className='project-open';open.dataset.openProject=project.id;
   const name=document.createElement('strong');name.textContent=project.name;
   const detail=document.createElement('small');detail.textContent=count+' sessions';
-  open.append(name,detail);row.append(open);list.append(row);
+  open.append(name,detail);
+  const files=document.createElement('button');files.type='button';files.className='project-files-open';files.textContent='FILES';files.dataset.projectFiles=project.id;
+  row.append(open,files);list.append(row);
  });
 }
 function openProjects(){renderProjects();openModal('projectModal')}
+function readProjectFiles(){
+ try{const value=JSON.parse(localStorage.getItem(PROJECT_FILES_KEY)||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch{return{}}
+}
+function writeProjectFiles(value){
+ try{localStorage.setItem(PROJECT_FILES_KEY,JSON.stringify(value));return true}catch{setStatus('PROJECT FILE STORAGE LIMIT REACHED');return false}
+}
+function openProjectFiles(id){
+ const project=projects.find(p=>p.id===id);if(!project)return;
+ projectFilesProjectId=id;$('#projectFilesName').textContent=project.name.toUpperCase();
+ renderProjectFiles();closeModal('projectModal');openModal('projectFilesModal');
+}
+function renderProjectFiles(){
+ const list=$('#projectFilesList');if(!list)return;list.innerHTML='';
+ const items=readProjectFiles()[projectFilesProjectId]||[];
+ if(!items.length){const empty=document.createElement('p');empty.className='snippet-empty';empty.textContent='No reference files yet. Add a text or code file to this project.';list.append(empty);return}
+ items.forEach(item=>{
+  const row=document.createElement('article');row.className='project-file-row';
+  const info=document.createElement('div');info.className='project-file-info';
+  const name=document.createElement('strong');name.textContent=item.name;
+  const meta=document.createElement('small');meta.textContent=Math.ceil(item.content.length/1024)+' KB · '+(item.content.match(/\\n/g)||[]).length+' lines';
+  info.append(name,meta);
+  const actions=document.createElement('div');actions.className='project-file-actions';
+  const use=document.createElement('button');use.type='button';use.textContent='ADD TO AI CONTEXT';use.addEventListener('click',()=>{
+   if(attachedFileContext.some(file=>file.name===item.name)){setStatus('FILE ALREADY ATTACHED');return}
+   if(attachedFileContext.length>=3){setStatus('MAXIMUM 3 FILES PER MESSAGE');return}
+   const used=attachedFileContext.reduce((total,file)=>total+file.content.length,0);
+   if(used+item.content.length>8500){setStatus('AI CONTEXT LIMIT · 8,500 CHARACTERS');return}
+   attachedFileContext.push({name:item.name,content:item.content});renderAttachedFiles();closeModal('projectFilesModal');setStatus('PROJECT FILE ADDED TO AI CONTEXT');
+  });
+  const remove=document.createElement('button');remove.type='button';remove.textContent='DELETE';remove.addEventListener('click',()=>{
+   if(!window.confirm('Delete this project file from local storage?'))return;
+   const all=readProjectFiles();all[projectFilesProjectId]=(all[projectFilesProjectId]||[]).filter(file=>file.id!==item.id);
+   if(writeProjectFiles(all))renderProjectFiles();
+  });
+  actions.append(use,remove);row.append(info,actions);list.append(row);
+ });
+}
+async function addProjectFiles(fileList){
+ const selected=Array.from(fileList||[]);const all=readProjectFiles();const items=all[projectFilesProjectId]||[];
+ for(const file of selected){
+  const ext=file.name.includes('.')?file.name.split('.').pop().toLowerCase():'';
+  if(!allowedFileExtensions.has(ext)){setStatus('UNSUPPORTED FILE · TEXT/CODE ONLY');continue}
+  if(file.size>80*1024){setStatus('FILE TOO LARGE · 80 KB MAX');continue}
+  if(items.length>=5){setStatus('MAXIMUM 5 FILES PER PROJECT');break}
+  if(items.some(item=>item.name.toLowerCase()===file.name.toLowerCase())){setStatus('FILE NAME ALREADY EXISTS');continue}
+  try{
+   const content=await file.text();
+   if(content.includes('\\u0000')){setStatus('BINARY FILES NOT SUPPORTED');continue}
+   const total=items.reduce((sum,item)=>sum+item.content.length,0);
+   if(total+content.length>250000){setStatus('PROJECT FILE STORAGE CAP · 250 KB');continue}
+   items.push({id:makeId(),name:file.name,content,updatedAt:Date.now()});
+  }catch{setStatus('COULD NOT READ FILE')}
+ }
+ all[projectFilesProjectId]=items;
+ if(writeProjectFiles(all)){renderProjectFiles();setStatus('PROJECT FILES SAVED LOCALLY')}
+}
+
 function createProject(){
  const field=$('#projectName'),name=field.value.trim();
  if(!name){field.focus();return}
@@ -290,6 +350,7 @@ document.addEventListener('click',e=>{
  const prompt=e.target.closest('[data-prompt],[data-library-prompt]');
  if(prompt){input.value=prompt.dataset.prompt||prompt.dataset.libraryPrompt;input.focus();closeModal('commandModal');return}
  const close=e.target.closest('[data-close-modal]');if(close){closeModal(close.dataset.closeModal);return}
+ const projectFiles=e.target.closest('[data-project-files]');if(projectFiles){openProjectFiles(projectFiles.dataset.projectFiles);return}
  const project=e.target.closest('[data-open-project]');if(project){openProject(project.dataset.openProject);return}
  const open=e.target.closest('[data-open-session]');if(open){openSession(open.dataset.openSession);return}
  const rename=e.target.closest('[data-rename-session]');if(rename){renameSession(rename.dataset.renameSession);return}
@@ -308,6 +369,8 @@ $('#newChat').addEventListener('click',createSession);
 $('#historyBtn').addEventListener('click',restoreHistory);
 $('#projectsBtn').addEventListener('click',openProjects);
 $('#createProjectBtn').addEventListener('click',createProject);
+$('#addProjectFilesBtn').addEventListener('click',()=>$('#projectFilesInput').click());
+$('#projectFilesInput').addEventListener('change',e=>{addProjectFiles(e.target.files);e.target.value=''});
 $('#projectName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();createProject()}});
 $('#promptBtn').addEventListener('click',openCommandCenter);
 $('#commandBtn').addEventListener('click',openCommandCenter);
