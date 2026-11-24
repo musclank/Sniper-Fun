@@ -1,7 +1,18 @@
 const API='/api/clanker';
 const money=value=>{const n=Number(value);if(!Number.isFinite(n)||n<=0)return '—';return n>=1e9?'$'+(n/1e9).toFixed(2)+'B':n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+(n/1e3).toFixed(2)+'K':n<.01?'$'+n.toExponential(2):'$'+n.toFixed(n<1?5:3)};
 const pick=(o,keys)=>{for(const k of keys){const v=k.split('.').reduce((a,b)=>a?.[b],o);if(v!==undefined&&v!==null&&v!=='')return v}return null};
-const arr=data=>Array.isArray(data)?data:(data?.tokens||data?.data?.tokens||data?.data||data?.results||data?.pools||[]);
+const arr=data=>{
+ const queue=[data],seen=new Set();
+ const keys=['tokens','results','items','data','pools','trending','clankers'];
+ while(queue.length){
+  const value=queue.shift();
+  if(Array.isArray(value))return value;
+  if(!value||typeof value!=='object'||seen.has(value))continue;
+  seen.add(value);
+  for(const key of keys)if(value[key]!==undefined)queue.push(value[key]);
+ }
+ return [];
+};
 function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function tokenCard(t,i){
  const address=pick(t,['token.address','tokenAddress','address','contractAddress','token_address'])||'';
