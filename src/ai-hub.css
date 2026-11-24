@@ -428,3 +428,17 @@ body.modal-open{overflow:hidden}
 .debug-engine-controls button{min-height:44px;padding:0 16px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
 .debug-engine-controls button:hover,.debug-runtime-head button:hover{border-color:#62d9ff;background:#124b6e}
 @media(max-width:560px){#openDebugEngine{width:100%}.debug-engine-controls{align-items:stretch;flex-direction:column}.debug-engine-controls button{min-height:48px}.debug-engine-modal textarea,.debug-engine-modal input,.debug-select{font-size:12px}}
+
+/* Stage 17 — Autonomous Coding Workspace */
+#openCodingWorkspace{border-color:#28658a;color:#a5e6ff}
+.coding-workspace-modal{width:min(100%,720px)}
+.coding-workspace-modal textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';outline:none;resize:vertical}
+.coding-workspace-modal textarea:focus{border-color:#39c9ff}
+#workspaceGoal{min-height:76px}
+#workspacePlan{min-height:180px;font-size:10px}
+.workspace-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.workspace-actions button{min-height:40px;padding:0 12px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:8px 'DM Mono';letter-spacing:.4px}
+.workspace-actions button:hover:not(:disabled){border-color:#62d9ff;background:#124b6e}
+.workspace-actions button:disabled{opacity:.4;cursor:not-allowed}
+.workspace-preview{max-height:220px;overflow:auto;margin-top:10px;padding:12px;border:1px solid #244865;background:#061421;color:#9fd8f7;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){#openCodingWorkspace{width:100%}.workspace-actions{display:grid;grid-template-columns:1fr}.workspace-actions button{min-height:46px}.coding-workspace-modal textarea{font-size:12px}}
