@@ -87,7 +87,8 @@ export async function onRequestPost({ request, env }) {
     }
     const report = data?.choices?.[0]?.message?.content;
     if (!report) return Response.json({ error: 'The AI provider returned an empty report.' }, { status: 502, headers });
-    const safeReport = String(report).replace(/\r/g, '').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, ' ').trim().slice(0, 7000);\n    return Response.json({ report: safeReport, model: clean(data.model || model, 120), evidence }, { headers });
+    const safeReport = String(report).replace(/\r/g, '').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, ' ').trim().slice(0, 7000);
+    return Response.json({ report: safeReport, model: clean(data.model || model, 120), evidence }, { headers });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Research request failed.';
     return Response.json({ error: clean(message, 240) }, { status: 502, headers });
