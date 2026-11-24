@@ -11,7 +11,10 @@ async function refreshBaseNetwork(){
  if(status)status.textContent='SYNCING BASE MAINNET';
  try{
   const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify({action:'network'}),cache:'no-store'});
-  const data=await response.json();
+  const raw=await response.text();
+  let data;
+  try { data=JSON.parse(raw); }
+  catch { throw new Error(response.status===404 || /^<!doctype html|^<html/i.test(raw.trim()) ? 'Cloudflare did not route /api/base to its Function. Check the latest Pages deployment and Functions routing.' : 'API returned invalid JSON (HTTP '+response.status+').'); }
   if(!response.ok||!data.ok)throw new Error(data.error||'Base RPC request failed');
   const block=number(data.blockNumber),gas=Number(BigInt(data.gasPrice))/1e9;
   const txCount=Number(data.transactionCount);
