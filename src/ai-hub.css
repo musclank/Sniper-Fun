@@ -453,3 +453,14 @@ body.modal-open{overflow:hidden}
 .dependency-status{margin:10px 0;padding:10px;border:1px solid #244865;background:#091b2a;color:#83d9ff;font:9px 'DM Mono'}
 .dependency-report{max-height:320px;overflow:auto;padding:13px;border:1px solid #244865;background:#061421;color:#a9dafa;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:560px){#openDependencyIntel{width:100%}.dependency-actions{display:grid;grid-template-columns:1fr}.dependency-actions button{min-height:46px}}
+
+/* Stage 19 — Security & Secrets Guardian */
+#openSecretsGuardian{border-color:#8a4b6d;color:#ffd0e2}
+.secrets-guardian-modal{width:min(100%,720px)}
+.secrets-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.secrets-actions button{min-height:42px;padding:0 13px;border:1px solid #8b5472;background:#321d32;color:#ffd5e7;font:8px 'DM Mono';letter-spacing:.4px}
+.secrets-actions button:disabled{opacity:.4;cursor:not-allowed}
+.secrets-actions button:hover:not(:disabled){border-color:#ff9fc7;background:#492342}
+.secrets-status{margin:10px 0;padding:10px;border:1px solid #6c405a;background:#211526;color:#ffb9d5;font:9px 'DM Mono'}
+.secrets-report{max-height:340px;overflow:auto;padding:13px;border:1px solid #50324a;background:#100d19;color:#f1c6dc;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){#openSecretsGuardian{width:100%}.secrets-actions{display:grid;grid-template-columns:1fr}.secrets-actions button{min-height:46px}}
