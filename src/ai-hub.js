@@ -145,6 +145,44 @@ function exportChat(){
  setStatus('CHAT EXPORTED · MARKDOWN');
 }
 function openCommandCenter(){openModal('commandModal')}
+const SNIPPETS_KEY='sniper-vvv-snippets-v1';
+function readSnippets(){try{const value=JSON.parse(localStorage.getItem(SNIPPETS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return[]}}
+function writeSnippets(items){try{localStorage.setItem(SNIPPETS_KEY,JSON.stringify(items));return true}catch{setStatus('SNIPPET STORAGE LIMIT REACHED');return false}}
+function renderSnippets(){
+ const list=$('#snippetList');if(!list)return;list.innerHTML='';
+ const items=readSnippets();
+ if(!items.length){const empty=document.createElement('p');empty.className='snippet-empty';empty.textContent='No snippets saved yet. Add code in the message box, name it, then save.';list.append(empty);return}
+ items.forEach(item=>{
+  const row=document.createElement('article');row.className='snippet-row';
+  const info=document.createElement('div');info.className='snippet-info';
+  const name=document.createElement('strong');name.textContent=item.name;
+  const detail=document.createElement('small');detail.textContent=(item.code.match(/\n/g)||[]).length+1+' lines · '+new Date(item.updatedAt).toLocaleDateString();
+  const preview=document.createElement('code');preview.textContent=item.code.slice(0,180);
+  info.append(name,detail,preview);
+  const actions=document.createElement('div');actions.className='snippet-actions';
+  const insert=document.createElement('button');insert.type='button';insert.textContent='INSERT';insert.addEventListener('click',()=>{input.value=item.code;input.focus();closeModal('snippetModal');setStatus('SNIPPET INSERTED INTO COMPOSER')});
+  const copy=document.createElement('button');copy.type='button';copy.textContent='COPY';copy.addEventListener('click',()=>copyText(item.code,copy));
+  const remove=document.createElement('button');remove.type='button';remove.textContent='DELETE';remove.addEventListener('click',()=>{if(!window.confirm('Delete this snippet?'))return;writeSnippets(readSnippets().filter(x=>x.id!==item.id));renderSnippets()});
+  actions.append(insert,copy,remove);row.append(info,actions);list.append(row);
+ });
+}
+function saveSnippet(){
+ const code=input.value.trim();if(!code){setStatus('ADD CODE TO THE COMPOSER FIRST');input.focus();return}
+ const name=$('#snippetName').value.trim()||'Untitled snippet';
+ const items=readSnippets();items.unshift({id:makeId(),name:name.slice(0,48),code:code.slice(0,12000),updatedAt:Date.now()});
+ if(writeSnippets(items.slice(0,50))){$('#snippetName').value='';renderSnippets();setStatus('SNIPPET SAVED LOCALLY')}
+}
+function runWorkspaceAction(kind){
+ const source=input.value.trim();
+ if(kind==='enhance'&&!source){setStatus('ENTER A PROMPT TO ENHANCE');input.focus();return}
+ if(kind==='summarize'&&!conversation.length){setStatus('NO CONVERSATION TO SUMMARIZE');return}
+ const request=kind==='enhance'
+  ? 'Improve the following prompt so it is clear, specific, structured, and likely to produce a high-quality result. Preserve the original intent. Return only the improved prompt, with brief notes only if essential.\n\nPROMPT TO IMPROVE:\n'+source
+  : 'Summarize this conversation so far. Capture the goal, important decisions, constraints, completed work, unresolved issues, and concrete next steps. Use concise headings and do not invent details.';
+ if(kind==='enhance')input.value='';
+ send(request);
+}
+
 function setTool(nextTool){tool=nextTool;$('#mobileToolSelect').value=tool;document.querySelectorAll('.tool-link').forEach(x=>x.classList.toggle('active',x.dataset.tool===tool));const labels={chat:['SNIPER TERMINAL','THINK FASTER.','A focused AI command line. Ask anything and keep your workflow moving.','GENERAL'],code:['DEVELOPER WORKSPACE','BUILD SMARTER.','Review, debug, explain, and refactor code with your AI engineering assistant.','CODING'],image:['VISUAL ASSISTANT','VISUALIZE IDEAS.','Create and refine image prompts with AI assistance.','VISUAL']};const label=labels[tool]||labels.chat;$('#modeTitle').textContent=label[0];$('#headline').innerHTML=label[1]+'<br><span>WITH SNIPER AI.</span>';$('#intro').textContent=label[2];$('#channelName').textContent=label[3];$('#developerTools').hidden=tool!=='code';}
 async function loadModels(){
  models=[{id:'openrouter/free',name:'OPENROUTER SMART ROUTER'}];
@@ -200,6 +238,10 @@ $('#promptBtn').addEventListener('click',openCommandCenter);
 $('#commandBtn').addEventListener('click',openCommandCenter);
 $('#clearChat').addEventListener('click',clearBuffer);
 $('#refreshModels').addEventListener('click',loadModels);
+$('#enhancePrompt').addEventListener('click',()=>runWorkspaceAction('enhance'));
+$('#summarizeChat').addEventListener('click',()=>runWorkspaceAction('summarize'));
+$('#openSnippets').addEventListener('click',()=>{renderSnippets();openModal('snippetModal')});
+$('#saveSnippet').addEventListener('click',saveSnippet);
 document.querySelectorAll('.tool-link').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 $('#mobileToolSelect').addEventListener('change',e=>setTool(e.target.value));
 document.addEventListener('click',e=>{const task=e.target.closest('[data-code-task]');if(task){const code=input.value.trim();const taskText=task.dataset.codeTask;input.value=code?taskText+'\n\n```\n'+code+'\n```':taskText+'\n\nPaste your code below this instruction.';input.focus();input.setSelectionRange(input.value.length,input.value.length)}});
