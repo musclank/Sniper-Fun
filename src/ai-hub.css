@@ -197,3 +197,5 @@ body.modal-open{overflow:hidden}
 .code-block pre{margin:0;padding:13px;overflow-x:auto;white-space:pre;color:#d7efff;font:10px/1.7 'DM Mono';tab-size:2}
 .code-block code{font:inherit}
 @media(max-width:650px){.developer-tools{padding:11px 10px}.developer-tools-head{font-size:7px}.developer-task-grid{grid-template-columns:1fr 1fr}.developer-task-grid button{min-height:39px;font-size:8px}.code-block pre{font-size:9px;padding:10px}}
+.mobile-tool-select{display:none}
+@media(max-width:560px){.mobile-tool-select{display:block;max-width:105px;min-width:88px;height:32px;padding:0 6px;border:1px solid #285477;background:#0b2033;color:#a9dfff;font:8px 'DM Mono';letter-spacing:.5px;border-radius:2px}.topbar{gap:8px}.mobile-brand{white-space:nowrap;font-size:16px}.command-trigger{padding:8px 9px}}
