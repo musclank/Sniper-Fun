@@ -23,6 +23,7 @@
 <a class="brand" href="#"><img class="brand-mark" src="/sniper-vvv-emblem.svg" alt="SNIPER VVV emblem"><span>SNIPER<span class="green">-$VVV</span><small>TACTICAL AI TERMINAL</small></span></a>
 <div class="side-label">WORKSPACE</div>
 <button class="side-item active" id="newChat"><span>＋</span> New session</button>
+<button class="side-item" id="projectsBtn"><span>▦</span> Projects</button>
 <button class="side-item" id="historyBtn"><span>◷</span> Session history</button>
 <button class="side-item" id="promptBtn"><span>✳</span> Prompt arsenal</button>
 <div class="side-label tools-label">AI SYSTEMS</div>
@@ -54,6 +55,14 @@
 </div>
 <footer><span>SNIPER-$VVV <b>·</b> TACTICAL AI SYSTEMS</span><span>POWERED BY OPENROUTER VERIFIED ROUTING</span></footer>
 </section></main></div>
+<div class="modal-backdrop" id="projectModal" hidden>
+  <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL PROJECT SPACE</span><h2 id="projectModalTitle">PROJECTS</h2></div><button class="modal-close" type="button" data-close-modal="projectModal" aria-label="Close">×</button></div>
+    <div class="project-create-row"><input id="projectName" type="text" maxlength="40" placeholder="New project name"><button type="button" id="createProjectBtn">CREATE PROJECT</button></div>
+    <p class="snippet-note">Projects group your conversations on this device. Existing sessions are kept in General.</p>
+    <div class="project-list" id="projectList"></div>
+  </section>
+</div>
 <div class="modal-backdrop" id="sessionModal" hidden>
   <section class="utility-modal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
     <div class="utility-modal-head"><div><span class="panel-kicker">LOCAL WORKSPACE</span><h2 id="sessionModalTitle">SESSION HISTORY</h2></div><button class="modal-close" type="button" data-close-modal="sessionModal" aria-label="Close">×</button></div>
