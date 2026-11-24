@@ -1,3 +1,4 @@
+import './clanker.js';
 import * as THREE from 'three';
 import './style.css';
 
