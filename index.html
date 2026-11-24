@@ -30,6 +30,14 @@
 <button class="side-item tool-link active" data-tool="chat"><span>⌘</span> General intelligence</button>
 <button class="side-item tool-link" data-tool="code"><span>⟨/⟩</span> Coding assistant</button>
 <button class="side-item tool-link" data-tool="image"><span>▧</span> Visual assistant</button>
+
+<div class="side-label resources-label">RESOURCES</div>
+<button class="side-item" type="button" id="resourcesBtn"><span>▤</span> Documentation</button>
+<button class="side-item" type="button" data-resource-open="terms"><span>§</span> Terms of service</button>
+<button class="side-item" type="button" data-resource-open="privacy"><span>◈</span> Privacy policy</button>
+<button class="side-item" type="button" data-resource-open="api"><span>⌘</span> API reference</button>
+<button class="side-item" type="button" data-resource-open="changelog"><span>↻</span> Changelog</button>
+<button class="side-item" type="button" data-resource-open="faq"><span>?</span> FAQ & support</button>
 <div class="sidebar-bottom"><div class="status-line"><i></i> SYSTEM READY</div><div class="quota-note">FREE ACCESS · PROVIDER LIMITS APPLY</div></div>
 </aside>
 <main class="main">
@@ -272,5 +280,61 @@
     <div class="snippet-list" id="snippetList"></div>
   </section>
 </div>
-<script type="module" src="/src/ai-hub.js"></script>
+
+<div class="modal-backdrop" id="resourcesModal" hidden>
+ <section class="utility-modal resources-modal" role="dialog" aria-modal="true" aria-labelledby="resourcesTitle">
+  <div class="utility-modal-head"><div><span class="panel-kicker">SNIPER-$VVV KNOWLEDGE BASE</span><h2 id="resourcesTitle">DOCUMENTATION</h2></div><button class="modal-close" type="button" data-close-modal="resourcesModal" aria-label="Close">×</button></div>
+  <nav class="resources-nav" aria-label="Documentation sections">
+   <button type="button" data-resource-tab="docs" class="active">DOCS</button><button type="button" data-resource-tab="terms">TERMS</button><button type="button" data-resource-tab="privacy">PRIVACY</button><button type="button" data-resource-tab="api">API</button><button type="button" data-resource-tab="changelog">CHANGELOG</button><button type="button" data-resource-tab="faq">FAQ</button>
+  </nav>
+  <div class="resource-content" id="resourceContent">
+   <section class="resource-page active" data-resource-page="docs">
+    <span class="resource-kicker">GETTING STARTED</span><h3>SNIPER-$VVV DOCUMENTATION</h3><p>SNIPER-$VVV is a tactical AI workspace that routes prompts through the configured OpenRouter provider. Available models and response quality depend on provider availability, account limits, and current routing.</p>
+    <h4>Start a conversation</h4><ol><li>Enter a question or task in the terminal input.</li><li>Choose a workspace from the sidebar: General intelligence, Coding assistant, or Visual assistant.</li><li>Select a suggested prompt or write your own, then choose EXECUTE.</li><li>Review generated output before using it in production.</li></ol>
+    <h4>Workspace tools</h4><ul><li><b>Prompt tools:</b> enhance prompts and summarize the current conversation.</li><li><b>Developer tools:</b> review, explain, debug, refactor, document, and test code.</li><li><b>Project tools:</b> organize sessions and add local reference files for project-aware assistance.</li><li><b>Engineering tools:</b> inspect dependencies, review patches, run local heuristic checks, and prepare code plans.</li><li><b>Memory and snippets:</b> optional browser-local preferences and reusable code snippets.</li></ul>
+    <h4>Commands</h4><div class="resource-code"><code>/help</code><code>/clear</code><code>/models</code><code>/history</code><code>/prompts</code><code>/export</code></div>
+    <h4>Important limitations</h4><p>AI output can be incomplete or incorrect. Local project files and drafts remain in this browser unless a feature explicitly sends selected context with a prompt. The workspace does not automatically commit changes to GitHub or deploy your project.</p>
+   </section>
+   <section class="resource-page" data-resource-page="terms">
+    <span class="resource-kicker">LAST UPDATED · NOVEMBER 24, 2026</span><h3>TERMS OF SERVICE</h3><p>By accessing SNIPER-$VVV, you agree to use the interface lawfully and responsibly. If you do not agree, discontinue use.</p>
+    <h4>Acceptable use</h4><ul><li>Do not use the service to violate laws, infringe rights, distribute malware, or attempt unauthorized access.</li><li>Do not submit information you are not authorized to share.</li><li>Do not attempt to disrupt, overload, or bypass service safeguards or provider limits.</li></ul>
+    <h4>AI-generated output</h4><p>Responses are generated automatically and may be inaccurate, incomplete, outdated, or unsuitable for your situation. You are responsible for reviewing, testing, and validating outputs before relying on them, especially code, security, financial, legal, or operational decisions.</p>
+    <h4>Third-party providers and availability</h4><p>AI requests may be processed by OpenRouter and the model providers selected through its routing. Their services, models, pricing, limits, and policies may change. Free access is not guaranteed and provider limits may apply.</p>
+    <h4>Changes and service availability</h4><p>Features may be modified, suspended, or discontinued. The service is provided on an availability basis; uninterrupted or error-free operation is not guaranteed.</p>
+    <h4>Contact</h4><p>For support or questions, use the project's official support channel when one is published. No response-time commitment is made by this page.</p>
+    <p class="resource-note">This is a general product-use notice, not legal advice. The project owner should review and adapt these terms to the actual operator, jurisdiction, and data practices before public commercial launch.</p>
+   </section>
+   <section class="resource-page" data-resource-page="privacy">
+    <span class="resource-kicker">LAST UPDATED · NOVEMBER 24, 2026</span><h3>PRIVACY POLICY</h3><p>This page describes the intended data handling visible from the current application interface. The project owner should verify it against hosting, server, analytics, and provider configurations before publication.</p>
+    <h4>Information you provide</h4><p>Prompts, code, and files you deliberately attach or submit may be processed to provide AI features. Do not submit passwords, API keys, payment details, or sensitive personal information.</p>
+    <h4>Browser-local data</h4><p>Project organization, saved reference files, conversation history, snippets, and optional AI memory may be stored in your browser's local storage or browser storage. They may be lost if browser data is cleared and may be accessible to anyone with access to your device or browser profile.</p>
+    <h4>AI processing</h4><p>When you submit a request, the prompt and any context selected by the application may be sent to the configured server-side service and AI provider, including OpenRouter and the routed model provider, to generate a response. Their handling is also governed by their respective privacy policies and terms.</p>
+    <h4>Security and retention</h4><p>The application is designed to keep provider credentials server-side. Do not assume that every deployment, browser, or provider configuration is risk-free. Retention, server logs, backups, and hosting telemetry depend on the project's infrastructure and provider settings.</p>
+    <h4>Your choices</h4><p>You can avoid submitting optional files or memory, remove browser-local items through the relevant application controls, and stop using the service. Clearing local browser data may remove saved sessions and project references.</p>
+    <p class="resource-note">This is a draft disclosure, not a verified audit of production data flows. The operator must confirm actual logging, cookies, analytics, hosting, and provider retention practices and add an accurate contact method.</p>
+   </section>
+   <section class="resource-page" data-resource-page="api">
+    <span class="resource-kicker">INTEGRATION OVERVIEW</span><h3>API REFERENCE</h3><p>SNIPER-$VVV currently exposes an in-product AI interface. A public, stable developer API is not documented in this release.</p>
+    <h4>Request flow</h4><ol><li>The browser collects the message and any selected context.</li><li>The application sends the request to its configured server-side endpoint.</li><li>The server uses its configured OpenRouter credential to request a model response.</li><li>The response is returned to the terminal for display.</li></ol>
+    <h4>Authentication and credentials</h4><p>Do not place OpenRouter API keys in browser code, public repositories, or client-side environment variables. Configure secrets in the deployment environment and access them only from server-side code.</p>
+    <h4>Availability and limits</h4><p>Model availability, rate limits, and response formats depend on the configured provider and model. The current interface indicates verified automatic routing; it does not promise a fixed model or public API compatibility.</p>
+    <p class="resource-note">Endpoint paths, schemas, authentication headers, quotas, and versioning are intentionally not listed because a supported public API contract has not been established.</p>
+   </section>
+   <section class="resource-page" data-resource-page="changelog">
+    <span class="resource-kicker">PRODUCT HISTORY</span><h3>CHANGELOG</h3>
+    <div class="resource-release"><b>TACTICAL AI WORKSPACE</b><span>Current interface</span><ul><li>General intelligence, coding assistant, and visual assistant workspaces.</li><li>OpenRouter automatic routing with provider availability notice.</li><li>Session history, projects, prompt arsenal, and chat export.</li><li>Developer utilities for code review, debugging, refactoring, and test planning.</li><li>Project reference files, local drafts, dependency intelligence, and project health tools.</li><li>Responsive terminal layout refinements for smaller screens.</li></ul></div>
+    <p class="resource-note">This summary describes visible capabilities, not a complete commit-by-commit release log. Dates and version numbers are omitted where they have not been verified.</p>
+   </section>
+   <section class="resource-page" data-resource-page="faq">
+    <span class="resource-kicker">HELP CENTER</span><h3>FAQ & SUPPORT</h3>
+    <h4>Why can a model fail?</h4><p>Provider availability, free-tier limits, rate limits, or temporary upstream errors can interrupt a request. Automatic routing may select another available route.</p>
+    <h4>Are project files uploaded automatically?</h4><p>Files added to the local project library are stored in this browser. They may be included when you explicitly run a project-aware feature or send selected context to AI. Avoid storing secrets.</p>
+    <h4>Does AI directly change my GitHub repository?</h4><p>No. Code plans and local workspace drafts require your review. Export or manually apply approved changes through your development workflow.</p>
+    <h4>Can I rely on generated code or security reports?</h4><p>No output is guaranteed. Review changes, run tests, inspect dependencies, and verify security findings independently.</p>
+    <h4>Where can I report a problem?</h4><p>Use the project's official repository issue tracker or support channel if the operator has enabled one.</p>
+   </section>
+  </div>
+ </section>
+</div>
+\n<script type="module" src="/src/ai-hub.js"></script>
 </body></html>
