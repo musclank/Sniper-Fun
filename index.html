@@ -52,6 +52,7 @@
   <button type="button" id="openSnippets">▤ CODE SNIPPETS</button>
   <button type="button" id="openMemory">◎ AI MEMORY</button>
   <button type="button" id="openWorkflow">BUILD AI WORKFLOW</button>
+  <button type="button" id="openCodeChange">PROPOSE CODE CHANGES</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -96,6 +97,15 @@
       <button class="arsenal-item" data-library-prompt="Create a concise content plan with audience, key message, platform-specific ideas, and several strong headline options.">Content plan <span>CREATIVE</span></button>
     </div></div>
     <div class="modal-hint">TIP: PRESS <kbd>CTRL</kbd> + <kbd>K</kbd> TO OPEN COMMAND CENTER</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="codeChangeModal" hidden>
+  <section class="utility-modal code-change-modal" role="dialog" aria-modal="true" aria-labelledby="codeChangeTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT-AWARE CODE ASSISTANT</span><h2 id="codeChangeTitle">PROPOSE CODE CHANGES</h2></div><button class="modal-close" type="button" data-close-modal="codeChangeModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Describe the change you want. Sniper AI will use the active project's saved reference files and propose a reviewable patch. Nothing is applied automatically.</p>
+    <textarea id="codeChangeGoal" rows="4" maxlength="1800" placeholder="Example: Make the mobile navigation easier to use without changing the desktop layout."></textarea>
+    <div class="code-change-controls"><span>READ-ONLY INPUT · MANUAL REVIEW</span><button type="button" id="generateCodeChange">GENERATE PROPOSAL</button></div>
+    <div class="workflow-note">Add project reference files under Projects first. Review the proposed diff and test it before applying any change.</div>
   </section>
 </div>
 <div class="modal-backdrop" id="workflowModal" hidden>
