@@ -10,6 +10,9 @@ A mobile-friendly AI workspace with a blue tactical terminal interface. Built wi
 - Local conversation sessions stored in the browser.
 - Prompt shortcuts, command center, chat history, and response/code copy controls.
 - Responsive developer workspace designed for Android and desktop browsers.
+- AI File Manager for local code drafts with preview, copy, download, and safe manual review.
+- AI Patch Reviewer for read-only engineering, security, and compatibility feedback.
+- AI Test Lab for project-aware test-suite generation; generated tests are not executed or applied automatically.
 
 ## Tech stack
 
