@@ -1070,3 +1070,23 @@ document.addEventListener('click',e=>{const task=e.target.closest('[data-code-ta
 window.addEventListener('error',event=>{recordRuntimeDebug('WINDOW ERROR',event.message||'Unknown browser error',event.error?.stack||[event.filename,event.lineno?'line '+event.lineno:'',event.colno?'column '+event.colno:''].filter(Boolean).join(':'))});
 window.addEventListener('unhandledrejection',event=>{const reason=event.reason;recordRuntimeDebug('UNHANDLED PROMISE REJECTION',reason?.message||String(reason||'Unknown rejection'),reason?.stack||'')});
 loadProjects();loadSessions();loadModels();
+
+/* Stage 24 — documentation and resource center navigation */
+function openResources(section='docs'){
+ const modal=$('#resourcesModal');
+ if(!modal)return;
+ setResourcePage(section);
+ openModal('resourcesModal');
+}
+function setResourcePage(section){
+ const allowed=['docs','terms','privacy','api','changelog','faq'];
+ const selected=allowed.includes(section)?section:'docs';
+ document.querySelectorAll('[data-resource-page]').forEach(page=>{page.classList.toggle('active',page.dataset.resourcePage===selected)});
+ document.querySelectorAll('[data-resource-tab]').forEach(tab=>{const active=tab.dataset.resourceTab===selected;tab.classList.toggle('active',active);tab.setAttribute('aria-pressed',String(active))});
+ const titles={docs:'DOCUMENTATION',terms:'TERMS OF SERVICE',privacy:'PRIVACY POLICY',api:'API REFERENCE',changelog:'CHANGELOG',faq:'FAQ & SUPPORT'};
+ $('#resourcesTitle').textContent=titles[selected];
+ const content=$('#resourceContent');if(content)content.scrollTop=0;
+}
+$('#resourcesBtn')?.addEventListener('click',()=>openResources('docs'));
+document.querySelectorAll('[data-resource-open]').forEach(button=>button.addEventListener('click',()=>openResources(button.dataset.resourceOpen)));
+document.querySelectorAll('[data-resource-tab]').forEach(button=>button.addEventListener('click',()=>setResourcePage(button.dataset.resourceTab)));
