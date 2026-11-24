@@ -55,7 +55,7 @@ export async function onRequestPost({ request, env }) {
     });
     if (!modelResponse.ok) return Response.json({ error: 'Unable to load eligible AI model routes.' }, { status: 503, headers });
     const directory = await modelResponse.json();
-    const blockedModel = /inclusion\\s*ai|inclusionai|ling[-\\s._]*3[.]?2[-\\s._]*flash/i;
+    const blockedModel = /inclusion\s*ai|inclusionai|ling[-\s._]*3[.]?2[-\s._]*flash/i;
     const eligible = (Array.isArray(directory.data) ? directory.data : [])
       .filter(item => item?.id?.endsWith(':free') || (Number(item?.pricing?.prompt) === 0 && Number(item?.pricing?.completion) === 0))
       .filter(item => !blockedModel.test(String(item.id || '') + ' ' + String(item.name || '')));
@@ -87,7 +87,7 @@ export async function onRequestPost({ request, env }) {
     }
     const report = data?.choices?.[0]?.message?.content;
     if (!report) return Response.json({ error: 'The AI provider returned an empty report.' }, { status: 502, headers });
-    const safeReport = String(report).replace(/\\r/g, '').replace(/[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]/g, ' ').trim().slice(0, 7000);\n    return Response.json({ report: safeReport, model: clean(data.model || model, 120), evidence }, { headers });
+    const safeReport = String(report).replace(/\r/g, '').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, ' ').trim().slice(0, 7000);\n    return Response.json({ report: safeReport, model: clean(data.model || model, 120), evidence }, { headers });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Research request failed.';
     return Response.json({ error: clean(message, 240) }, { status: 502, headers });
