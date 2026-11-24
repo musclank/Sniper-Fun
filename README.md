@@ -1,18 +1,25 @@
-# Sniper Fun
+# SNIPER-$VVV AI HUB
 
-A browser-based 3D tactical sniper range prototype built with **Three.js** and **Vite**.
+A mobile-friendly AI workspace with a blue tactical terminal interface. Built with Vite and deployed on Vercel.
 
-## Current prototype
+## Current experience
 
-- Real-time 3D outdoor training range
-- ACES filmic tone mapping, soft shadows, atmospheric fog and directional lighting
-- First-person camera with drag-to-look controls
-- 4× optical scope overlay
-- Three target dummies with hit detection
-- Ammunition counter, reload and target score
-- Responsive HUD and touch-friendly controls for mobile
+- Blue futuristic terminal-style interface with a cinematic boot screen.
+- AI workspace modes: General, Coding, and Visual Assistant.
+- Smart routing through OpenRouter (the current interface uses the verified automatic route).
+- Local conversation sessions stored in the browser.
+- Prompt shortcuts, command center, chat history, and response/code copy controls.
+- Responsive developer workspace designed for Android and desktop browsers.
 
-## Development
+## Tech stack
+
+- Vite
+- Vanilla JavaScript and CSS
+- Vercel serverless functions
+- OpenRouter API
+- Browser `localStorage` for local chat sessions
+
+## Run locally
 
 Requirements: Node.js 20.19+ or 22.12+.
 
@@ -28,40 +35,38 @@ npm run build
 npm run preview
 ```
 
-Vite outputs the production site to `dist/`.
+Vite writes the production build to `dist/`.
 
-## Cloudflare Pages
+## Vercel deployment
 
-Connect this repository to Cloudflare Pages with:
+Import the GitHub repository into Vercel and use these settings:
 
 - Framework preset: **Vite**
 - Build command: `npm run build`
-- Build output directory: `dist`
-- Production branch: `main`
+- Output directory: `dist`
+- Install command: `npm install`
+- Production branch: `feature/sniper-vvv-ai-hub` (or the branch explicitly selected in Vercel)
 
-## Controls
+The repository includes these Vercel serverless API routes:
 
-- Drag on the scene: look around
-- Fire button / Space: shoot
-- 4× Scope button / Z: toggle scope
-- Reload button / R: reload
+- `GET /api/models` — retrieves the OpenRouter model catalog and filters free models.
+- `POST /api/chat` — sends a chat completion request to OpenRouter.
 
-This is an early gameplay prototype. Additional weapon models, richer battlefield assets, enemy AI, mission progression and audio are planned for future updates.
+## Environment variable
 
+Add this variable in **Vercel → Project Settings → Environment Variables**:
 
-## Sniper-$VVV AI hub implementation plan
+```text
+OPENROUTER_API_KEY
+```
 
-The AI hub is being developed separately from the production game. The initial branch keeps the game entry point intact until the complete frontend and Pages Functions can be committed together.
+Set its value to your OpenRouter API key and enable it for the environments you use (Production, Preview, and/or Development). Keep the key in Vercel environment variables only. Never put it in frontend JavaScript, source files, or public commits.
 
-### Planned architecture
-- Vite frontend with a responsive tactical dashboard.
-- Cloudflare Pages Functions at `/api/models` and `/api/chat`.
-- OpenRouter free-model catalog and chat completion proxy.
-- Provider credentials stored only as Cloudflare Pages secrets (`OPENROUTER_API_KEY`).
-- Browser `localStorage` for local chat history; no account or external database required.
+After changing an environment variable, redeploy the project for the change to take effect.
 
-### Deployment settings
-- Framework preset: Vite
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Keep production branch on `main` until the AI branch has been built and tested.
+## Notes
+
+- The AI service requires a valid OpenRouter API key and may be subject to provider availability and free-model limits.
+- Chat history is stored locally in the current browser profile. It is not synced between devices and clearing browser storage may remove it.
+- The Visual Assistant helps create and refine visual prompts; it does not claim to generate images unless an image-generation provider is connected.
+- The project is intended to stay usable on free-tier infrastructure. Provider usage and platform limits still apply.
