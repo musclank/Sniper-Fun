@@ -74,7 +74,7 @@ function renderProjectFiles(){
   const row=document.createElement('article');row.className='project-file-row';
   const info=document.createElement('div');info.className='project-file-info';
   const name=document.createElement('strong');name.textContent=item.name;
-  const meta=document.createElement('small');meta.textContent=Math.ceil(item.content.length/1024)+' KB · '+(item.content.match(/\\n/g)||[]).length+' lines';
+  const meta=document.createElement('small');meta.textContent=Math.ceil(item.content.length/1024)+' KB · '+(item.content.match(/\n/g)||[]).length+' lines';
   info.append(name,meta);
   const actions=document.createElement('div');actions.className='project-file-actions';
   const use=document.createElement('button');use.type='button';use.textContent='ADD TO AI CONTEXT';use.addEventListener('click',()=>{
@@ -102,7 +102,7 @@ async function addProjectFiles(fileList){
   if(items.some(item=>item.name.toLowerCase()===file.name.toLowerCase())){setStatus('FILE NAME ALREADY EXISTS');continue}
   try{
    const content=await file.text();
-   if(content.includes('\\u0000')){setStatus('BINARY FILES NOT SUPPORTED');continue}
+   if(content.includes('\u0000')){setStatus('BINARY FILES NOT SUPPORTED');continue}
    const total=items.reduce((sum,item)=>sum+item.content.length,0);
    if(total+content.length>250000){setStatus('PROJECT FILE STORAGE CAP · 250 KB');continue}
    items.push({id:makeId(),name:file.name,content,updatedAt:Date.now()});
