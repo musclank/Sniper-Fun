@@ -56,6 +56,7 @@
   <button type="button" id="openProjectBuilder">AI PROJECT BUILDER</button>
   <button type="button" id="openFileManager">AI FILE MANAGER</button>
   <button type="button" id="openPatchReviewer">AI PATCH REVIEWER</button>
+  <button type="button" id="openTestLab">AI TEST LAB</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -157,6 +158,20 @@
     <textarea id="patchReviewFocus" rows="3" maxlength="900" placeholder="Example: Check mobile layout, accessibility, and compatibility with existing code."></textarea>
     <div class="patch-review-controls"><span>READ ONLY · NO AUTOMATIC CHANGES</span><button type="button" id="runPatchReview">RUN CODE REVIEW</button></div>
     <div class="workflow-note">For the most useful review, add the related existing files under Projects → Files before running this check.</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="testLabModal" hidden>
+  <section class="utility-modal test-lab-modal" role="dialog" aria-modal="true" aria-labelledby="testLabTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT-AWARE TEST DESIGN</span><h2 id="testLabTitle">AI TEST LAB</h2></div><button class="modal-close" type="button" data-close-modal="testLabModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Generate focused test code and a test plan for a saved file draft. Related project files are included as context. Tests are proposed only; nothing is executed or applied automatically.</p>
+    <label class="builder-field-label" for="testDraftSelect">SOURCE FILE DRAFT</label>
+    <select id="testDraftSelect" class="test-lab-select"><option value="">Select a saved file draft</option></select>
+    <label class="builder-field-label" for="testFramework">TEST FRAMEWORK (OPTIONAL)</label>
+    <input id="testFramework" type="text" maxlength="100" placeholder="Example: Vitest, Jest, Pytest">
+    <label class="builder-field-label" for="testLabFocus">TEST FOCUS (OPTIONAL)</label>
+    <textarea id="testLabFocus" rows="3" maxlength="900" placeholder="Example: Cover validation, mobile navigation, and API failure handling."></textarea>
+    <div class="test-lab-controls"><span>GENERATE ONLY · REVIEW BEFORE USE</span><button type="button" id="generateTestSuite">GENERATE TEST SUITE</button></div>
+    <div class="workflow-note">Add related files under Projects → Files for more accurate imports, mocks, and integration assumptions.</div>
   </section>
 </div>
 <div class="modal-backdrop" id="memoryModal" hidden>
