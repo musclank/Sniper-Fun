@@ -61,6 +61,7 @@
   <button type="button" id="openCodingWorkspace">AUTONOMOUS CODING WORKSPACE</button>
   <button type="button" id="openDependencyIntel">PROJECT DEPENDENCY INTELLIGENCE</button>
   <button type="button" id="openSecretsGuardian">AI SECURITY & SECRETS GUARDIAN</button>
+  <button type="button" id="openProjectHealth">AI PROJECT HEALTH DASHBOARD</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -191,6 +192,17 @@
   <input id="debugFocus" type="text" maxlength="500" placeholder="Example: Error appears after pressing Execute on Android.">
   <div class="debug-engine-controls"><span>ANALYSIS ONLY · NO AUTO-FIX</span><button type="button" id="runDebugAnalysis">ANALYZE ERROR</button></div>
   <div class="workflow-note">For better diagnosis, add related files in Projects → Files. Remove secrets, API keys, tokens, and personal data before submitting logs.</div>
+ </section>
+</div>
+<div class="modal-backdrop" id="projectHealthModal" hidden>
+ <section class="utility-modal project-health-modal" role="dialog" aria-modal="true" aria-labelledby="projectHealthTitle">
+  <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT STATUS CENTER</span><h2 id="projectHealthTitle">AI PROJECT HEALTH</h2></div><button class="modal-close" type="button" data-close-modal="projectHealthModal" aria-label="Close">×</button></div>
+  <p class="snippet-note">A local, heuristic snapshot of saved project files, dependency metadata, security pattern matches, and captured runtime errors. Test execution and deployment status are not inferred.</p>
+  <div class="health-actions"><button type="button" id="runProjectHealth">RUN HEALTH CHECK</button><button type="button" id="askHealthAI" disabled>ASK AI TO REVIEW</button><button type="button" id="copyHealthReport" disabled>COPY REPORT</button></div>
+  <div id="healthScorePanel" class="health-score-panel"><div class="health-score-value" id="healthScoreValue">—</div><div><strong id="healthScoreLabel">NOT SCANNED</strong><span id="healthScoreCaption">Run a local check to generate a snapshot.</span></div></div>
+  <div id="healthStatusGrid" class="health-status-grid"><div class="health-status-card"><span>SECURITY</span><strong>UNKNOWN</strong><small>Not scanned</small></div><div class="health-status-card"><span>DEPENDENCIES</span><strong>UNKNOWN</strong><small>Not inspected</small></div><div class="health-status-card"><span>RUNTIME</span><strong>UNKNOWN</strong><small>No snapshot</small></div><div class="health-status-card"><span>TESTS / BUILD</span><strong>NOT VERIFIED</strong><small>No execution evidence</small></div></div>
+  <div class="health-report" id="healthReport" aria-live="polite">No health report yet.</div>
+  <div class="workflow-note">Score is a local heuristic, not a security certification, test result, or production-readiness guarantee. Re-run after changing files. AI review receives the summarized report only, not source files or secret values.</div>
  </section>
 </div>
 <div class="modal-backdrop" id="secretsGuardianModal" hidden>
