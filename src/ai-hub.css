@@ -291,3 +291,9 @@ body.modal-open{overflow:hidden}
 .memory-footer span{color:#6f91ad;font:9px 'DM Mono'}
 .memory-actions{display:flex;gap:8px}.memory-actions button:first-child{border-color:#62404c;background:#241923;color:#e6a9b5}.memory-footer button{min-height:40px;padding:0 15px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
 @media(max-width:560px){.memory-footer button{min-height:44px}.memory-modal textarea{font-size:12px}}
+
+
+/* Stage 8 — task intelligence and transparent output profile */
+.intelligence-status{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border:1px solid #245879;background:#0a1d30;color:#78d8ff;font:8px 'DM Mono';letter-spacing:.8px}
+.output-profile{margin:8px 0 0;padding:6px 9px;border-left:2px solid #32bfff;background:#091b2b;color:#7db8d7;font:8px 'DM Mono';letter-spacing:.6px}
+@media(max-width:560px){.intelligence-status{width:100%;order:-1;min-height:27px}.workspace-tools{gap:6px}.output-profile{font-size:7px}}
