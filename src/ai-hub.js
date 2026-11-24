@@ -398,6 +398,48 @@ function outputProfile(answer){
  const code=/```/.test(value),structured=/^\s*(?:#{1,3}\s|[-*]\s|\d+[.)]\s)/m.test(value);
  return [words>180?'DETAILED':words>65?'STANDARD':'CONCISE',structured?'STRUCTURED':'DIRECT',code?'CODE INCLUDED':''].filter(Boolean).join(' · ');
 }
+
+const FILE_DRAFTS_KEY='sniper-vvv-file-drafts-v1';
+function readFileDrafts(){try{const value=JSON.parse(localStorage.getItem(FILE_DRAFTS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return[]}}
+function writeFileDrafts(items){try{localStorage.setItem(FILE_DRAFTS_KEY,JSON.stringify(items));return true}catch{setStatus('FILE DRAFT STORAGE LIMIT REACHED');return false}}
+function openFileManager(){renderFileDrafts();$('#draftFileName').value='';$('#draftFileContent').value='';$('#draftFileCount').textContent='0 characters';$('#draftPreview').hidden=true;openModal('fileManagerModal')}
+function renderFileDrafts(){
+ const list=$('#fileDraftList');if(!list)return;list.innerHTML='';
+ const items=readFileDrafts();$('#draftStorageCount').textContent=items.length+' / 20 FILES';
+ if(!items.length){const empty=document.createElement('p');empty.className='snippet-empty';empty.textContent='No file drafts saved. Paste a generated file above to create your first draft.';list.append(empty);return}
+ items.forEach(item=>{
+  const row=document.createElement('article');row.className='file-draft-row';
+  const info=document.createElement('div');info.className='file-draft-info';
+  const name=document.createElement('strong');name.textContent=item.name;
+  const meta=document.createElement('small');meta.textContent=item.content.length.toLocaleString()+' characters · '+((item.content.match(/\n/g)||[]).length+1)+' lines';
+  info.append(name,meta);
+  const actions=document.createElement('div');actions.className='file-draft-actions';
+  [['VIEW','view'],['COPY','copy'],['DOWNLOAD','download'],['DELETE','delete']].forEach(([label,action])=>{const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.draftAction=action;button.dataset.draftId=item.id;actions.append(button)});
+  row.append(info,actions);list.append(row);
+ });
+}
+function saveFileDraft(){
+ const name=$('#draftFileName').value.trim().replace(/\\/g,'/');
+ const content=$('#draftFileContent').value;
+ if(!name||!content.trim()){setStatus('FILE NAME AND CONTENT ARE REQUIRED');return}
+ if(name.length>100||name.startsWith('/')||name.split('/').some(part=>!part||part==='.'||part==='..')||/[<>:"|?*]/.test(name)){setStatus('INVALID FILE PATH');return}
+ if(content.length>100000){setStatus('FILE CONTENT EXCEEDS 100 KB');return}
+ const items=readFileDrafts(),existing=items.find(item=>item.name.toLowerCase()===name.toLowerCase());
+ if(existing){if(!window.confirm('A draft with this path exists. Replace it?'))return;existing.content=content;existing.updatedAt=Date.now()}
+ else{if(items.length>=20){setStatus('FILE DRAFT LIMIT · 20 FILES');return}items.unshift({id:makeId(),name,content,updatedAt:Date.now()})}
+ if(writeFileDrafts(items)){renderFileDrafts();$('#draftFileName').value='';$('#draftFileContent').value='';$('#draftFileCount').textContent='0 characters';$('#draftPreview').hidden=true;setStatus('FILE DRAFT SAVED LOCALLY')}
+}
+function handleFileDraftAction(action,id){
+ const item=readFileDrafts().find(file=>file.id===id);if(!item)return;
+ if(action==='view'){$('#draftPreviewName').textContent=item.name;$('#draftPreviewContent').textContent=item.content;$('#draftPreview').hidden=false;$('#draftPreview').scrollIntoView({block:'nearest',behavior:'smooth'});return}
+ if(action==='copy'){copyText(item.content);setStatus('FILE CONTENT COPIED');return}
+ if(action==='download'){
+  const blob=new Blob([item.content],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download=item.name.split('/').pop();document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);setStatus('FILE DOWNLOAD STARTED');return;
+ }
+ if(action==='delete'&&window.confirm('Delete this local file draft?')){writeFileDrafts(readFileDrafts().filter(file=>file.id!==id));renderFileDrafts();$('#draftPreview').hidden=true;setStatus('FILE DRAFT DELETED')}
+}
+
 async function send(text){
  if(busy||!text.trim())return;
  const command=text.trim().toLowerCase();
@@ -424,6 +466,7 @@ async function send(text){
 $('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=buildMessageWithFiles(input.value);input.value='';attachedFileContext=[];renderAttachedFiles();send(text)});
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#chatForm').requestSubmit()}});
 document.addEventListener('click',e=>{
+ const draftAction=e.target.closest('[data-draft-action]');if(draftAction){handleFileDraftAction(draftAction.dataset.draftAction,draftAction.dataset.draftId);return}
  const prompt=e.target.closest('[data-prompt],[data-library-prompt]');
  if(prompt){input.value=prompt.dataset.prompt||prompt.dataset.libraryPrompt;input.focus();closeModal('commandModal');return}
  const close=e.target.closest('[data-close-modal]');if(close){closeModal(close.dataset.closeModal);return}
@@ -461,6 +504,10 @@ $('#openMemory').addEventListener('click',openMemory);
  $('#openWorkflow').addEventListener('click',openWorkflow);
  $('#openCodeChange').addEventListener('click',openCodeChange);
  $('#openProjectBuilder').addEventListener('click',openProjectBuilder);
+ $('#openFileManager').addEventListener('click',openFileManager);
+ $('#saveFileDraft').addEventListener('click',saveFileDraft);
+ $('#draftFileContent').addEventListener('input',e=>{$('#draftFileCount').textContent=e.target.value.length.toLocaleString()+' characters'});
+ $('#closeDraftPreview').addEventListener('click',()=>{$('#draftPreview').hidden=true});
  $('#generateProject').addEventListener('click',generateProject);
  $('#generateCodeChange').addEventListener('click',generateCodeChange);
  $('#generateWorkflow').addEventListener('click',generateWorkflow);
