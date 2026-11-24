@@ -53,6 +53,7 @@
   <button type="button" id="openMemory">◎ AI MEMORY</button>
   <button type="button" id="openWorkflow">BUILD AI WORKFLOW</button>
   <button type="button" id="openCodeChange">PROPOSE CODE CHANGES</button>
+  <button type="button" id="openProjectBuilder">AI PROJECT BUILDER</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -115,6 +116,18 @@
     <textarea id="workflowGoal" rows="4" maxlength="1800" placeholder="Example: Build a responsive dashboard with login, project list, and settings. Keep it free and mobile-friendly."></textarea>
     <div class="workflow-controls"><span>PLAN FIRST · YOU CONTROL EXECUTION</span><button type="button" id="generateWorkflow">GENERATE WORKFLOW</button></div>
     <div class="workflow-note">AI-generated plans may need review. This tool does not modify repository files automatically.</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="projectBuilderModal" hidden>
+  <section class="utility-modal project-builder-modal" role="dialog" aria-modal="true" aria-labelledby="projectBuilderTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT SCAFFOLD GENERATOR</span><h2 id="projectBuilderTitle">AI PROJECT BUILDER</h2></div><button class="modal-close" type="button" data-close-modal="projectBuilderModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Describe the app you want to build. Sniper AI will draft a small, reviewable project structure and file contents. It will not create or change repository files automatically.</p>
+    <label class="builder-field-label" for="projectBuilderGoal">PROJECT GOAL</label>
+    <textarea id="projectBuilderGoal" rows="4" maxlength="1800" placeholder="Example: Build a responsive task manager with local storage, filters, and a clean mobile interface."></textarea>
+    <label class="builder-field-label" for="projectBuilderStack">PREFERRED STACK (OPTIONAL)</label>
+    <input id="projectBuilderStack" type="text" maxlength="160" placeholder="Example: Vite, vanilla JavaScript, CSS">
+    <div class="builder-controls"><span>FREE-FIRST · REVIEW BEFORE APPLYING</span><button type="button" id="generateProject">GENERATE PROJECT</button></div>
+    <div class="workflow-note">Start with a small MVP. Copy the generated files into GitHub only after reviewing each file and its setup instructions.</div>
   </section>
 </div>
 <div class="modal-backdrop" id="memoryModal" hidden>
