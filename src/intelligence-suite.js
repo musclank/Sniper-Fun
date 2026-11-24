@@ -107,8 +107,9 @@ async function loadModels(panel){
     const response=await fetch('/api/models',{headers:{accept:'application/json'},cache:'no-store'});
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||'Model directory unavailable');
-    const models=Array.isArray(data.models)?data.models:[];
-    if(!models.length)throw new Error('No free model routes are currently available.');
+    const blockedModel=/inclusion\\s*ai|inclusionai|ling[-\\s._]*3[.]?2[-\\s._]*flash/i;
+    const models=(Array.isArray(data.models)?data.models:[]).filter(model=>!blockedModel.test(String(model.id||'')+' '+String(model.name||'')));
+    if(!models.length)throw new Error('No eligible free model routes are currently available.');
     const selected=models.slice(0,3);
     selected.forEach((model,index)=>{
       const label=el('label','intel-model-option');
