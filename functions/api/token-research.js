@@ -1,4 +1,3 @@
-const MAX_ITEMS = 12;
 const MAX_TEXT = 9000;
 
 function clean(value, limit = 240) {
@@ -50,6 +49,19 @@ export async function onRequestPost({ request, env }) {
       'Do not make price predictions or tell the user to buy or sell. Explain that market metrics alone cannot establish token safety.'
     ].join(' ');
 
+    const modelResponse = await fetch('https://openrouter.ai/api/v1/models', {
+      headers: { authorization: 'Bearer ' + env.OPENROUTER_API_KEY },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (!modelResponse.ok) return Response.json({ error: 'Unable to load eligible AI model routes.' }, { status: 503, headers });
+    const directory = await modelResponse.json();
+    const blockedModel = /inclusion\\s*ai|inclusionai|ling[-\\s._]*3[.]?2[-\\s._]*flash/i;
+    const eligible = (Array.isArray(directory.data) ? directory.data : [])
+      .filter(item => item?.id?.endsWith(':free') || (Number(item?.pricing?.prompt) === 0 && Number(item?.pricing?.completion) === 0))
+      .filter(item => !blockedModel.test(String(item.id || '') + ' ' + String(item.name || '')));
+    const model = eligible[0]?.id;
+    if (!model) return Response.json({ error: 'No eligible free model routes are available.' }, { status: 503, headers });
+
     const upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -59,7 +71,7 @@ export async function onRequestPost({ request, env }) {
         'X-Title': 'SNIPER-VVV Token Research'
       },
       body: JSON.stringify({
-        model: 'openrouter/free',
+        model,
         messages: [
           { role: 'system', content: system },
           { role: 'user', content: 'Research this Base token using only this snapshot:\n' + serialized }
@@ -75,7 +87,7 @@ export async function onRequestPost({ request, env }) {
     }
     const report = data?.choices?.[0]?.message?.content;
     if (!report) return Response.json({ error: 'The AI provider returned an empty report.' }, { status: 502, headers });
-    return Response.json({ report: clean(report, 7000), model: clean(data.model || 'openrouter/free', 120), evidence }, { headers });
+    const safeReport = String(report).replace(/\\r/g, '').replace(/[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]/g, ' ').trim().slice(0, 7000);\n    return Response.json({ report: safeReport, model: clean(data.model || model, 120), evidence }, { headers });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Research request failed.';
     return Response.json({ error: clean(message, 240) }, { status: 502, headers });
