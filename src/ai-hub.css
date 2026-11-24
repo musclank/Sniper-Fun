@@ -731,3 +731,57 @@ button,select,textarea{max-width:100%}
 .contract-network{margin-top:10px;color:#62caff;font:8px 'DM Mono';letter-spacing:.8px}
 .contract-launch-link{display:inline-block;margin-top:12px;color:#6ed3ff;font:8px 'DM Mono';letter-spacing:.7px;text-decoration:none;border-bottom:1px solid #28658a;padding-bottom:3px}.contract-launch-link:hover{color:#eaf7ff;border-color:#6ed3ff}
 @media(max-width:650px){.contract-section{grid-template-columns:1fr;gap:15px;margin:22px 0 18px;padding:18px}.contract-heading h2{font-size:23px}.contract-address-panel{padding:13px}}
+
+
+/* Clanker Live — scoped styles (kept in the active AI Hub stylesheet) */
+#clankerLauncher{position:fixed;z-index:99999;right:22px;top:22px;display:inline-flex;align-items:center;gap:8px;border:1px solid #35678c;background:#07182b;color:#dcecff;border-radius:4px;padding:11px 14px;font:700 10px 'DM Mono',monospace;letter-spacing:1px;cursor:pointer;box-shadow:0 8px 28px #0008}
+#clankerLauncher .cl-live-dot{display:inline-block;width:7px;height:7px;flex:none;border-radius:50%;background:#48d7ae;box-shadow:0 0 10px #48d7ae}
+#clankerPanel{position:fixed;z-index:100000;inset:0 0 0 auto;width:min(720px,100vw);max-width:100vw;height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;padding:24px;background:linear-gradient(145deg,#071321,#0b1b2b);border-left:1px solid #3c6b91;box-shadow:-20px 0 70px #0009;color:#e4f1ff;font-family:'DM Mono',monospace;font-size:14px;line-height:1.5;transform:translateX(105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+#clankerPanel.open{transform:translateX(0);visibility:visible}
+#clankerPanel *{box-sizing:border-box}
+#clankerPanel button,#clankerPanel a{font-family:'DM Mono',monospace}
+#clankerPanel .cl-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-bottom:1px solid #29435c;padding:4px 0 18px}
+#clankerPanel .cl-head>div{min-width:0}
+#clankerPanel .cl-head small{display:block;font-size:10px;line-height:1.5;letter-spacing:1px;color:#75a9d4}
+#clankerPanel .cl-head h2{font:800 34px/1.1 'Barlow Condensed',sans-serif;letter-spacing:1px;margin:12px 0 6px;color:#e4f1ff}
+#clankerPanel .cl-head h2 span{color:#58b7ee}
+#clankerPanel .cl-head p{font:12px/1.5 'DM Mono',monospace;color:#9eb5c9;margin:0}
+#clankerPanel .cl-close{flex:none;background:#102941;border:1px solid #315574;color:#dcecff;width:38px;height:38px;padding:0;font-size:22px;line-height:1;cursor:pointer}
+#clankerPanel .cl-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;color:#68d7b3;font-size:10px;line-height:1.4;letter-spacing:.7px}
+#clankerPanel #clStatus{min-width:0;overflow-wrap:anywhere}
+#clankerPanel #clRefresh{flex:none;background:#12324b;border:1px solid #35678c;color:#d9edff;padding:9px 12px;font-size:10px;line-height:1.3;cursor:pointer}
+#clankerPanel .cl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#clankerPanel .clanker-token{min-width:0;padding:13px;background:linear-gradient(140deg,#10263a,#0c1d2d);border:1px solid #29445e}
+#clankerPanel .ct-top{display:flex;align-items:center;gap:9px;min-width:0}
+#clankerPanel .ct-rank{flex:none;font-size:10px;color:#6e98ba}
+#clankerPanel .ct-logo{width:35px;height:35px;flex:none;border-radius:50%;background:#1c3a55;display:grid;place-items:center;overflow:hidden}
+#clankerPanel .ct-logo img{width:100%;height:100%;object-fit:cover}
+#clankerPanel .ct-name{min-width:0;display:grid;gap:3px;flex:1}
+#clankerPanel .ct-name b{font:700 14px/1.2 'Barlow Condensed',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#clankerPanel .ct-name small{font-size:10px;color:#81a7c7}
+#clankerPanel .ct-change{flex:none;font-size:10px;white-space:nowrap}
+#clankerPanel .ct-change.up{color:#56d6a7}#clankerPanel .ct-change.down{color:#ff8585}
+#clankerPanel .ct-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px 8px;margin:16px 0}
+#clankerPanel .ct-metrics div{display:grid;gap:4px;min-width:0}
+#clankerPanel .ct-metrics small{font-size:9px;letter-spacing:.6px;color:#7796b2}
+#clankerPanel .ct-metrics b{font-size:11px;color:#e2f1ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#clankerPanel .ct-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #29445e;padding-top:10px}
+#clankerPanel .ct-bottom code{min-width:0;font-size:9px;color:#789bb9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#clankerPanel .ct-bottom a{font-size:9px;color:#64baf0;text-decoration:none;white-space:nowrap}
+#clankerPanel .cl-empty{grid-column:1/-1;padding:22px 14px;text-align:center;color:#91abc2;font-size:12px;line-height:1.7;border:1px dashed #34536d}
+#clankerPanel .cl-foot{padding:18px 0 8px;color:#6989a7;font-size:9px;line-height:1.6;letter-spacing:.3px}
+@media(max-width:600px){
+ #clankerLauncher{top:auto;right:14px;bottom:16px;padding:11px 12px;font-size:10px}
+ #clankerPanel{padding:18px 14px calc(24px + env(safe-area-inset-bottom));width:100vw}
+ #clankerPanel .cl-head{gap:10px;padding-bottom:15px}
+ #clankerPanel .cl-head small{font-size:9px}
+ #clankerPanel .cl-head h2{font-size:29px;margin:9px 0 5px}
+ #clankerPanel .cl-head p{font-size:10px}
+ #clankerPanel .cl-close{width:34px;height:34px}
+ #clankerPanel .cl-toolbar{align-items:flex-start;font-size:9px;padding:12px 0}
+ #clankerPanel #clRefresh{padding:8px 9px;font-size:9px}
+ #clankerPanel .cl-grid{grid-template-columns:1fr;gap:9px}
+ #clankerPanel .clanker-token{padding:11px}
+ #clankerPanel .ct-metrics{margin:12px 0;gap:10px 8px}
+ #clankerPanel .cl-foot{padding-bottom:12px}
+}
