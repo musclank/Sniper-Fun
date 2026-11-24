@@ -880,3 +880,10 @@ button,select,textarea{max-width:100%}
 .base-data-note{margin:12px 0 0;color:#6f8da5;font:8px/1.65 'DM Mono'}
 @media(max-width:650px){.base-ecosystem{margin:22px 0 18px;padding:17px 13px}.base-ecosystem-head{flex-direction:column;gap:11px}.base-ecosystem-head h2{font-size:22px}.base-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.base-metric{padding:11px 9px;gap:7px}.base-metric strong{font-size:15px}.base-ecosystem-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.base-ecosystem-actions>*{min-width:0;text-align:center;font-size:7px;padding:8px 5px;overflow-wrap:anywhere}.base-live-state{align-self:flex-start}}
 @media(max-width:360px){.base-ecosystem-actions{grid-template-columns:1fr}.base-metric strong{font-size:13px}}
+
+/* Base live monitor refresh telemetry */
+.base-refresh-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin-top:13px;padding:10px 12px;border:1px solid #1b405b;background:#071522;color:#78a9c8;font:8px 'DM Mono';letter-spacing:.65px}
+.base-refresh-meta b{color:#75dcff;font-weight:700}
+.base-live-state.is-error i{animation:baseStatusPulse 1.2s ease-in-out infinite}
+@keyframes baseStatusPulse{50%{opacity:.35;box-shadow:0 0 2px #ff7777}}
+@media(max-width:650px){.base-refresh-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:7px}.base-refresh-meta span:last-child{grid-column:1/-1}}
