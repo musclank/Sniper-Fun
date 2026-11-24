@@ -111,15 +111,40 @@
 </section>
 
 <section class="contract-section" aria-labelledby="contractTitle">
- <div class="contract-heading"><span class="contract-kicker">TOKEN INFORMATION</span><h2 id="contractTitle">TOKEN <span>CONTRACT</span></h2><p>SNIPER-$VVV is planned to launch on Base through Clanker. The official contract address will appear here after launch.</p></div>
+ <div class="contract-heading"><span class="contract-kicker">TOKEN INFORMATION</span><h2 id="contractTitle">TOKEN <span>CONTRACT</span></h2><p>SNIPER-$VVV ($SVVV) is live on Base through Clanker. Verify the contract before trading.</p></div>
  <div class="contract-address-panel">
-  <div class="contract-status"><span class="contract-status-dot"></span> LAUNCH PREPARATION</div>
+  <div class="contract-status"><span class="contract-status-dot"></span> TOKEN LIVE · $SVVV</div>
   <span class="contract-address-label">CONTRACT ADDRESS</span>
-  <div class="contract-address-value">ADDRESS WILL BE ANNOUNCED AFTER LAUNCH</div>
-  <div class="contract-network">NETWORK: BASE</div>
-  <a class="contract-launch-link" href="https://www.clanker.world/" target="_blank" rel="noopener noreferrer">LAUNCH PLATFORM: CLANKER.WORLD ↗</a>
+  <div class="contract-address-value" id="sniperTokenCA" style="overflow-wrap:anywhere;user-select:text;">0xB2c8aC8b2B0cD5F9549500c3Bbd32d86D97cCccc</div>
+  <div class="contract-network">NETWORK: BASE MAINNET · CHAIN ID 8453</div>
+  <div class="contract-address-actions" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px;">
+   <button class="contract-launch-link" type="button" id="copySniperCA">COPY CA</button>
+   <a class="contract-launch-link" href="https://www.clanker.world/clanker/0xB2c8aC8b2B0cD5F9549500c3Bbd32d86D97cCccc" target="_blank" rel="noopener noreferrer">VIEW ON CLANKER ↗</a>
+   <a class="contract-launch-link" href="https://basescan.org/token/0xB2c8aC8b2B0cD5F9549500c3Bbd32d86D97cCccc" target="_blank" rel="noopener noreferrer">VIEW ON BASESCAN ↗</a>
+  </div>
  </div>
 </section>
+<script>
+(function(){
+ var button=document.getElementById('copySniperCA');
+ var address=document.getElementById('sniperTokenCA');
+ if(!button||!address)return;
+ button.addEventListener('click',async function(){
+  var value=address.textContent.trim();
+  try{
+   if(navigator.clipboard&&window.isSecureContext) await navigator.clipboard.writeText(value);
+   else {
+    var field=document.createElement('textarea');field.value=value;field.style.position='fixed';field.style.opacity='0';
+    document.body.appendChild(field);field.select();
+    var copied=document.execCommand('copy');field.remove();
+    if(!copied)throw new Error('Copy unavailable');
+   }
+   button.textContent='CA COPIED';
+   window.setTimeout(function(){button.textContent='COPY CA';},1600);
+  }catch(error){button.textContent='SELECT ADDRESS TO COPY';}
+ });
+})();
+</script>
 <section class="social-section" aria-labelledby="socialTitle">
  <div class="social-copy"><span class="social-kicker">CONNECT WITH THE OPERATOR</span><h2 id="socialTitle">SOCIAL <span>MEDIA</span></h2><p>Follow SNIPER-$VVV for updates, announcements, and project developments.</p></div>
  <a class="social-x-link" href="https://x.com/snipervenice" target="_blank" rel="noopener noreferrer" aria-label="Follow SNIPER VVV on X, opens in a new tab">
