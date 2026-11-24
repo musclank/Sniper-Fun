@@ -729,4 +729,5 @@ button,select,textarea{max-width:100%}
 .contract-address-label{display:block;margin-top:15px;color:#6e9ab8;font:8px 'DM Mono';letter-spacing:1.2px}
 .contract-address-value{margin-top:7px;padding:10px;border:1px dashed #294b66;background:#0a1c2c;color:#9fc4dc;font:9px 'DM Mono';letter-spacing:.6px;overflow-wrap:anywhere}
 .contract-network{margin-top:10px;color:#62caff;font:8px 'DM Mono';letter-spacing:.8px}
+.contract-launch-link{display:inline-block;margin-top:12px;color:#6ed3ff;font:8px 'DM Mono';letter-spacing:.7px;text-decoration:none;border-bottom:1px solid #28658a;padding-bottom:3px}.contract-launch-link:hover{color:#eaf7ff;border-color:#6ed3ff}
 @media(max-width:650px){.contract-section{grid-template-columns:1fr;gap:15px;margin:22px 0 18px;padding:18px}.contract-heading h2{font-size:23px}.contract-address-panel{padding:13px}}
