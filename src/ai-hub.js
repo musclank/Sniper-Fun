@@ -881,14 +881,14 @@ function reviewSecretsWithAI(){
 function recordRuntimeDebug(type,message,stack=''){
  const clean=String(message||'').slice(0,1600);
  const trace=String(stack||'').slice(0,2600);
- const entry='['+new Date().toISOString()+'] '+type+': '+clean+(trace?'\\n'+trace:'');
+ const entry='['+new Date().toISOString()+'] '+type+': '+clean+(trace?'\n'+trace:'');
  runtimeDebugEvents.push(entry);
  if(runtimeDebugEvents.length>DEBUG_EVENT_LIMIT)runtimeDebugEvents.shift();
  const status=$('#debugCaptureStatus');if(status)status.textContent='SESSION CAPTURE · '+runtimeDebugEvents.length+' EVENT'+(runtimeDebugEvents.length===1?'':'S');
 }
 function renderDebugCapture(){
  const field=$('#debugErrorInput');
- if(field)field.value=runtimeDebugEvents.join('\\n\\n').slice(-12000);
+ if(field)field.value=runtimeDebugEvents.join('\n\n').slice(-12000);
  const status=$('#debugCaptureStatus');
  if(status)status.textContent='SESSION CAPTURE · '+runtimeDebugEvents.length+' EVENT'+(runtimeDebugEvents.length===1?'':'S');
 }
