@@ -511,3 +511,28 @@ body.modal-open{overflow:hidden}
 .performance-metrics strong{margin-top:8px;font:12px 'DM Mono';color:#e0ffff;overflow-wrap:anywhere}
 .performance-report{max-height:300px;overflow:auto;padding:13px;border:1px solid #294e55;background:#0b151d;color:#c8e5e5;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:560px){#openPerformanceEngine{width:100%}.performance-actions{display:grid;grid-template-columns:1fr}.performance-actions button{min-height:46px}.performance-metrics{grid-template-columns:1fr}.performance-score-value{font-size:36px}}
+
+
+/* Stage 22 — guided AI workflow execution center */
+.workflow-modal{width:min(100%,760px)}
+#workflowPlanInput{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #244865;background:#071827;color:#dceeff;font:10px/1.7 'DM Mono';outline:none;resize:vertical}
+#workflowPlanInput:focus{border-color:#39c9ff}
+.workflow-execution-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.workflow-execution-actions button{min-height:42px;padding:0 12px;border:1px solid #287cac;background:#0d2d47;color:#bceaff;font:8px 'DM Mono';letter-spacing:.4px}
+.workflow-execution-actions button:disabled{opacity:.38;cursor:not-allowed}
+.workflow-execution-actions button:hover:not(:disabled){border-color:#62d9ff;background:#124b6e}
+.workflow-progress{margin:14px 0;padding:12px;border:1px solid #244865;background:#091b2a}
+.workflow-progress>div:first-child{display:flex;justify-content:space-between;gap:8px;color:#9bdfff;font:8px 'DM Mono';letter-spacing:.5px}
+.workflow-progress-track{height:5px;margin-top:10px;background:#142d43;overflow:hidden}
+.workflow-progress-track span{display:block;width:0;height:100%;background:#38c7ff;transition:width .2s ease}
+.workflow-step-list{display:grid;gap:8px;max-height:340px;overflow:auto}
+.workflow-step-card{padding:12px;border:1px solid #244865;background:#091827}
+.workflow-step-card.is-next{border-color:#3c9ac4;background:#0b2235}
+.workflow-step-card.is-complete{border-color:#286d63;background:#0b211f}
+.workflow-step-card-head{display:flex;align-items:center;gap:9px;min-width:0}
+.workflow-step-number{color:#54cfff;font:10px 'DM Mono'}
+.workflow-step-card-head strong{flex:1;min-width:0;color:#d8efff;font:10px 'DM Mono';overflow-wrap:anywhere}
+.workflow-step-card-head small{color:#81a8c2;font:7px 'DM Mono';white-space:nowrap}
+.workflow-step-card p{margin:9px 0;color:#b2c9dc;font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.workflow-step-checkpoint{padding-top:8px;border-top:1px solid #1d3b54;color:#7dbbdc;font:8px/1.6 'DM Mono';overflow-wrap:anywhere}
+@media(max-width:560px){.workflow-execution-actions{grid-template-columns:1fr}.workflow-execution-actions button{min-height:46px}#workflowPlanInput{font-size:12px}.workflow-step-card-head{flex-wrap:wrap}.workflow-step-card-head small{margin-left:auto}}
