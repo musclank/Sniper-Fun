@@ -27,20 +27,20 @@ function restoreHistory(){
  }catch{setStatus('LOCAL CHAT HISTORY UNAVAILABLE')}
 }
 async function loadModels(){
- setStatus('FETCHING FREE MODEL CATALOG');$('#refreshModels').disabled=true;
- try{const r=await fetch('/api/models');const data=await r.json();if(!r.ok)throw new Error(data.error||'Model service unavailable');models=data.models||[];modelSelect.innerHTML='';
- if(!models.length)throw new Error('No free models are currently available');
- for(const m of models){const o=document.createElement('option');o.value=m.id;o.textContent=m.name||m.id;modelSelect.append(o)}
- setStatus(models.length+' FREE MODELS AVAILABLE');
- }catch(e){modelSelect.innerHTML='<option value="">Model directory unavailable</option>';setStatus('API NOT READY · '+e.message)}
- finally{$('#refreshModels').disabled=false}
+ // Only expose the route that has been confirmed working in production.
+ models=[{id:'openrouter/free',name:'OPENROUTER SMART ROUTER'}];
+ modelSelect.innerHTML='';
+ const option=document.createElement('option');option.value=models[0].id;option.textContent=models[0].name;modelSelect.append(option);
+ modelSelect.disabled=true;routing.value='auto';routing.disabled=true;
+ setStatus('1 VERIFIED ROUTE · AUTO MODE');
+ $('#refreshModels').disabled=false;
 }
-routing.addEventListener('change',()=>{modelSelect.disabled=routing.value==='auto';setStatus(routing.value==='auto'?'AUTOMATIC ROUTING ENABLED':models.length+' FREE MODELS AVAILABLE')});
+routing.addEventListener('change',()=>{routing.value='auto';modelSelect.value='openrouter/free';setStatus('AUTOMATIC ROUTING ENABLED')});
 async function send(text){
  if(busy||!text.trim())return;busy=true;$('#sendBtn').disabled=true;addMessage('user',text);
  const reply=addMessage('assistant','Connecting to model…',false);
  try{
-  const model=routing.value==='auto'?'openrouter/free':modelSelect.value;
+  const model='openrouter/free';
   if(!model)throw new Error('No model selected. Refresh the model list or check API configuration.');
   const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,model,system:systemPrompts[tool]})});
   const data=await response.json();if(!response.ok)throw new Error(data.error||'Request failed');
@@ -51,7 +51,7 @@ async function send(text){
 }
 $('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=input.value;input.value='';send(text)});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b){input.value=b.dataset.prompt;input.focus()}});
-function newChat(){conversation=[];persist();showWelcome();setStatus(models.length+' FREE MODELS AVAILABLE')}
+function newChat(){conversation=[];persist();showWelcome();setStatus('1 VERIFIED ROUTE · AUTO MODE')}
 $('#newChat').addEventListener('click',newChat);
 $('#clearChat').addEventListener('click',newChat);
 $('#historyBtn').addEventListener('click',restoreHistory);
