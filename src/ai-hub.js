@@ -1,3 +1,4 @@
+import './base-ecosystem.js';
 import './clanker.js';
 import './ai-hub.css';
 
