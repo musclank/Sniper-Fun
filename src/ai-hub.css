@@ -638,3 +638,37 @@ button,select,textarea{max-width:100%}
 @media(prefers-reduced-motion:reduce){
   .workspace-tools button,.terminal-input-row #sendBtn{transition:none}
 }
+
+
+/* Stage 24 — documentation and resource center */
+.resources-label{margin-top:22px}
+.resources-modal{width:min(100%,820px);max-height:min(86vh,900px);display:flex;flex-direction:column}
+.resources-nav{display:flex;gap:6px;flex-wrap:wrap;padding:0 20px 13px;border-bottom:1px solid #1b3b58}
+.resources-nav button{min-height:34px;padding:0 11px;border:1px solid #244865;background:#091b2b;color:#8db6d1;font:8px 'DM Mono';letter-spacing:.7px}
+.resources-nav button.active,.resources-nav button:hover{border-color:#42caff;background:#103653;color:#e3f7ff}
+.resource-content{min-height:0;overflow:auto;padding:20px 22px 24px}
+.resource-page{display:none;color:#b8cee0;font:11px/1.8 'DM Mono'}
+.resource-page.active{display:block}
+.resource-kicker{color:#58cfff;font-size:8px;letter-spacing:1.2px}
+.resource-page h3{margin:8px 0 13px;color:#e5f5ff;font:600 19px/1.35 'DM Mono'}
+.resource-page h4{margin:20px 0 7px;color:#8edbff;font:600 10px 'DM Mono';letter-spacing:.6px}
+.resource-page p{margin:8px 0;color:#a9c2d8}
+.resource-page ul,.resource-page ol{padding-left:21px;margin:8px 0}
+.resource-page li{padding:2px 0}
+.resource-page b{color:#d8efff}
+.resource-code{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.resource-code code{padding:6px 9px;border:1px solid #244865;background:#071625;color:#8edbff;font-size:9px}
+.resource-note{margin-top:18px!important;padding:11px 12px;border-left:2px solid #2b85ad;background:#0a1b2b;color:#799ab4!important;font-size:9px}
+.resource-release{margin-top:14px;padding:14px;border:1px solid #21435f;background:#091b2b}
+.resource-release>b,.resource-release>span{display:block}
+.resource-release>b{color:#d9f2ff;font-size:10px}
+.resource-release>span{margin-top:4px;color:#63cfff;font-size:8px}
+@media(max-width:560px){
+ .resources-modal{max-height:88vh}
+ .resources-nav{gap:5px;padding:0 11px 10px}
+ .resources-nav button{flex:1 1 27%;min-height:36px;padding:0 5px;font-size:7px}
+ .resource-content{padding:15px 12px 18px}
+ .resource-page{font-size:10px;line-height:1.75}
+ .resource-page h3{font-size:16px}
+ .resource-page h4{margin-top:17px}
+}
