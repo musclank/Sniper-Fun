@@ -15,7 +15,8 @@ window.addEventListener('load',()=>{
 const $=s=>document.querySelector(s);
 const messages=$('#messages'),modelSelect=$('#model'),routing=$('#routing'),input=$('#promptInput');
 const LEGACY_KEY='sniper-vvv-chat-v1',SESSIONS_KEY='sniper-vvv-sessions-v1';
-let models=[],busy=false,tool='chat',conversation=[],sessions=[],activeSessionId='';
+let models=[],busy=false,tool='chat',conversation=[],sessions=[],activeSessionId='',projects=[],activeProjectId='';
+const PROJECTS_KEY='sniper-vvv-projects-v1';
 const systemPrompts={
  chat:'You are Sniper-$VVV, a helpful and precise AI assistant. Be clear, honest, and useful.',
  code:'You are Sniper-$VVV Coding Assistant. Help design, debug, explain, and write maintainable software. Include code blocks when useful.',
@@ -32,17 +33,52 @@ function saveCurrentSession(){
  if(firstUser&&(!session.title||session.title==='New session'))session.title=firstUser.text.slice(0,42)+(firstUser.text.length>42?'…':'');
  saveSessions();
 }
+function loadProjects(){
+ try{const stored=JSON.parse(localStorage.getItem(PROJECTS_KEY)||'null');if(Array.isArray(stored)&&stored.length)projects=stored}catch{}
+ if(!projects.length)projects=[{id:'project-general',name:'General',createdAt:Date.now()}];
+ activeProjectId=projects[0].id;saveProjects();
+}
+function saveProjects(){try{localStorage.setItem(PROJECTS_KEY,JSON.stringify(projects))}catch{setStatus('PROJECT STORAGE LIMIT REACHED')}}
+function currentProject(){return projects.find(p=>p.id===activeProjectId)||projects[0]}
+function renderProjects(){
+ const list=$('#projectList');if(!list)return;list.innerHTML='';
+ projects.forEach(project=>{
+  const count=sessions.filter(s=>s.projectId===project.id).length;
+  const row=document.createElement('div');row.className='project-row'+(project.id===activeProjectId?' active':'');
+  const open=document.createElement('button');open.type='button';open.className='project-open';open.dataset.openProject=project.id;
+  const name=document.createElement('strong');name.textContent=project.name;
+  const detail=document.createElement('small');detail.textContent=count+' sessions';
+  open.append(name,detail);row.append(open);list.append(row);
+ });
+}
+function openProjects(){renderProjects();openModal('projectModal')}
+function createProject(){
+ const field=$('#projectName'),name=field.value.trim();
+ if(!name){field.focus();return}
+ if(projects.some(p=>p.name.toLowerCase()===name.toLowerCase())){setStatus('PROJECT NAME ALREADY EXISTS');return}
+ const project={id:makeId(),name:name.slice(0,40),createdAt:Date.now()};
+ projects.push(project);activeProjectId=project.id;saveProjects();field.value='';createSession();renderProjects();setStatus('PROJECT CREATED · '+project.name);
+}
+function openProject(id){
+ const project=projects.find(p=>p.id===id);if(!project)return;
+ activeProjectId=id;
+ const latest=sessions.filter(s=>s.projectId===id).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))[0];
+ if(latest)openSession(latest.id);else createSession();
+ closeModal('projectModal');renderProjects();setStatus('PROJECT ACTIVE · '+project.name);
+}
 function loadSessions(){
  try{
   const stored=JSON.parse(localStorage.getItem(SESSIONS_KEY)||'null');
   if(Array.isArray(stored)&&stored.length){sessions=stored}
   else{
    const legacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'[]');
-   sessions=Array.isArray(legacy)&&legacy.length?[{id:makeId(),title:'Previous conversation',createdAt:Date.now(),updatedAt:Date.now(),messages:legacy.slice(-100)}]:[];
+   sessions=Array.isArray(legacy)&&legacy.length?[{id:makeId(),title:'Previous conversation',projectId:activeProjectId,createdAt:Date.now(),updatedAt:Date.now(),messages:legacy.slice(-100)}]:[];
   }
  }catch{sessions=[]}
- if(!sessions.length)sessions=[{id:makeId(),title:'New session',createdAt:Date.now(),updatedAt:Date.now(),messages:[]}];
- activeSessionId=sessions[0].id;conversation=[...(sessions[0].messages||[])];saveSessions();renderConversation();
+ sessions.forEach(session=>{if(!session.projectId)session.projectId=activeProjectId});
+ if(!sessions.length)sessions=[{id:makeId(),title:'New session',projectId:activeProjectId,createdAt:Date.now(),updatedAt:Date.now(),messages:[]}];
+ const first=sessions.find(s=>s.projectId===activeProjectId)||sessions[0];activeProjectId=first.projectId||activeProjectId;
+ activeSessionId=first.id;conversation=[...(first.messages||[])];saveSessions();renderConversation();
 }
 function addMessage(role,text,save=true){
  const el=document.createElement('div');el.className='message '+role;
@@ -83,8 +119,8 @@ function renderConversation(){
  conversation.forEach(item=>addMessage(item.role,item.text,false));
 }
 function createSession(){
- const session={id:makeId(),title:'New session',createdAt:Date.now(),updatedAt:Date.now(),messages:[]};
- sessions.unshift(session);activeSessionId=session.id;conversation=[];saveSessions();renderConversation();closeModal('commandModal');setStatus('NEW LOCAL SESSION CREATED');input.focus();
+ const session={id:makeId(),title:'New session',projectId:activeProjectId,createdAt:Date.now(),updatedAt:Date.now(),messages:[]};
+ sessions.unshift(session);activeSessionId=session.id;conversation=[];saveSessions();renderConversation();closeModal('commandModal');closeModal('projectModal');setStatus('NEW LOCAL SESSION CREATED');input.focus();
 }
 function clearBuffer(){
  conversation=[];const session=currentSession();if(session){session.messages=[];session.updatedAt=Date.now()}
@@ -94,7 +130,7 @@ function openModal(id){const modal=$('#'+id);if(modal){modal.hidden=false;docume
 function closeModal(id){const modal=$('#'+id);if(modal){modal.hidden=true;if(!document.querySelector('.modal-backdrop:not([hidden])'))document.body.classList.remove('modal-open')}}
 function renderSessions(){
  const list=$('#sessionList');list.innerHTML='';
- const ordered=[...sessions].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+ const ordered=sessions.filter(s=>s.projectId===activeProjectId).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
  if(!ordered.length){list.textContent='No saved sessions yet.';return}
  ordered.forEach(session=>{
   const row=document.createElement('div');row.className='session-row'+(session.id===activeSessionId?' active':'');
@@ -122,8 +158,8 @@ function deleteSession(id){
  const session=sessions.find(s=>s.id===id);if(!session)return;
  if(!window.confirm('Delete this local session? This cannot be undone.'))return;
  sessions=sessions.filter(s=>s.id!==id);
- if(!sessions.length)sessions=[{id:makeId(),title:'New session',createdAt:Date.now(),updatedAt:Date.now(),messages:[]}];
- if(activeSessionId===id){activeSessionId=sessions[0].id;conversation=[...(sessions[0].messages||[])];renderConversation()}
+ if(!sessions.some(s=>s.projectId===activeProjectId))sessions.push({id:makeId(),title:'New session',projectId:activeProjectId,createdAt:Date.now(),updatedAt:Date.now(),messages:[]});
+ if(activeSessionId===id){const next=sessions.find(s=>s.projectId===activeProjectId);activeSessionId=next.id;conversation=[...(next.messages||[])];renderConversation()}
  saveSessions();renderSessions();
 }
 async function copyText(text,button){
@@ -254,6 +290,7 @@ document.addEventListener('click',e=>{
  const prompt=e.target.closest('[data-prompt],[data-library-prompt]');
  if(prompt){input.value=prompt.dataset.prompt||prompt.dataset.libraryPrompt;input.focus();closeModal('commandModal');return}
  const close=e.target.closest('[data-close-modal]');if(close){closeModal(close.dataset.closeModal);return}
+ const project=e.target.closest('[data-open-project]');if(project){openProject(project.dataset.openProject);return}
  const open=e.target.closest('[data-open-session]');if(open){openSession(open.dataset.openSession);return}
  const rename=e.target.closest('[data-rename-session]');if(rename){renameSession(rename.dataset.renameSession);return}
  const del=e.target.closest('[data-delete-session]');if(del){deleteSession(del.dataset.deleteSession);return}
@@ -269,6 +306,9 @@ document.addEventListener('keydown',e=>{
 });
 $('#newChat').addEventListener('click',createSession);
 $('#historyBtn').addEventListener('click',restoreHistory);
+$('#projectsBtn').addEventListener('click',openProjects);
+$('#createProjectBtn').addEventListener('click',createProject);
+$('#projectName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();createProject()}});
 $('#promptBtn').addEventListener('click',openCommandCenter);
 $('#commandBtn').addEventListener('click',openCommandCenter);
 $('#clearChat').addEventListener('click',clearBuffer);
@@ -282,4 +322,4 @@ $('#contextFileInput').addEventListener('change',e=>{handleContextFiles(e.target
 document.querySelectorAll('.tool-link').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 $('#mobileToolSelect').addEventListener('change',e=>setTool(e.target.value));
 document.addEventListener('click',e=>{const task=e.target.closest('[data-code-task]');if(task){const code=input.value.trim();const taskText=task.dataset.codeTask;input.value=code?taskText+'\n\n```\n'+code+'\n```':taskText+'\n\nPaste your code below this instruction.';input.focus();input.setSelectionRange(input.value.length,input.value.length)}});
-loadSessions();loadModels();
+loadProjects();loadSessions();loadModels();
