@@ -51,6 +51,7 @@
   <button type="button" id="summarizeChat">≋ SUMMARIZE CHAT</button>
   <button type="button" id="openSnippets">▤ CODE SNIPPETS</button>
   <button type="button" id="openMemory">◎ AI MEMORY</button>
+  <button type="button" id="openWorkflow">BUILD AI WORKFLOW</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -95,6 +96,15 @@
       <button class="arsenal-item" data-library-prompt="Create a concise content plan with audience, key message, platform-specific ideas, and several strong headline options.">Content plan <span>CREATIVE</span></button>
     </div></div>
     <div class="modal-hint">TIP: PRESS <kbd>CTRL</kbd> + <kbd>K</kbd> TO OPEN COMMAND CENTER</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="workflowModal" hidden>
+  <section class="utility-modal workflow-modal" role="dialog" aria-modal="true" aria-labelledby="workflowModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">GUIDED EXECUTION PLANNER</span><h2 id="workflowModalTitle">AI WORKFLOW BUILDER</h2></div><button class="modal-close" type="button" data-close-modal="workflowModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Describe the outcome you want. Sniper AI will create a phased plan with dependencies, checkpoints, and clear deliverables. Review the plan before using each step.</p>
+    <textarea id="workflowGoal" rows="4" maxlength="1800" placeholder="Example: Build a responsive dashboard with login, project list, and settings. Keep it free and mobile-friendly."></textarea>
+    <div class="workflow-controls"><span>PLAN FIRST · YOU CONTROL EXECUTION</span><button type="button" id="generateWorkflow">GENERATE WORKFLOW</button></div>
+    <div class="workflow-note">AI-generated plans may need review. This tool does not modify repository files automatically.</div>
   </section>
 </div>
 <div class="modal-backdrop" id="memoryModal" hidden>
