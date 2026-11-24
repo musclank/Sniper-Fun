@@ -243,3 +243,17 @@ body.modal-open{overflow:hidden}
  .terminal-prompt{display:none}
  .terminal-input-row{gap:6px}
 }
+
+/* Phase 5 — local project workspace */
+.project-create-row{display:flex;gap:8px;padding-top:16px}
+.project-create-row input{flex:1;min-width:0;min-height:40px;padding:0 11px;border:1px solid #244665;background:#071625;color:#e1f2ff;font:10px 'DM Mono';outline:none}
+.project-create-row input:focus{border-color:#36c9ff}
+.project-create-row button{min-height:40px;padding:0 12px;border:1px solid #285477;background:#0b2942;color:#8edbff;font:8px 'DM Mono';letter-spacing:.5px}
+.project-create-row button:hover{border-color:#55d4ff;background:#103653}
+.project-list{display:grid;gap:8px;margin-top:14px}
+.project-row{border:1px solid #1c3d59;background:#081a2b}
+.project-row.active{border-color:#3aa8d8;background:#0d2941}
+.project-open{display:flex;width:100%;min-height:58px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:10px 12px;text-align:left;border:0;background:transparent;color:#dceeff}
+.project-open strong{font:10px 'DM Mono'}
+.project-open small{color:#7696b1;font:8px 'DM Mono'}
+@media(max-width:560px){.project-create-row{flex-direction:column}.project-create-row button{min-height:42px}}
