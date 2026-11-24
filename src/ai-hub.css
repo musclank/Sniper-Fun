@@ -488,3 +488,26 @@ body.modal-open{overflow:hidden}
 .health-status-card small{font-size:10px;color:#8fa6bb;line-height:1.5}
 .health-report{max-height:280px;overflow:auto;padding:13px;border:1px solid #29445f;background:#0b1421;color:#c8dff2;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:560px){#openProjectHealth{width:100%}.health-actions{display:grid;grid-template-columns:1fr}.health-actions button{min-height:46px}.health-status-grid{grid-template-columns:1fr}.health-score-value{font-size:36px}}
+
+/* Stage 21 — Performance & Optimization Engine */
+#openPerformanceEngine{border-color:#4b8d9b;color:#b9f4f5}
+.performance-engine-modal{width:min(100%,760px)}
+.performance-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.performance-actions button{min-height:42px;padding:0 13px;border:1px solid #397b83;background:#10292f;color:#c3f4f3;font:8px 'DM Mono';letter-spacing:.4px}
+.performance-actions button:disabled{opacity:.4;cursor:not-allowed}
+.performance-actions button:hover:not(:disabled){border-color:#8ce7e4;background:#194047}
+.performance-score-panel{display:flex;align-items:center;gap:16px;margin:14px 0;padding:16px;border:1px solid #326c74;background:#10242b}
+.performance-score-value{font:700 42px 'DM Mono';color:#a4eeee;min-width:82px;text-align:center}
+.performance-score-panel[data-state="good"] .performance-score-value{color:#78e0bb}
+.performance-score-panel[data-state="warn"] .performance-score-value{color:#ffd17e}
+.performance-score-panel[data-state="risk"] .performance-score-value{color:#ff9baf}
+.performance-score-panel strong,.performance-score-panel span{display:block}
+.performance-score-panel strong{font:11px 'DM Mono';color:#e0ffff;letter-spacing:.8px}
+.performance-score-panel span{margin-top:5px;color:#91b7bb;font-size:11px}
+.performance-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.performance-metrics>div{padding:12px;border:1px solid #294e55;background:#101e27;min-width:0}
+.performance-metrics span,.performance-metrics strong{display:block}
+.performance-metrics span{font:8px 'DM Mono';color:#83c8ca;letter-spacing:.8px}
+.performance-metrics strong{margin-top:8px;font:12px 'DM Mono';color:#e0ffff;overflow-wrap:anywhere}
+.performance-report{max-height:300px;overflow:auto;padding:13px;border:1px solid #294e55;background:#0b151d;color:#c8e5e5;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){#openPerformanceEngine{width:100%}.performance-actions{display:grid;grid-template-columns:1fr}.performance-actions button{min-height:46px}.performance-metrics{grid-template-columns:1fr}.performance-score-value{font-size:36px}}
