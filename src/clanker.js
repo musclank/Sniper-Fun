@@ -3,18 +3,20 @@ const money=value=>{const n=Number(value);if(!Number.isFinite(n)||n<=0)return '�
 const pick=(o,keys)=>{for(const k of keys){const v=k.split('.').reduce((a,b)=>a?.[b],o);if(v!==undefined&&v!==null&&v!=='')return v}return null};
 const arr=data=>{
  if(Array.isArray(data))return data;
- const candidates=[data?.data,data?.tokens,data?.results,data?.items,data?.pools,data?.trending,data?.clankers,data?.data?.tokens,data?.data?.results,data?.data?.items,data?.data?.pools];
+ const candidates=[data?.trending,data?.data?.trending,data?.data,data?.tokens,data?.results,data?.items,data?.pools,data?.clankers,data?.data?.tokens,data?.data?.results,data?.data?.items,data?.data?.pools];
  return candidates.find(Array.isArray)||[];
 };
-function tokenCard(pool,i,included=[]){
+function tokenCard(pool,i,included=[],tokensByPool={}){
  const attrs=pool?.attributes||pool||{};
  const rel=pool?.relationships||{};
  const baseId=rel?.base_token?.data?.id||rel?.baseToken?.data?.id;
  const quoteId=rel?.quote_token?.data?.id||rel?.quoteToken?.data?.id;
  const base=included.find(x=>x?.id===baseId)?.attributes||{};
  const quote=included.find(x=>x?.id===quoteId)?.attributes||{};
- const token=Object.keys(base).length?base:(Object.keys(quote).length?quote:(pool?.token||pool?.baseToken||{}));
- const address=pick(token,['address','contract_address','token_address'])||pick(attrs,['token_address','base_token_address','address'])||'';
+ const poolAddress=pick(attrs,['address','pool_address','poolAddress'])||String(pool?.id||'').replace(/^base_/i,'');
+ const mappedToken=poolAddress?(tokensByPool?.[String(poolAddress).toLowerCase()]||tokensByPool?.[poolAddress]):null;
+ const token=mappedToken|| (Object.keys(base).length?base:(Object.keys(quote).length?quote:(pool?.token||pool?.baseToken||{})));
+ const address=pick(token,['contract_address','contractAddress','token_address','tokenAddress','address'])||pick(base,['contract_address','address'])||pick(attrs,['token_address','token_contract_address'])||'';
  const name=pick(token,['name','token_name'])||pick(attrs,['token_name','name'])||String(attrs.name||'').split(' / ')[0]||'Unknown token';
  const symbol=pick(token,['symbol','ticker'])||pick(attrs,['symbol','token_symbol'])||'—';
  const findTokenImage=(root)=>{
@@ -42,7 +44,7 @@ function tokenCard(pool,i,included=[]){
  const liquidity=pick(attrs,['reserve_in_usd','liquidity_usd','liquidityUsd','liquidity'])||pick(pool,['liquidityUsd']);
  const volume=pick(attrs,['volume_usd.h24','volume24hUsd','volume_24h_usd','volume24h'])||pick(pool,['volume24hUsd']);
  const change=Number(pick(attrs,['price_change_percentage.h24','priceChange24h','price_change_24h','change24h'])||pick(pool,['priceChange24h'])||0);
- const href=address?'https://www.clanker.world/clanker/'+encodeURIComponent(address):'https://www.clanker.world/clankers?filter=trending';
+ const href=/^0x[a-f0-9]{40}$/i.test(address)?'https://www.clanker.world/clanker/'+address:'https://www.clanker.world/clankers?filter=trending';
  const initials=escapeHtml((symbol&&symbol!=='—'?symbol:name).trim().slice(0,3).toUpperCase());
  const img=logo?'<img src="'+escapeHtml(logo)+'" alt="'+escapeHtml(name)+' official token icon" loading="lazy" referrerpolicy="no-referrer" onerror="clankerImageFallback(this)"/>':'<span class="ct-logo-fallback" aria-label="'+escapeHtml(name)+' token icon">'+initials+'</span>';
  const short=address?address.slice(0,6)+'…'+address.slice(-4):'Address unavailable';
@@ -86,7 +88,8 @@ function mount(){
    const payload=await res.json();
    const tokens=arr(payload).slice(0,10);
    if(!tokens.length)throw new Error('No trending Base tokens returned');
-   grid.innerHTML=tokens.map((token,index)=>tokenCard(token,index,Array.isArray(payload?.included)?payload.included:[])).join('');
+   const tokensByPool=payload?.tokens||payload?.data?.tokens||{};
+   grid.innerHTML=tokens.map((token,index)=>tokenCard(token,index,Array.isArray(payload?.included)?payload.included:[],tokensByPool)).join('');
    status.textContent='LIVE · '+tokens.length+' TOKENS · BASE';
   }catch(err){
    status.textContent='DATA FEED UNAVAILABLE';
