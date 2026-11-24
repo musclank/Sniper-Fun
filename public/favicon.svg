@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="SNIPER VVV emblem">
+<defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".48" stop-color="#9eb7d0"/><stop offset="1" stop-color="#eaf6ff"/></linearGradient><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00eaff"/><stop offset="1" stop-color="#176dff"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<circle cx="128" cy="128" r="105" fill="none" stroke="#176dff" stroke-width="3" opacity=".9"/><circle cx="128" cy="128" r="94" fill="none" stroke="url(#blue)" stroke-width="5" stroke-dasharray="118 13 72 13" filter="url(#glow)"/>
+<path d="M128 5v31M128 220v31M5 128h31M220 128h31" stroke="#00eaff" stroke-width="7" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M83 78l-14-24 27 12 12-18 20 24 20-24 12 18 27-12-14 24-45 17z" fill="url(#metal)" stroke="#00cfff" stroke-width="3" stroke-linejoin="round"/>
+<path d="M48 104l35 90 45-58 45 58 35-90-35 0-45 58-45-58z" fill="url(#metal)" stroke="#00cfff" stroke-width="4" stroke-linejoin="round" filter="url(#glow)"/>
+<path d="M48 104l35 90 45-58 45 58 35-90" fill="none" stroke="#176dff" stroke-width="3" stroke-linejoin="round"/>
+</svg>
