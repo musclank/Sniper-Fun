@@ -1,5 +1,17 @@
 import './ai-hub.css';
 
+// Keep the intro visible briefly, then reveal the workspace after page assets load.
+const bootStartedAt=Date.now();
+window.addEventListener('load',()=>{
+ const bootScreen=document.querySelector('#bootScreen');
+ if(!bootScreen)return;
+ const wait=Math.max(0,1450-(Date.now()-bootStartedAt));
+ window.setTimeout(()=>{
+  bootScreen.classList.add('is-hidden');
+  window.setTimeout(()=>bootScreen.remove(),600);
+ },wait);
+},{once:true});
+
 const $=s=>document.querySelector(s);
 const messages=$('#messages'),modelSelect=$('#model'),routing=$('#routing'),input=$('#promptInput');
 const STORAGE_KEY='sniper-vvv-chat-v1';
