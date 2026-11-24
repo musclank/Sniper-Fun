@@ -1090,3 +1090,5 @@ function setResourcePage(section){
 $('#resourcesBtn')?.addEventListener('click',()=>openResources('docs'));
 document.querySelectorAll('[data-resource-open]').forEach(button=>button.addEventListener('click',()=>openResources(button.dataset.resourceOpen)));
 document.querySelectorAll('[data-resource-tab]').forEach(button=>button.addEventListener('click',()=>setResourcePage(button.dataset.resourceTab)));
+
+$('#mobileResourcesBtn')?.addEventListener('click',()=>openResources('docs'));
