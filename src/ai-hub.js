@@ -557,9 +557,9 @@ function scanProjectDependencies(){
  const all=[...projectFiles,...drafts],files=new Map();
  for(const item of all){if(item&&typeof item.name==='string'&&typeof item.content==='string'&&!files.has(item.name.toLowerCase()))files.set(item.name.toLowerCase(),item)}
  const pkg=files.get('package.json');
- if(!pkg){latestDependencyReport='NO PACKAGE MANIFEST FOUND\\nAdd package.json to Projects → Files or save it in AI File Manager, then scan again.';latestDependencyContext='';$('#dependencyScanReport').textContent=latestDependencyReport;$('#dependencyScanStatus').textContent='SCAN COMPLETE · PACKAGE.JSON NOT FOUND';$('#analyzeDependencies').disabled=true;$('#copyDependencyReport').disabled=false;return}
+ if(!pkg){latestDependencyReport='NO PACKAGE MANIFEST FOUND\nAdd package.json to Projects → Files or save it in AI File Manager, then scan again.';latestDependencyContext='';$('#dependencyScanReport').textContent=latestDependencyReport;$('#dependencyScanStatus').textContent='SCAN COMPLETE · PACKAGE.JSON NOT FOUND';$('#analyzeDependencies').disabled=true;$('#copyDependencyReport').disabled=false;return}
  let data;
- try{data=JSON.parse(pkg.content)}catch(error){latestDependencyReport='INVALID PACKAGE.JSON\\n'+String(error.message||error)+'\\nCheck commas, quotes, and JSON syntax.';latestDependencyContext='';$('#dependencyScanReport').textContent=latestDependencyReport;$('#dependencyScanStatus').textContent='SCAN FAILED · INVALID JSON';$('#analyzeDependencies').disabled=true;$('#copyDependencyReport').disabled=false;return}
+ try{data=JSON.parse(pkg.content)}catch(error){latestDependencyReport='INVALID PACKAGE.JSON\n'+String(error.message||error)+'\nCheck commas, quotes, and JSON syntax.';latestDependencyContext='';$('#dependencyScanReport').textContent=latestDependencyReport;$('#dependencyScanStatus').textContent='SCAN FAILED · INVALID JSON';$('#analyzeDependencies').disabled=true;$('#copyDependencyReport').disabled=false;return}
  const sections=['dependencies','devDependencies','peerDependencies','optionalDependencies'];
  const deps=[];
  for(const section of sections){
@@ -572,8 +572,8 @@ function scanProjectDependencies(){
  for(const dep of deps){
   const v=dep.version.trim();
   if(v==='*'||v.toLowerCase()==='latest')flags.push('UNPINNED / FLOATING · '+dep.name+' = '+v);
-  if(/^(git\\+|git:|https?:|github:|file:|link:|workspace:)/i.test(v))flags.push('NON-REGISTRY / WORKSPACE SOURCE · '+dep.name+' = '+v);
-  if(/^\\d+\\.\\d+\\.\\d+/.test(v)&&!v.startsWith('^')&&!v.startsWith('~'))flags.push('EXACT VERSION PIN · '+dep.name+' = '+v+' (intentional pin may be valid)');
+  if(/^(git\+|git:|https?:|github:|file:|link:|workspace:)/i.test(v))flags.push('NON-REGISTRY / WORKSPACE SOURCE · '+dep.name+' = '+v);
+  if(/^\d+\.\d+\.\d+/.test(v)&&!v.startsWith('^')&&!v.startsWith('~'))flags.push('EXACT VERSION PIN · '+dep.name+' = '+v+' (intentional pin may be valid)');
   if(/^npm:/i.test(v))flags.push('NPM ALIAS · '+dep.name+' = '+v+' (verify package identity)');
  }
  const missingLock=deps.length>0&&!foundLocks.length;
@@ -602,8 +602,8 @@ function scanProjectDependencies(){
  'DEPENDENCY INVENTORY',
  ...(deps.length?deps.map(dep=>dep.section+' · '+dep.name+' · '+dep.version):['No dependencies declared.'])
  ];
- latestDependencyReport=report.join('\\n');
- latestDependencyContext='PACKAGE.JSON\\n'+pkg.content.slice(0,18000)+'\\n\\nLOCKFILES\\n'+foundLocks.map(name=>'FILE: '+name+'\\n'+String(files.get(name).content).slice(0,10000)).join('\\n\\n');
+ latestDependencyReport=report.join('\n');
+ latestDependencyContext='PACKAGE.JSON\n'+pkg.content.slice(0,18000)+'\n\nLOCKFILES\n'+foundLocks.map(name=>'FILE: '+name+'\n'+String(files.get(name).content).slice(0,10000)).join('\n\n');
  $('#dependencyScanReport').textContent=latestDependencyReport;
  $('#dependencyScanStatus').textContent='SCAN COMPLETE · '+deps.length+' DEPENDENCIES · '+flags.length+' HEURISTIC FLAGS';
  $('#analyzeDependencies').disabled=false;$('#copyDependencyReport').disabled=false;
