@@ -59,6 +59,7 @@
   <button type="button" id="openTestLab">AI TEST LAB</button>
   <button type="button" id="openDebugEngine">AI DEBUG ENGINE</button>
   <button type="button" id="openCodingWorkspace">AUTONOMOUS CODING WORKSPACE</button>
+  <button type="button" id="openDependencyIntel">PROJECT DEPENDENCY INTELLIGENCE</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -189,6 +190,16 @@
   <input id="debugFocus" type="text" maxlength="500" placeholder="Example: Error appears after pressing Execute on Android.">
   <div class="debug-engine-controls"><span>ANALYSIS ONLY · NO AUTO-FIX</span><button type="button" id="runDebugAnalysis">ANALYZE ERROR</button></div>
   <div class="workflow-note">For better diagnosis, add related files in Projects → Files. Remove secrets, API keys, tokens, and personal data before submitting logs.</div>
+ </section>
+</div>
+<div class="modal-backdrop" id="dependencyIntelModal" hidden>
+ <section class="utility-modal dependency-intel-modal" role="dialog" aria-modal="true" aria-labelledby="dependencyIntelTitle">
+  <div class="utility-modal-head"><div><span class="panel-kicker">PROJECT HEALTH SCANNER</span><h2 id="dependencyIntelTitle">DEPENDENCY INTELLIGENCE</h2></div><button class="modal-close" type="button" data-close-modal="dependencyIntelModal" aria-label="Close">×</button></div>
+  <p class="snippet-note">Scan locally saved project files for dependency metadata, lockfiles, version patterns, and configuration gaps. No package is installed, updated, or removed.</p>
+  <div class="dependency-actions"><button type="button" id="scanDependencies">SCAN PROJECT FILES</button><button type="button" id="analyzeDependencies" disabled>ASK AI TO REVIEW</button><button type="button" id="copyDependencyReport" disabled>COPY REPORT</button></div>
+  <div id="dependencyScanStatus" class="dependency-status">READY · Scan saved project files to begin.</div>
+  <div id="dependencyScanReport" class="dependency-report" aria-live="polite">No scan report yet.</div>
+  <div class="workflow-note">Scope: package.json and recognized lockfiles in this browser's project files and file drafts. Version flags are heuristics, not proof of vulnerabilities. Security advisories and live registry data are not queried.</div>
  </section>
 </div>
 <div class="modal-backdrop" id="codingWorkspaceModal" hidden>
