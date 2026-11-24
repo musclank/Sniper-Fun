@@ -37,7 +37,13 @@ async function loadModels(){
 }
 routing.addEventListener('change',()=>{routing.value='auto';modelSelect.value='openrouter/free';setStatus('AUTOMATIC ROUTING ENABLED')});
 async function send(text){
- if(busy||!text.trim())return;busy=true;$('#sendBtn').disabled=true;addMessage('user',text);
+ if(busy||!text.trim())return;
+ const command=text.trim().toLowerCase();
+ if(command==='/help'){addMessage('assistant','AVAILABLE COMMANDS\\n/help     Show terminal commands\\n/clear    Clear the current session\\n/models   Show the active model route\\n/history  Restore locally saved conversation');return}
+ if(command==='/clear'){newChat();return}
+ if(command==='/models'){addMessage('assistant','MODEL ROUTER\\nACTIVE ROUTE: OPENROUTER SMART ROUTER\\nMODE: AUTO\\nSTATUS: VERIFIED ROUTE');return}
+ if(command==='/history'){restoreHistory();return}
+ busy=true;$('#sendBtn').disabled=true;addMessage('user',text);
  const reply=addMessage('assistant','Connecting to model…',false);
  try{
   const model='openrouter/free';
@@ -49,7 +55,7 @@ async function send(text){
  }catch(e){reply.classList.add('error');reply.querySelector('.message-content').textContent='Connection error: '+e.message}
  finally{busy=false;$('#sendBtn').disabled=false;input.focus();messages.scrollTop=messages.scrollHeight}
 }
-$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=input.value;input.value='';send(text)});
+$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const text=input.value;input.value='';send(text)});\ninput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#chatForm').requestSubmit()}});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b){input.value=b.dataset.prompt;input.focus()}});
 function newChat(){conversation=[];persist();showWelcome();setStatus('1 VERIFIED ROUTE · AUTO MODE')}
 $('#newChat').addEventListener('click',newChat);
