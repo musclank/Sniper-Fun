@@ -179,3 +179,21 @@ body.modal-open{overflow:hidden}
  .session-actions button{padding:8px 10px}
  .message-head{margin-bottom:6px}
 }
+
+/* Phase 2 — developer workspace and safe code-block rendering */
+.developer-tools{margin:0;padding:13px 18px 14px;border-bottom:1px solid #1b3b58;background:linear-gradient(110deg,#0a1e31,#0a1726)}
+.developer-tools[hidden]{display:none}
+.developer-tools-head{display:flex;justify-content:space-between;gap:10px;color:#63cfff;font:8px 'DM Mono';letter-spacing:1.2px}
+.developer-tools-head span:last-child{color:#6d8da8}
+.developer-task-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.developer-task-grid button{min-height:34px;padding:7px 5px;border:1px solid #234b69;background:#0d2941;color:#a9d8f2;font:8px 'DM Mono';letter-spacing:.5px}
+.developer-task-grid button:hover{border-color:#42caff;color:#e4f8ff;background:#103653}
+.developer-tools p{margin:9px 0 0;color:#6e8da7;font:8px 'DM Mono'}
+.message-content .response-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.code-block{margin:12px 0;border:1px solid #285474;background:#06111d;overflow:hidden}
+.code-block-head{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:#0d2941;border-bottom:1px solid #244a68;color:#78cfff;font:8px 'DM Mono';letter-spacing:1px}
+.copy-code{padding:5px 8px;border:1px solid #2c6286;background:#0b2033;color:#8edbff;font:8px 'DM Mono'}
+.copy-code:hover{border-color:#62d7ff;color:#fff}
+.code-block pre{margin:0;padding:13px;overflow-x:auto;white-space:pre;color:#d7efff;font:10px/1.7 'DM Mono';tab-size:2}
+.code-block code{font:inherit}
+@media(max-width:650px){.developer-tools{padding:11px 10px}.developer-tools-head{font-size:7px}.developer-task-grid{grid-template-columns:1fr 1fr}.developer-task-grid button{min-height:39px;font-size:8px}.code-block pre{font-size:9px;padding:10px}}
