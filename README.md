@@ -13,6 +13,7 @@ A mobile-friendly AI workspace with a blue tactical terminal interface. Built wi
 - AI File Manager for local code drafts with preview, copy, download, and safe manual review.
 - AI Patch Reviewer for read-only engineering, security, and compatibility feedback.
 - AI Test Lab for project-aware test-suite generation; generated tests are not executed or applied automatically.
+- AI Debug Engine for session-scoped browser error and unhandled-promise capture, pasted build logs, project-aware diagnosis, and reviewable fix suggestions. It does not record page content or apply fixes automatically.
 
 ## Tech stack
 
