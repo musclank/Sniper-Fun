@@ -49,7 +49,7 @@
 <div class="workspace-tools" aria-label="AI workspace tools">
   <button type="button" id="enhancePrompt">✦ ENHANCE PROMPT</button>
   <button type="button" id="summarizeChat">≋ SUMMARIZE CHAT</button>
-  <button type="button" id="openSnippets">▤ CODE SNIPPETS</button>
+  <button type="button" id="openSnippets">▤ CODE SNIPPETS</button>\n  <button type="button" id="openMemory">◎ AI MEMORY</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -94,6 +94,14 @@
       <button class="arsenal-item" data-library-prompt="Create a concise content plan with audience, key message, platform-specific ideas, and several strong headline options.">Content plan <span>CREATIVE</span></button>
     </div></div>
     <div class="modal-hint">TIP: PRESS <kbd>CTRL</kbd> + <kbd>K</kbd> TO OPEN COMMAND CENTER</div>
+  </section>
+</div>
+<div class="modal-backdrop" id="memoryModal" hidden>
+  <section class="utility-modal memory-modal" role="dialog" aria-modal="true" aria-labelledby="memoryModalTitle">
+    <div class="utility-modal-head"><div><span class="panel-kicker">USER-CONTROLLED CONTEXT</span><h2 id="memoryModalTitle">AI MEMORY</h2></div><button class="modal-close" type="button" data-close-modal="memoryModal" aria-label="Close">×</button></div>
+    <p class="snippet-note">Save preferences, project details, or instructions you want Sniper AI to consider in future chats. Stored only in this browser and sent with your prompts. Do not save passwords, API keys, or sensitive information.</p>
+    <textarea id="memoryInput" maxlength="3000" rows="7" placeholder="Example: I build websites with GitHub and Vercel. Prefer free tools and mobile-friendly interfaces."></textarea>
+    <div class="memory-footer"><span id="memoryCount">0 / 3000</span><div><button type="button" id="saveMemory">SAVE MEMORY</button></div></div>
   </section>
 </div>
 <div class="modal-backdrop" id="snippetModal" hidden>
