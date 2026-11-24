@@ -194,6 +194,8 @@ async function handleContextFiles(fileList){
   try{
    const content=await file.text();
    if(content.includes('\u0000')){setStatus('BINARY FILES ARE NOT SUPPORTED');continue}
+   const used=attachedFileContext.reduce((total,item)=>total+item.content.length,0);
+   if(content.length+used>8500){setStatus('TEXT LIMIT · 8,500 CHARACTERS TOTAL');continue}
    attachedFileContext.push({name:file.name,content});
    setStatus('FILE ADDED · '+file.name);
   }catch{setStatus('COULD NOT READ FILE · '+file.name)}
