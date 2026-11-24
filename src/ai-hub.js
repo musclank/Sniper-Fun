@@ -1,6 +1,5 @@
 import './base-ecosystem.js';
 import './clanker.js';
-import './clanker-scanner.js';
 import './ai-hub.css';
 
 // Cinematic boot screen
