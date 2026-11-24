@@ -229,3 +229,17 @@ body.modal-open{overflow:hidden}
  .snippet-actions{justify-content:flex-end}
  .snippet-actions button{padding:9px 11px}
 }
+
+/* Phase 4 — local text and code file context */
+.attach-file-btn{flex:0 0 auto;min-height:42px;align-self:stretch;padding:0 10px;border:1px solid #285477;border-radius:2px;background:#0b2033;color:#7fd5ff;font:8px 'DM Mono';letter-spacing:.6px}
+.attach-file-btn:hover{border-color:#58d4ff;background:#10304b;color:#e8f8ff}
+.attached-files{display:flex;flex-wrap:wrap;gap:6px;padding:7px 0 0}
+.attached-files:empty{display:none}
+.attached-file-chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:5px 8px;border:1px solid #285477;background:#0b2033;color:#91c8e8;font:8px 'DM Mono'}
+.attached-file-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.attached-file-chip button{flex:0 0 auto;border:0;background:transparent;color:#e39aa6;font-size:15px;line-height:1}
+@media(max-width:560px){
+ .attach-file-btn{min-height:40px;padding:0 7px;font-size:7px}
+ .terminal-prompt{display:none}
+ .terminal-input-row{gap:6px}
+}
