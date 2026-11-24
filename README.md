@@ -19,6 +19,7 @@ A mobile-friendly AI workspace with a blue tactical terminal interface. Built wi
 - Security & Secrets Guardian for local pattern-based credential detection with redacted reports and AI remediation guidance. Secret values are not displayed or included in AI review; the scanner is heuristic and cannot guarantee complete detection.
 - AI Project Health Dashboard combines local security pattern findings, dependency manifest/lockfile metadata, and captured runtime errors into a transparent heuristic score. Tests, builds, and deployment are explicitly marked unverified unless independently run.
 - AI Performance & Optimization Engine performs local static pattern checks and source-size inspection, producing a heuristic report and AI-assisted Android-first optimization guidance. It does not run benchmarks, Lighthouse, builds, or modify source files.
+- AI Workflow Automation Center converts a goal into a structured 3–8 step JSON plan, tracks progress locally per project, sends one selected step to AI for guidance, and requires the user to confirm each completion checkpoint. It does not run commands, mutate repository files, or deploy automatically.
 
 ## Tech stack
 
