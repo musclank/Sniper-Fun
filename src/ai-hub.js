@@ -166,7 +166,7 @@ async function send(text){
  const reply=addMessage('assistant','Connecting to model…',false);
  try{
   const model='openrouter/free';
-  const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,model,system:systemPrompts[tool]})});
+  const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,model,system:systemPrompts[tool],history:conversation.slice(0,-1).slice(-12).map(item=>({role:item.role,content:item.text}))})});
   const data=await response.json();if(!response.ok)throw new Error(data.error||'Request failed');
   const answer=data.reply||'The model returned an empty response.';
   renderRichContent(reply.querySelector('.message-content'),answer);
