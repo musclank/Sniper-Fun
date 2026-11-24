@@ -257,3 +257,28 @@ body.modal-open{overflow:hidden}
 .project-open strong{font:10px 'DM Mono'}
 .project-open small{color:#7696b1;font:8px 'DM Mono'}
 @media(max-width:560px){.project-create-row{flex-direction:column}.project-create-row button{min-height:42px}}
+
+/* Phase 6 — project reference files */
+.project-row{display:flex;align-items:stretch;gap:8px;padding-right:8px}
+.project-row .project-open{flex:1;min-width:0}
+.project-files-open{align-self:center;min-height:34px;padding:0 10px;border:1px solid #285477;background:#0b2033;color:#8edbff;font:8px 'DM Mono';letter-spacing:.5px}
+.project-files-open:hover{border-color:#55d4ff;background:#103653}
+.project-files-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:16px}
+.project-files-toolbar span{color:#91c8e8;font:9px 'DM Mono';letter-spacing:.8px}
+.project-files-toolbar button{min-height:38px;padding:0 12px;border:1px solid #285477;background:#0b2942;color:#8edbff;font:8px 'DM Mono'}
+.project-files-list{display:grid;gap:8px;margin-top:14px}
+.project-file-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px;border:1px solid #1c3d59;background:#081a2b}
+.project-file-info{min-width:0;flex:1}
+.project-file-info strong,.project-file-info small{display:block;overflow-wrap:anywhere}
+.project-file-info strong{color:#d9efff;font:10px 'DM Mono'}
+.project-file-info small{margin-top:5px;color:#6f91ad;font:8px 'DM Mono'}
+.project-file-actions{display:flex;gap:6px;flex-wrap:wrap}
+.project-file-actions button{min-height:32px;padding:0 9px;border:1px solid #244865;background:#0b2033;color:#8edbff;font:7px 'DM Mono'}
+.project-file-actions button:last-child{color:#e39aa6}
+@media(max-width:560px){
+ .project-files-toolbar{align-items:stretch;flex-direction:column}
+ .project-files-toolbar button{min-height:42px}
+ .project-file-row{align-items:stretch;flex-direction:column}
+ .project-file-actions{justify-content:flex-end}
+ .project-file-actions button{min-height:38px}
+}
