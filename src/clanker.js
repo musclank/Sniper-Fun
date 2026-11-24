@@ -17,16 +17,35 @@ function tokenCard(pool,i,included=[]){
  const address=pick(token,['address','contract_address','token_address'])||pick(attrs,['token_address','base_token_address','address'])||'';
  const name=pick(token,['name','token_name'])||pick(attrs,['token_name','name'])||String(attrs.name||'').split(' / ')[0]||'Unknown token';
  const symbol=pick(token,['symbol','ticker'])||pick(attrs,['symbol','token_symbol'])||'—';
- const logo=safeUrl(pick(token,['image_url','imageUrl','image','logoURI','logo']))||safeUrl(pick(attrs,['image_url','imageUrl','image']));
+ const rawLogo=pick(token,['image_url','imageUrl','image','logoURI','logo','image_uri','logo_url','icon_url','metadata.image','metadata.image_url'])||pick(attrs,['image_url','imageUrl','image','image_uri','logo_url','icon_url']);
+ const logo=imageUrl(rawLogo);
  const price=pick(attrs,['base_token_price_usd','price_usd','priceUsd','price_usd.value','baseTokenPriceUsd'])||pick(pool,['priceUsd','price_usd']);
  const cap=pick(attrs,['market_cap_usd','fdv_usd','marketCapUsd','fdv'])||pick(pool,['marketCapUsd','fdvUsd']);
  const liquidity=pick(attrs,['reserve_in_usd','liquidity_usd','liquidityUsd','liquidity'])||pick(pool,['liquidityUsd']);
  const volume=pick(attrs,['volume_usd.h24','volume24hUsd','volume_24h_usd','volume24h'])||pick(pool,['volume24hUsd']);
  const change=Number(pick(attrs,['price_change_percentage.h24','priceChange24h','price_change_24h','change24h'])||pick(pool,['priceChange24h'])||0);
  const href=address?'https://www.clanker.world/clanker/'+encodeURIComponent(address):'https://www.clanker.world/clankers?filter=trending';
- const img=logo?'<img src="'+logo.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+ const img=logo?'<img src="'+escapeHtml(logo)+'" alt="'+escapeHtml(name)+'" loading="lazy" referrerpolicy="no-referrer" onerror="clankerImageFallback(this)"/>':'';
  const short=address?address.slice(0,6)+'…'+address.slice(-4):'Address unavailable';
  return '<article class="clanker-token"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP / FDV</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
+}
+function imageUrl(value){
+ if(!value||typeof value!=='string')return '';
+ const raw=value.trim();
+ if(/^ipfs:\/\//i.test(raw))return 'https://ipfs.io/ipfs/'+raw.replace(/^ipfs:\/\//i,'').replace(/^ipfs\//,'');
+ if(/^ar:\/\//i.test(raw))return 'https://arweave.net/'+raw.slice(5);
+ if(raw.startsWith('/ipfs/'))return 'https://ipfs.io'+raw;
+ return safeUrl(raw);
+}
+function clankerImageFallback(img){
+ const original=img.dataset.original||img.src;
+ img.dataset.original=original;
+ const gateways=['https://www.clanker.world','https://gateway.pinata.cloud','https://cloudflare-ipfs.com','https://ipfs.io'];
+ const path=original.match(/(?:ipfs\/|ipfs:\/\/)([^?#]+)/i)?.[1];
+ const tried=Number(img.dataset.gatewayTry||0);
+ if(!path||tried>=gateways.length){img.style.display='none';return}
+ img.dataset.gatewayTry=String(tried+1);
+ img.src=gateways[tried]+'/ipfs/'+path.replace(/^ipfs\//,'');
 }
 function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
