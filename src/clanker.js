@@ -46,7 +46,7 @@ function tokenCard(pool,i,included=[]){
  const initials=escapeHtml((symbol&&symbol!=='—'?symbol:name).trim().slice(0,3).toUpperCase());
  const img=logo?'<img src="'+escapeHtml(logo)+'" alt="'+escapeHtml(name)+' official token icon" loading="lazy" referrerpolicy="no-referrer" onerror="clankerImageFallback(this)"/>':'<span class="ct-logo-fallback" aria-label="'+escapeHtml(name)+' token icon">'+initials+'</span>';
  const short=address?address.slice(0,6)+'…'+address.slice(-4):'Address unavailable';
- return '<article class="clanker-token"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP / FDV</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
+ return '<article class="clanker-token" data-token-address="'+escapeHtml(address)+'"><div class="ct-top"><span class="ct-rank">'+String(i+1).padStart(2,'0')+'</span><div class="ct-logo">'+img+'</div><div class="ct-name"><b>'+escapeHtml(name)+'</b><small>$'+escapeHtml(symbol)+'</small></div><span class="ct-change '+(change>=0?'up':'down')+'">'+(change>0?'+':'')+change.toFixed(2)+'%</span></div><div class="ct-metrics"><div><small>PRICE</small><b>'+money(price)+'</b></div><div><small>MARKET CAP / FDV</small><b>'+money(cap)+'</b></div><div><small>LIQUIDITY</small><b>'+money(liquidity)+'</b></div><div><small>24H VOLUME</small><b>'+money(volume)+'</b></div></div><div class="ct-bottom"><code title="'+escapeHtml(address)+'">'+escapeHtml(short)+'</code><a href="'+href+'" target="_blank" rel="noopener noreferrer">OPEN CLANKER ↗</a></div></article>';
 }
 function imageUrl(value){
  if(!value||typeof value!=='string')return '';
@@ -68,6 +68,67 @@ function clankerImageFallback(img){
 }
 function safeUrl(value){if(!value)return '';try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function hydrateTokenProfiles(grid){
+ const cards=[...grid.querySelectorAll('.clanker-token[data-token-address]')];
+ await Promise.all(cards.map(async card=>{
+  const address=card.dataset.tokenAddress;
+  if(!/^0x[a-f0-9]{40}$/i.test(address))return;
+  try{
+   const response=await fetch('https://api.dexscreener.com/latest/dex/tokens/'+encodeURIComponent(address),{headers:{accept:'application/json'}});
+   if(!response.ok)return;
+   const data=await response.json();
+   const pairs=Array.isArray(data?.pairs)?data.pairs.filter(p=>String(p.chainId||'').toLowerCase()==='base'):[];
+   pairs.sort((a,b)=>Number(b?.liquidity?.usd||0)-Number(a?.liquidity?.usd||0));
+   const pair=pairs[0];
+   const token=pair?.baseToken&&String(pair.baseToken.address||'').toLowerCase()===address.toLowerCase()?pair.baseToken:
+    pair?.quoteToken&&String(pair.quoteToken.address||'').toLowerCase()===address.toLowerCase()?pair.quoteToken:pair?.baseToken;
+   const info=pair?.info||{};
+   const icon=safeUrl(info?.imageUrl||info?.header||'');
+   const logo=card.querySelector('.ct-logo');
+   if(icon&&logo){
+    logo.innerHTML='<img src="'+escapeHtml(icon)+'" alt="Token icon" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">';
+   }
+   if(token?.symbol){
+    const symbolNode=card.querySelector('.ct-name small');
+    if(symbolNode)symbolNode.textContent='
+ if(document.getElementById('clankerLauncher'))return;
+ const launcher=document.createElement('button');launcher.id='clankerLauncher';launcher.type='button';launcher.innerHTML='<span class="cl-live-dot"></span> CLANKER LIVE';
+ const panel=document.createElement('section');panel.id='clankerPanel';panel.className='cl-panel';panel.setAttribute('aria-label','Clanker trending tokens');panel.innerHTML='<div class="cl-head"><div><small>BASE NETWORK / LIVE MARKET FEED</small><h2>CLANKER <span>TRENDING</span></h2><p>Top 10 trending Clanker tokens</p></div><button class="cl-close" aria-label="Close">×</button></div><div class="cl-toolbar"><span id="clStatus">CONNECTING TO CLANKER…</span><button id="clRefresh" type="button">↻ REFRESH</button></div><div id="clGrid" class="cl-grid"><div class="cl-empty">Loading trending tokens…</div></div><div class="cl-foot">Market data supplied by Clanker · Refreshes every 30 seconds</div>';
+ document.body.append(launcher,panel);
+ const close=()=>panel.classList.remove('open');
+ launcher.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))load()});
+ panel.querySelector('.cl-close').addEventListener('click',close);
+ panel.querySelector('#clRefresh').addEventListener('click',load);
+ async function load(){
+  const status=panel.querySelector('#clStatus'),grid=panel.querySelector('#clGrid');
+  status.textContent='UPDATING…';
+  try{
+   const res=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});
+   if(!res.ok){let info={};try{info=await res.json()}catch{}throw new Error(info.details||info.error||('API returned HTTP '+res.status))}
+   const payload=await res.json();
+   const tokens=arr(payload).slice(0,10);
+   if(!tokens.length)throw new Error('No trending Base tokens returned');
+   grid.innerHTML=tokens.map((token,index)=>tokenCard(token,index,Array.isArray(payload?.included)?payload.included:[])).join('');
+   status.textContent='LIVE · '+tokens.length+' TOKENS · BASE';
+   hydrateTokenProfiles(grid);
+  }catch(err){
+   status.textContent='DATA FEED UNAVAILABLE';
+   grid.innerHTML='<div class="cl-empty cl-error">Unable to load live Clanker data. '+escapeHtml(err?.message||'Request failed')+'. <a href="https://www.clanker.world/clankers?filter=trending" target="_blank" rel="noopener noreferrer" style="color:#64baf0">Open Clanker trending ↗</a></div>';
+  }
+ }
+ load();
+ window.setInterval(()=>{if(panel.classList.contains('open'))load()},30000);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
++token.symbol;
+   }
+   if(token?.name){
+    const nameNode=card.querySelector('.ct-name b');
+    if(nameNode)nameNode.textContent=token.name;
+   }
+  }catch{}
+ }));
+}
 function mount(){
  if(document.getElementById('clankerLauncher'))return;
  const launcher=document.createElement('button');launcher.id='clankerLauncher';launcher.type='button';launcher.innerHTML='<span class="cl-live-dot"></span> CLANKER LIVE';
