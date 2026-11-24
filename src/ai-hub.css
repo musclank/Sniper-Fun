@@ -199,3 +199,33 @@ body.modal-open{overflow:hidden}
 @media(max-width:650px){.developer-tools{padding:11px 10px}.developer-tools-head{font-size:7px}.developer-task-grid{grid-template-columns:1fr 1fr}.developer-task-grid button{min-height:39px;font-size:8px}.code-block pre{font-size:9px;padding:10px}}
 .mobile-tool-select{display:none}
 @media(max-width:560px){.mobile-tool-select{display:block;max-width:105px;min-width:88px;height:32px;padding:0 6px;border:1px solid #285477;background:#0b2033;color:#a9dfff;font:8px 'DM Mono';letter-spacing:.5px;border-radius:2px}.topbar{gap:8px}.mobile-brand{white-space:nowrap;font-size:16px}.command-trigger{padding:8px 9px}}
+
+/* Phase 3 — AI workspace actions and local snippet library */
+.workspace-tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px 0;background:#081625}
+.workspace-tools button,.snippet-save-row button{min-height:34px;padding:0 11px;border:1px solid #285477;background:#0b2033;color:#8edbff;font:8px 'DM Mono';letter-spacing:.7px}
+.workspace-tools button:hover,.snippet-save-row button:hover{border-color:#55d4ff;background:#10304b;color:#e5f8ff}
+.snippet-modal{width:min(100%,650px)}
+.snippet-save-row{display:flex;gap:8px;padding-top:16px}
+.snippet-save-row input{flex:1;min-width:0;min-height:38px;padding:0 11px;border:1px solid #244665;background:#071625;color:#e1f2ff;font:10px 'DM Mono';outline:none}
+.snippet-save-row input:focus{border-color:#36c9ff}
+.snippet-note,.snippet-empty{color:#718da8;font:9px/1.7 'DM Mono'}
+.snippet-list{display:grid;gap:8px;margin-top:14px}
+.snippet-row{display:flex;align-items:center;gap:12px;padding:11px;border:1px solid #1c3d59;background:#081a2b}
+.snippet-info{flex:1;min-width:0}
+.snippet-info strong,.snippet-info small{display:block}
+.snippet-info strong{color:#d9efff;font:10px 'DM Mono'}
+.snippet-info small{margin-top:5px;color:#6f91ad;font:8px 'DM Mono'}
+.snippet-info code{display:block;margin-top:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#7eb8d9;font:8px 'DM Mono'}
+.snippet-actions{display:flex;gap:5px;flex-wrap:wrap}
+.snippet-actions button{padding:7px 8px;border:1px solid #244865;background:#0b2033;color:#8edbff;font:8px 'DM Mono'}
+.snippet-actions button:last-child{color:#e39aa6}
+.snippet-actions button:hover{border-color:#49caff}
+@media(max-width:560px){
+ .workspace-tools{gap:6px;padding:10px 10px 0}
+ .workspace-tools button{flex:1;min-width:0;padding:0 5px;font-size:7px;letter-spacing:0}
+ .snippet-save-row{flex-direction:column}
+ .snippet-save-row button{min-height:40px}
+ .snippet-row{align-items:stretch;flex-direction:column}
+ .snippet-actions{justify-content:flex-end}
+ .snippet-actions button{padding:9px 11px}
+}
