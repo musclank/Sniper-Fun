@@ -386,3 +386,17 @@ body.modal-open{overflow:hidden}
  .file-draft-actions button{min-height:38px;padding:0 10px}
  .file-manager-modal input,.file-manager-modal textarea{font-size:12px}
 }
+
+ 
+/* Stage 14 — AI patch reviewer */
+#openPatchReviewer{border-color:#28658a;color:#a5e6ff}
+.patch-reviewer-modal{width:min(100%,620px)}
+.patch-draft-select,.patch-reviewer-modal textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';outline:none}
+.patch-draft-select{min-height:44px}
+.patch-reviewer-modal textarea{min-height:90px;resize:vertical}
+.patch-draft-select:focus,.patch-reviewer-modal textarea:focus{border-color:#39c9ff}
+.patch-review-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px}
+.patch-review-controls span{color:#6f91ad;font:8px/1.6 'DM Mono';letter-spacing:.5px}
+.patch-review-controls button{min-height:42px;padding:0 14px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
+.patch-review-controls button:hover{border-color:#62d9ff;background:#124b6e}
+@media(max-width:560px){#openPatchReviewer{width:100%}.patch-review-controls{align-items:stretch;flex-direction:column}.patch-review-controls button{min-height:46px}.patch-reviewer-modal textarea,.patch-draft-select{font-size:12px}}
