@@ -416,6 +416,20 @@
   </div>
  </section>
 </div>
+<script>
+/* Boot-screen failsafe: never leave the loading overlay covering the app. */
+(function () {
+  function releaseBootScreen() {
+    var screen = document.getElementById('bootScreen');
+    if (!screen || screen.dataset.failsafeReleased === '1') return;
+    screen.dataset.failsafeReleased = '1';
+    screen.classList.add('is-hidden');
+    window.setTimeout(function () { if (screen.isConnected) screen.remove(); }, 700);
+  }
+  window.addEventListener('load', function () { window.setTimeout(releaseBootScreen, 1800); }, { once: true });
+  window.setTimeout(releaseBootScreen, 7000);
+})();
+</script>
 <script type="module" src="/src/ai-hub.js"></script>
 <script type="module" src="/src/intelligence-suite.js"></script>
 </body></html>
