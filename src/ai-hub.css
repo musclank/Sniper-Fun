@@ -442,3 +442,14 @@ body.modal-open{overflow:hidden}
 .workspace-actions button:disabled{opacity:.4;cursor:not-allowed}
 .workspace-preview{max-height:220px;overflow:auto;margin-top:10px;padding:12px;border:1px solid #244865;background:#061421;color:#9fd8f7;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:560px){#openCodingWorkspace{width:100%}.workspace-actions{display:grid;grid-template-columns:1fr}.workspace-actions button{min-height:46px}.coding-workspace-modal textarea{font-size:12px}}
+
+/* Stage 18 — Project Dependency Intelligence */
+#openDependencyIntel{border-color:#287a9c;color:#a8e9ff}
+.dependency-intel-modal{width:min(100%,720px)}
+.dependency-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dependency-actions button{min-height:42px;padding:0 13px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:8px 'DM Mono';letter-spacing:.4px}
+.dependency-actions button:disabled{opacity:.4;cursor:not-allowed}
+.dependency-actions button:hover:not(:disabled){border-color:#62d9ff;background:#124b6e}
+.dependency-status{margin:10px 0;padding:10px;border:1px solid #244865;background:#091b2a;color:#83d9ff;font:9px 'DM Mono'}
+.dependency-report{max-height:320px;overflow:auto;padding:13px;border:1px solid #244865;background:#061421;color:#a9dafa;font:10px/1.8 'DM Mono';white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:560px){#openDependencyIntel{width:100%}.dependency-actions{display:grid;grid-template-columns:1fr}.dependency-actions button{min-height:46px}}
