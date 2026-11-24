@@ -58,6 +58,7 @@
   <button type="button" id="openPatchReviewer">AI PATCH REVIEWER</button>
   <button type="button" id="openTestLab">AI TEST LAB</button>
   <button type="button" id="openDebugEngine">AI DEBUG ENGINE</button>
+  <button type="button" id="openCodingWorkspace">AUTONOMOUS CODING WORKSPACE</button>
 </div>
 <form id="chatForm" class="composer terminal-composer"><div class="terminal-input-row"><span class="terminal-prompt">user@sniper:~$</span><button type="button" id="attachFileBtn" class="attach-file-btn" aria-label="Attach text file" title="Attach a text or code file">＋ FILE</button><input id="contextFileInput" type="file" accept=".txt,.md,.markdown,.json,.js,.jsx,.ts,.tsx,.py,.html,.css,.scss,.sql,.yaml,.yml,.xml,.sh,.env.example,.csv" multiple hidden><textarea id="promptInput" rows="2" placeholder="Enter a message or /command..." required></textarea><button id="sendBtn" type="submit" aria-label="Execute command"><span>EXECUTE</span> ↑</button></div><div class="attached-files" id="attachedFiles" aria-live="polite"></div><div class="composer-bottom"><span>ENTER TO TRANSMIT · SHIFT+ENTER FOR NEW LINE</span><span>OUTPUT MAY REQUIRE VERIFICATION</span></div></form>
 </div>
@@ -188,6 +189,20 @@
   <input id="debugFocus" type="text" maxlength="500" placeholder="Example: Error appears after pressing Execute on Android.">
   <div class="debug-engine-controls"><span>ANALYSIS ONLY · NO AUTO-FIX</span><button type="button" id="runDebugAnalysis">ANALYZE ERROR</button></div>
   <div class="workflow-note">For better diagnosis, add related files in Projects → Files. Remove secrets, API keys, tokens, and personal data before submitting logs.</div>
+ </section>
+</div>
+<div class="modal-backdrop" id="codingWorkspaceModal" hidden>
+ <section class="utility-modal coding-workspace-modal" role="dialog" aria-modal="true" aria-labelledby="codingWorkspaceTitle">
+  <div class="utility-modal-head"><div><span class="panel-kicker">MULTI-FILE PROJECT CONTROL</span><h2 id="codingWorkspaceTitle">AUTONOMOUS CODING WORKSPACE</h2></div><button class="modal-close" type="button" data-close-modal="codingWorkspaceModal" aria-label="Close">×</button></div>
+  <p class="snippet-note">Generate a proposed multi-file plan with AI, inspect every file, then apply only after explicit confirmation. Changes stay in this browser's local drafts; your GitHub repository is not modified.</p>
+  <label class="builder-field-label" for="workspaceGoal">CHANGE REQUEST</label>
+  <textarea id="workspaceGoal" rows="3" maxlength="1200" placeholder="Describe the feature or change you want across the project files."></textarea>
+  <div class="workspace-actions"><button type="button" id="askWorkspaceAI">ASK AI TO BUILD PLAN</button><button type="button" id="exportWorkspaceZip">EXPORT PROJECT ZIP</button><button type="button" id="undoWorkspaceApply">UNDO LAST APPLY</button></div>
+  <label class="builder-field-label" for="workspacePlan">REVIEWABLE FILE PLAN · JSON</label>
+  <textarea id="workspacePlan" rows="8" maxlength="500000" spellcheck="false" placeholder='Paste the AI JSON plan here: {"files":[{"path":"src/example.js","content":"..."}]}'></textarea>
+  <div class="workspace-actions"><button type="button" id="previewWorkspacePlan">PREVIEW CHANGES</button><button type="button" id="applyWorkspacePlan" disabled>APPLY APPROVED PLAN</button></div>
+  <div id="workspacePreview" class="workspace-preview" aria-live="polite">No plan previewed yet.</div>
+  <div class="workflow-note">Safety: paths are validated, file count and size are capped, deletes are not supported, and only one local apply can be undone. Export includes saved file drafts only.</div>
  </section>
 </div>
 <div class="modal-backdrop" id="memoryModal" hidden>
