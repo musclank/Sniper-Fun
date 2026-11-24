@@ -314,3 +314,13 @@ body.modal-open{overflow:hidden}
 .workflow-controls button:hover{border-color:#62d9ff;background:#124b6e}
 .workflow-note{margin-top:12px}
 @media(max-width:560px){#openWorkflow{width:100%}.workflow-controls{align-items:stretch;flex-direction:column}.workflow-controls button{min-height:46px}.workflow-modal textarea{font-size:12px}}
+
+/* Stage 11 — read-only AI code change proposals */
+#openCodeChange{border-color:#28658a;color:#a5e6ff}
+.code-change-modal textarea{display:block;width:100%;min-height:112px;margin-top:14px;padding:13px;border:1px solid #244865;background:#071827;color:#dceeff;font:11px/1.7 'DM Mono';resize:vertical}
+.code-change-modal textarea:focus{outline:none;border-color:#39c9ff}
+.code-change-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.code-change-controls span{color:#6f91ad;font:8px/1.6 'DM Mono';letter-spacing:.5px}
+.code-change-controls button{min-height:42px;padding:0 14px;border:1px solid #278bc0;background:#0d3b59;color:#bceaff;font:9px 'DM Mono';letter-spacing:.5px}
+.code-change-controls button:hover{border-color:#62d9ff;background:#124b6e}
+@media(max-width:560px){#openCodeChange{width:100%}.code-change-controls{align-items:stretch;flex-direction:column}.code-change-controls button{min-height:46px}.code-change-modal textarea{font-size:12px}}
